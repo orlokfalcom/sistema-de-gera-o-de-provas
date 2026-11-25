@@ -182,7 +182,10 @@ def run_system_audit():
     assert "knowledge-areas-bars" in root_html
     assert "Robótica e Inteligência Artificial" in root_html
     assert "Biotecnologia e Genética Aplicada" in root_html
-    assert "Desenvolvimento de Sistemas e Programação Web" in root_html
+    assert "Técnico em Desenvolvimento de Sistemas (SEE/MG)" in root_html
+    assert "Projetos Integradores e de Corresponsabilidade Social (PICS)" in root_html
+    assert "Cultura Digital e Fundamentos de IA" in root_html
+    assert "Ferramentas para o Mundo do Trabalho" in root_html
     print(" ✓ [OK] Todos os 3 arquivos HTML estão perfeitamente sincronizados e contêm todos os componentes solicitados.\n")
 
     print("=================================================================")

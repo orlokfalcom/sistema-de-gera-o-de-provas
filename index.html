@@ -73,7 +73,362 @@
 
 <body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
 
-  <div class="flex h-full overflow-hidden">
+  <!-- CATÁLOGO GLOBAL DE DISCIPLINAS DO ENSINO MÉDIO E ITINERÁRIOS TÉCNICOS SEE/MG -->
+  <datalist id="disciplines-suggestions">
+    <!-- 1. FORMAÇÃO GERAL BÁSICA (FGB / BNCC - 1º, 2º e 3º ANOS - SEE/MG) -->
+    <option value="Língua Portuguesa">
+    <option value="Literatura Brasileira">
+    <option value="Redação e Produção Textual">
+    <option value="Língua Inglesa">
+    <option value="Língua Espanhola">
+    <option value="Arte (Artes Visuais, Música, Teatro, Dança)">
+    <option value="Educação Física">
+    <option value="Matemática">
+    <option value="Física">
+    <option value="Química">
+    <option value="Biologia">
+    <option value="História">
+    <option value="Geografia">
+    <option value="Filosofia">
+    <option value="Sociologia">
+
+    <!-- 2. ATIVIDADES INTEGRADORAS / PARTE FLEXÍVEL SEE/MG (EMTI & REGULAR) -->
+    <option value="Projeto de Vida">
+    <option value="Estudos Orientados">
+    <option value="Práticas Experimentais">
+    <option value="Eletivas">
+    <option value="Nivelamento (Língua Portuguesa e Matemática)">
+    <option value="Preparação para o Mundo do Trabalho / Pós-Médio">
+    <option value="Tecnologia e Inovação">
+    <option value="Educação Financeira e Empreendedorismo">
+    <option value="Iniciação Científica / Pesquisa e Intervenção">
+    <option value="Cultura Digital e Cidadania na Rede">
+
+    <!-- 3. ITINERÁRIOS FORMATIVOS DE APROFUNDAMENTO (CURRÍCULO REFERÊNCIA SEE/MG) -->
+    <option value="Linguagens — Produção Textual Avançada e Escrita Criativa">
+    <option value="Linguagens — Práticas de Linguagens Digitais e Mídias">
+    <option value="Linguagens — Comunicação, Mídias e Oratória">
+    <option value="Linguagens — Literatura Comparada e Contemporânea">
+    <option value="Linguagens — Teatro, Expressão Corporal e Artes Cênicas">
+    <option value="Matemática — Educação Financeira">
+    <option value="Matemática — Matemática Financeira e Estatística Aplicada">
+    <option value="Matemática — Modelagem Matemática e Resolução de Problemas">
+    <option value="Matemática — Geometria Espacial e Desenho Técnico">
+    <option value="Matemática — Lógica Matemática e Algoritmos">
+    <option value="Natureza — Biotecnologia e Genética Aplicada">
+    <option value="Natureza — Sustentabilidade e Gestão Ambiental">
+    <option value="Natureza — Astronomia e Astrofísica">
+    <option value="Natureza — Química Tecnológica e Farmacologia">
+    <option value="Natureza — Saúde Pública e Bioética">
+    <option value="Humanas — Geopolítica Contemporânea e Relações Internacionais">
+    <option value="Humanas — Direitos Humanos, Cidadania e Movimentos Sociais">
+    <option value="Humanas — Empreendedorismo Social">
+    <option value="Humanas — História de Minas Gerais, Patrimônio e Memória">
+    <option value="Humanas — Ética, Política e Sociedade Contemporânea">
+    <option value="Humanas — Antropologia e Estudos Culturais">
+
+    <!-- 4. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO INFORMAÇÃO E COMUNICAÇÃO -->
+    <option value="Técnico em Desenvolvimento de Sistemas (SEE/MG)">
+    <option value="Técnico em Informática (SEE/MG)">
+    <option value="Técnico em Informática para Internet (SEE/MG)">
+    <option value="Técnico em Redes de Computadores (SEE/MG)">
+    <option value="Técnico em Manutenção e Suporte em Informática (SEE/MG)">
+    <option value="Técnico em Programação de Jogos Digitais (SEE/MG)">
+    <option value="Técnico em Ciência de Dados e Inteligência Artificial (SEE/MG)">
+    <option value="Técnico em Robótica e Automação (SEE/MG)">
+
+    <!-- 5. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO GESTÃO E NEGÓCIOS -->
+    <option value="Técnico em Administração (SEE/MG)">
+    <option value="Técnico em Logística (SEE/MG)">
+    <option value="Técnico em Contabilidade (SEE/MG)">
+    <option value="Técnico em Recursos Humanos (SEE/MG)">
+    <option value="Técnico em Marketing e Marketing Digital (SEE/MG)">
+    <option value="Técnico em Comércio / Vendas (SEE/MG)">
+    <option value="Técnico em Finanças (SEE/MG)">
+    <option value="Técnico em Secretariado (SEE/MG)">
+    <option value="Técnico em Transações Imobiliárias (SEE/MG)">
+    <option value="Técnico em Serviços Jurídicos (SEE/MG)">
+    <option value="Técnico em Qualidade (SEE/MG)">
+
+    <!-- 6. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO RECURSOS NATURAIS -->
+    <option value="Técnico em Agropecuária (SEE/MG)">
+    <option value="Técnico em Agronegócio (SEE/MG)">
+    <option value="Técnico em Agricultura (SEE/MG)">
+    <option value="Técnico em Zootecnia (SEE/MG)">
+    <option value="Técnico em Agroecologia (SEE/MG)">
+    <option value="Técnico em Florestas (SEE/MG)">
+    <option value="Técnico em Meio Ambiente (SEE/MG)">
+    <option value="Técnico em Cafeicultura (SEE/MG)">
+    <option value="Técnico em Fruticultura (SEE/MG)">
+    <option value="Técnico em Piscicultura (SEE/MG)">
+
+    <!-- 7. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO AMBIENTE E SAÚDE -->
+    <option value="Técnico em Enfermagem (SEE/MG)">
+    <option value="Técnico em Análises Clínicas (SEE/MG)">
+    <option value="Técnico em Farmácia (SEE/MG)">
+    <option value="Técnico em Nutrição e Dietética (SEE/MG)">
+    <option value="Técnico em Segurança do Trabalho (SEE/MG)">
+    <option value="Técnico em Saúde Bucal (SEE/MG)">
+    <option value="Técnico em Radiologia (SEE/MG)">
+    <option value="Técnico em Agente Comunitário de Saúde (SEE/MG)">
+    <option value="Técnico em Gerência em Saúde (SEE/MG)">
+    <option value="Técnico em Estética (SEE/MG)">
+
+    <!-- 8. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO CONTROLE E PROCESSOS INDUSTRIAIS -->
+    <option value="Técnico em Eletrotécnica (SEE/MG)">
+    <option value="Técnico em Eletrônica (SEE/MG)">
+    <option value="Técnico em Mecânica (SEE/MG)">
+    <option value="Técnico em Mecatrônica (SEE/MG)">
+    <option value="Técnico em Automação Industrial (SEE/MG)">
+    <option value="Técnico em Química (SEE/MG)">
+    <option value="Técnico em Metalurgia (SEE/MG)">
+    <option value="Técnico em Eletromecânica (SEE/MG)">
+    <option value="Técnico em Soldagem (SEE/MG)">
+    <option value="Técnico em Refrigeração e Climatização (SEE/MG)">
+    <option value="Técnico em Manutenção Automotiva (SEE/MG)">
+
+    <!-- 9. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO INFRAESTRUTURA E MINERAÇÃO -->
+    <option value="Técnico em Edificações (SEE/MG)">
+    <option value="Técnico em Mineração (SEE/MG)">
+    <option value="Técnico em Agrimensura (SEE/MG)">
+    <option value="Técnico em Estradas (SEE/MG)">
+    <option value="Técnico em Saneamento (SEE/MG)">
+    <option value="Técnico em Geoprocessamento (SEE/MG)">
+    <option value="Técnico em Design de Interiores (SEE/MG)">
+
+    <!-- 10. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO PRODUÇÃO ALIMENTÍCIA -->
+    <option value="Técnico em Alimentos (SEE/MG)">
+    <option value="Técnico em Agroindústria (SEE/MG)">
+    <option value="Técnico em Leite e Derivados / Laticínios (SEE/MG)">
+    <option value="Técnico em Panificação e Confeitaria (SEE/MG)">
+
+    <!-- 11. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO PRODUÇÃO INDUSTRIAL -->
+    <option value="Técnico em Vestuário e Moda (SEE/MG)">
+    <option value="Técnico em Têxtil (SEE/MG)">
+    <option value="Técnico em Móveis (SEE/MG)">
+    <option value="Técnico em Biocombustíveis (SEE/MG)">
+    <option value="Técnico em Açúcar e Álcool (SEE/MG)">
+
+    <!-- 12. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO TURISMO, HOSPITALIDADE E LAZER -->
+    <option value="Técnico em Gastronomia / Cozinha (SEE/MG)">
+    <option value="Técnico em Hospedagem (SEE/MG)">
+    <option value="Técnico em Eventos (SEE/MG)">
+    <option value="Técnico em Guia de Turismo (SEE/MG)">
+    <option value="Técnico em Lazer (SEE/MG)">
+
+    <!-- 13. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO PRODUÇÃO CULTURAL E DESIGN -->
+    <option value="Técnico em Comunicação Visual (SEE/MG)">
+    <option value="Técnico em Multimídia (SEE/MG)">
+    <option value="Técnico em Produção de Áudio e Vídeo (SEE/MG)">
+    <option value="Técnico em Design Gráfico (SEE/MG)">
+
+    <!-- 14. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO DESENVOLVIMENTO EDUCACIONAL E SOCIAL -->
+    <option value="Técnico em Secretaria Escolar (SEE/MG)">
+    <option value="Técnico em Biblioteconomia (SEE/MG)">
+    <option value="Técnico em Tradução e Interpretação de Libras (SEE/MG)">
+    <option value="Técnico em Multimeios Didáticos (SEE/MG)">
+  </datalist>
+
+  <!-- TELA DE LOGIN E CADASTRO INSTITUCIONAL -->
+  <div id="auth-screen"
+    class="min-h-full w-full flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-slate-100 via-sky-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/60 overflow-y-auto">
+    <div
+      class="w-full max-w-4xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+
+      <!-- Painel Institucional Esquerdo -->
+      <div
+        class="lg:col-span-5 bg-gradient-to-br from-sky-600 via-indigo-600 to-sky-800 p-8 text-white flex flex-col justify-between space-y-6">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center shadow-lg">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <button type="button" onclick="toggleDarkMode()" title="Alternar Modo Escuro / Claro"
+              class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition">
+              🌓
+            </button>
+          </div>
+          <div>
+            <span
+              class="inline-block px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-extrabold uppercase tracking-wider mb-2">
+              Plataforma Escolar Oficial
+            </span>
+            <h1 class="text-2xl font-extrabold tracking-tight leading-tight">Gerador Inteligente de Avaliações</h1>
+            <p class="text-xs text-sky-100/90 mt-2 leading-relaxed">
+              Sistema unificado para elaboração, conferência e montagem de provas multidisciplinares do Ensino Médio.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 text-xs text-sky-50/90">
+          <div class="flex items-center gap-2.5">
+            <span class="w-6 h-6 rounded-lg bg-white/15 flex items-center justify-center text-[11px]">📚</span>
+            <span>Todas as disciplinas BNCC + 5 Itinerários Formativos</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="w-6 h-6 rounded-lg bg-white/15 flex items-center justify-center text-[11px]">🏫</span>
+            <span>Escolas de Tempo Integral (EMTI/PEI) e Não Integrais</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="w-6 h-6 rounded-lg bg-white/15 flex items-center justify-center text-[11px]">📄</span>
+            <span>Exportação Word editável no padrão ABNT NBR 14724</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="w-6 h-6 rounded-lg bg-white/15 flex items-center justify-center text-[11px]">🛡️</span>
+            <span>Perfis seguros: Professor (restrito) e Coordenação (total)</span>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-white/15 text-[10px] text-sky-100/80">
+          <p class="font-bold uppercase tracking-wider mb-1">Contas de Demonstração:</p>
+          <p>👤 Professor: <code class="bg-black/20 px-1.5 py-0.5 rounded">professor@escola.gov.br</code> / <code class="bg-black/20 px-1.5 py-0.5 rounded">prof123</code></p>
+          <p class="mt-1">🛡️ Admin: <code class="bg-black/20 px-1.5 py-0.5 rounded">admin@escola.gov.br</code> / <code class="bg-black/20 px-1.5 py-0.5 rounded">admin123</code></p>
+        </div>
+      </div>
+
+      <!-- Painel de Autenticação Direito -->
+      <div class="lg:col-span-7 p-6 md:p-8 flex flex-col justify-center">
+        <!-- Seletor de Abas: Login vs Cadastro -->
+        <div class="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl mb-6">
+          <button type="button" id="tab-login" onclick="switchAuthTab('login')"
+            class="flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-xs">
+            🔐 Entrar no Sistema
+          </button>
+          <button type="button" id="tab-register" onclick="switchAuthTab('register')"
+            class="flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
+            ➕ Criar Nova Conta
+          </button>
+        </div>
+
+        <!-- FORMULÁRIO DE LOGIN -->
+        <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900 dark:text-white">Acesse sua conta</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Entre com seu e-mail institucional e senha cadastrada.</p>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">E-mail Institucional</label>
+              <input type="email" id="login-email" required placeholder="seu.nome@escola.gov.br"
+                class="w-full text-xs py-2.5 px-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Senha</label>
+              <div class="relative">
+                <input type="password" id="login-password" required placeholder="Digite sua senha..."
+                  class="w-full text-xs py-2.5 px-3.5 pr-10 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+                <button type="button" onclick="togglePasswordVisibility('login-password')"
+                  class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs">👁️</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="login-error"
+            class="hidden p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2">
+            <span>⚠️</span> <span id="login-error-msg">Credenciais inválidas.</span>
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition shadow-md shadow-sky-600/20 flex items-center justify-center gap-2">
+            <span>Entrar na Plataforma</span> →
+          </button>
+
+          <p class="text-center text-[11px] text-slate-500 pt-2">
+            Ainda não tem cadastro?
+            <button type="button" onclick="switchAuthTab('register')" class="text-sky-600 dark:text-sky-400 font-bold hover:underline">
+              Cadastre-se agora
+            </button>
+          </p>
+        </form>
+
+        <!-- FORMULÁRIO DE CADASTRO (AUTO-REGISTRO) -->
+        <form id="form-register" onsubmit="handleRegisterSubmit(event)" class="hidden space-y-3.5">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900 dark:text-white">Criar conta institucional</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Preencha seus dados para acessar o sistema escolar.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Nome Completo</label>
+              <input type="text" id="register-name" required placeholder="Ex: Prof. João Mendes"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">E-mail Institucional</label>
+              <input type="email" id="register-email" required placeholder="joao.mendes@escola.gov.br"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Perfil de Acesso</label>
+              <select id="register-role" onchange="toggleRegisterRoleFields(this.value)"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+                <option value="professor">Professor (Acesso à Disciplina)</option>
+                <option value="admin">Administrador / Coordenação</option>
+              </select>
+            </div>
+
+            <div id="register-discipline-wrapper">
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Disciplina / Itinerário</label>
+              <input type="text" id="register-discipline" list="disciplines-suggestions" placeholder="Ex: Matemática, Biologia..."
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+          </div>
+
+          <!-- Campo condicional: Chave Administrativa (somente para criar conta Admin) -->
+          <div id="register-admin-key-wrapper" class="hidden p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-1.5">
+            <label class="block text-[11px] font-bold text-amber-900 dark:text-amber-300">🔑 Chave Institucional Administrativa (Obrigatória para Admin)</label>
+            <input type="password" id="register-admin-key" placeholder="Digite a chave da coordenação..."
+              class="w-full text-xs py-2 px-3 rounded-xl border border-amber-300 dark:border-amber-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-hidden">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Criar Senha</label>
+              <div class="relative">
+                <input type="password" id="register-password" required minlength="4" placeholder="Mínimo 4 caracteres"
+                  class="w-full text-xs py-2 px-3 pr-9 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+                <button type="button" onclick="togglePasswordVisibility('register-password')"
+                  class="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 text-xs">👁️</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Confirmar Senha</label>
+              <input type="password" id="register-password-confirm" required minlength="4" placeholder="Repita a senha"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+          </div>
+
+          <div id="register-error"
+            class="hidden p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2">
+            <span>⚠️</span> <span id="register-error-msg">Erro ao cadastrar.</span>
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2">
+            <span>Cadastrar e Entrar no Sistema</span> ✓
+          </button>
+
+          <p class="text-center text-[11px] text-slate-500 pt-1">
+            Já possui conta?
+            <button type="button" onclick="switchAuthTab('login')" class="text-sky-600 dark:text-sky-400 font-bold hover:underline">
+              Fazer login
+            </button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-shell" class="hidden flex h-full overflow-hidden">
     <!-- SIDEBAR NAVIGATION -->
     <aside
       class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 z-30 transition-all duration-300">
@@ -124,6 +479,10 @@
               class="w-full py-1.5 px-2 text-[10px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-sky-50 dark:hover:bg-sky-950/40 hover:border-sky-300 text-slate-600 dark:text-slate-300 hover:text-sky-600 transition flex items-center justify-center gap-1.5 shadow-2xs">
               <span>🔑 Acesso Coordenação (Exige Senha)</span>
             </button>
+            <button onclick="logoutUser()"
+              class="w-full py-1.5 px-2 text-[10px] font-bold rounded-lg border border-rose-200 dark:border-rose-900/60 bg-rose-50/70 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 hover:bg-rose-100 transition flex items-center justify-center gap-1.5">
+              <span>🚪 Sair da Conta (Login)</span>
+            </button>
           </div>
 
           <!-- Admin View Controls (Visible ONLY when authenticated as Admin) -->
@@ -135,8 +494,12 @@
                 class="text-[9px] px-1.5 py-0.5 rounded bg-sky-200 dark:bg-sky-800 text-sky-800 dark:text-sky-200 font-bold uppercase">ADMIN</span>
             </div>
             <button id="btn-exit-admin" onclick="switchRole('professor')"
+              class="w-full py-1.5 px-2 text-[10px] font-bold rounded-lg border border-amber-300 dark:border-amber-900 bg-amber-50/80 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 hover:bg-amber-100 transition flex items-center justify-center gap-1.5">
+              <span>👤 Visualizar como Professor</span>
+            </button>
+            <button onclick="logoutUser()"
               class="w-full py-1.5 px-2 text-[10px] font-bold rounded-lg border border-rose-300 dark:border-rose-900 bg-rose-50/80 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100 transition flex items-center justify-center gap-1.5">
-              <span>🚪 Sair do Modo Admin</span>
+              <span>🚪 Sair da Conta (Login)</span>
             </button>
           </div>
         </div>
@@ -438,78 +801,10 @@
                 </datalist>
               </div>
               <div>
-                <label class="block text-xs font-semibold mb-1">Disciplina / Componente</label>
+                <label class="block text-xs font-semibold mb-1">Disciplina / Componente (SEE/MG)</label>
                 <input type="text" id="upload-discipline" list="disciplines-suggestions"
-                  placeholder="Ex: Matemática, Robótica, Educação Financeira..."
+                  placeholder="Ex: Matemática, Técnico em Desenvolvimento de Sistemas..."
                   class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                <datalist id="disciplines-suggestions">
-                  <!-- FORMAÇÃO GERAL BÁSICA (BNCC) - 1º, 2º e 3º ANOS -->
-                  <option value="Língua Portuguesa">
-                  <option value="Literatura Brasileira">
-                  <option value="Redação e Produção Textual">
-                  <option value="Língua Inglesa">
-                  <option value="Língua Espanhola">
-                  <option value="Arte (Artes Visuais, Música, Teatro, Dança)">
-                  <option value="Educação Física">
-                  <option value="Matemática">
-                  <option value="Física">
-                  <option value="Química">
-                  <option value="Biologia">
-                  <option value="História">
-                  <option value="Geografia">
-                  <option value="Filosofia">
-                  <option value="Sociologia">
-
-                    <!-- ITINERÁRIO FORMATIVO 1: LINGUAGENS E SUAS TECNOLOGIAS -->
-                  <option value="Produção Textual Avançada e Escrita Criativa">
-                  <option value="Práticas de Linguagens Digitais e Redes">
-                  <option value="Comunicação, Mídias e Oratória">
-                  <option value="Literatura Comparada e Contemporânea">
-                  <option value="Teatro, Expressão Corporal e Artes Cênicas">
-
-                    <!-- ITINERÁRIO FORMATIVO 2: MATEMÁTICA E SUAS TECNOLOGIAS -->
-                  <option value="Educação Financeira">
-                  <option value="Matemática Financeira e Estatística Aplicada">
-                  <option value="Resolução de Problemas Complexos e Modelagem Matemática">
-                  <option value="Geometria Espacial e Desenho Técnico">
-                  <option value="Lógica Matemática e Algoritmos">
-
-                    <!-- ITINERÁRIO FORMATIVO 3: CIÊNCIAS DA NATUREZA E SUAS TECNOLOGIAS -->
-                  <option value="Biotecnologia e Genética Aplicada">
-                  <option value="Sustentabilidade e Gestão Ambiental">
-                  <option value="Práticas Experimentais e Laboratório">
-                  <option value="Astronomia e Astrofísica">
-                  <option value="Química Tecnológica e Farmacologia">
-                  <option value="Saúde Pública e Bioética">
-
-                    <!-- ITINERÁRIO FORMATIVO 4: CIÊNCIAS HUMANAS E SOCIAIS APLICADAS -->
-                  <option value="Geopolítica Contemporânea e Relações Internacionais">
-                  <option value="Direitos Humanos, Cidadania e Movimentos Sociais">
-                  <option value="Empreendedorismo Social">
-                  <option value="História Regional, Patrimônio e Memória">
-                  <option value="Ética, Política e Sociedade Contemporânea">
-                  <option value="Antropologia e Estudos Culturais">
-
-                    <!-- ITINERÁRIO FORMATIVO 5: EDUCAÇÃO PROFISSIONAL E TÉCNICA (EPT) -->
-                  <option value="Desenvolvimento de Sistemas e Programação Web">
-                  <option value="Robótica e Inteligência Artificial">
-                  <option value="Ciência de Dados e Banco de Dados">
-                  <option value="Administração e Gestão Empreendedora">
-                  <option value="Logística e Cadeia de Suprimentos">
-                  <option value="Marketing Digital e E-commerce">
-                  <option value="Recursos Humanos e Relações Trabalhistas">
-                  <option value="Contabilidade Básica e Finanças Corporativas">
-                  <option value="Segurança do Trabalho">
-                  <option value="Agropecuária e Gestão do Agronegócio">
-                  <option value="Enfermagem e Primeiros Socorros">
-
-                    <!-- COMPONENTES INTEGRADORES E ELETIVAS ESCOLARES -->
-                  <option value="Projeto de Vida">
-                  <option value="Estudo Orientado e Métodos de Aprendizagem">
-                  <option value="Iniciação Científica e Metodologia de Pesquisa">
-                  <option value="Cultura Digital e Cidadania na Rede">
-                  <option value="Liderança e Inteligência Emocional">
-                </datalist>
               </div>
               <div>
                 <label class="block text-xs font-semibold mb-1">Período Letivo / Trimestre</label>
@@ -1361,14 +1656,238 @@
 
     // User Management Engine
     const DEFAULT_USERS = [
-      { id: 'usr-admin-1', full_name: 'Coordenador Pedagógico', email: 'admin@escola.gov.br', role: 'admin', discipline: 'Todas', picture_url: 'https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-1', full_name: 'Prof. Carlos Silva', email: 'professor@escola.gov.br', role: 'professor', discipline: 'Matemática', picture_url: 'https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-2', full_name: 'Profª. Mariana Santos', email: 'mariana@escola.gov.br', role: 'professor', discipline: 'Português', picture_url: 'https://ui-avatars.com/api/?name=Mariana+Santos&background=6366f1&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-3', full_name: 'Profª. Carla Souza', email: 'carla@escola.gov.br', role: 'professor', discipline: 'Biologia', picture_url: 'https://ui-avatars.com/api/?name=Carla+Souza&background=14b8a6&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-4', full_name: 'Prof. André Martins', email: 'andre@escola.gov.br', role: 'professor', discipline: 'História', picture_url: 'https://ui-avatars.com/api/?name=Andre+Martins&background=f59e0b&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-5', full_name: 'Prof. Marcos Dias', email: 'marcos@escola.gov.br', role: 'professor', discipline: 'Física', picture_url: 'https://ui-avatars.com/api/?name=Marcos+Dias&background=ec4899&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-6', full_name: 'Prof. Gabriel Torres', email: 'gabriel.robotica@escola.gov.br', role: 'professor', discipline: 'Robótica e Inteligência Artificial', picture_url: 'https://ui-avatars.com/api/?name=Gabriel+Torres&background=06b6d4&color=fff', created_at: new Date().toISOString() }
+      { id: 'usr-admin-1', full_name: 'Coordenador Pedagógico', email: 'admin@escola.gov.br', role: 'admin', discipline: 'Todas', password: 'admin123', picture_url: 'https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff', created_at: new Date().toISOString() },
+      { id: 'usr-prof-1', full_name: 'Prof. Carlos Silva', email: 'professor@escola.gov.br', role: 'professor', discipline: 'Matemática', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff', created_at: new Date().toISOString() },
+      { id: 'usr-prof-2', full_name: 'Profª. Mariana Santos', email: 'mariana@escola.gov.br', role: 'professor', discipline: 'Português', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Mariana+Santos&background=6366f1&color=fff', created_at: new Date().toISOString() },
+      { id: 'usr-prof-3', full_name: 'Profª. Carla Souza', email: 'carla@escola.gov.br', role: 'professor', discipline: 'Biologia', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Carla+Souza&background=14b8a6&color=fff', created_at: new Date().toISOString() },
+      { id: 'usr-prof-4', full_name: 'Prof. André Martins', email: 'andre@escola.gov.br', role: 'professor', discipline: 'História', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Andre+Martins&background=f59e0b&color=fff', created_at: new Date().toISOString() },
+      { id: 'usr-prof-5', full_name: 'Prof. Marcos Dias', email: 'marcos@escola.gov.br', role: 'professor', discipline: 'Física', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Marcos+Dias&background=ec4899&color=fff', created_at: new Date().toISOString() },
+      { id: 'usr-prof-6', full_name: 'Prof. Gabriel Torres', email: 'gabriel.robotica@escola.gov.br', role: 'professor', discipline: 'Robótica e Inteligência Artificial', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Gabriel+Torres&background=06b6d4&color=fff', created_at: new Date().toISOString() }
     ];
+
+    // Login & Self-Registration Screen Controller
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('form-login');
+      const regForm = document.getElementById('form-register');
+      const tabLogin = document.getElementById('tab-login');
+      const tabReg = document.getElementById('tab-register');
+      const loginErr = document.getElementById('login-error');
+      const regErr = document.getElementById('register-error');
+      if (loginErr) loginErr.classList.add('hidden');
+      if (regErr) regErr.classList.add('hidden');
+
+      if (tab === 'register') {
+        if (loginForm) loginForm.classList.add('hidden');
+        if (regForm) regForm.classList.remove('hidden');
+        if (tabReg) tabReg.className = 'flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-xs';
+        if (tabLogin) tabLogin.className = 'flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200';
+      } else {
+        if (regForm) regForm.classList.add('hidden');
+        if (loginForm) loginForm.classList.remove('hidden');
+        if (tabLogin) tabLogin.className = 'flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-white dark:bg-slate-900 text-sky-700 dark:text-sky-300 shadow-xs';
+        if (tabReg) tabReg.className = 'flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200';
+      }
+    }
+
+    function toggleRegisterRoleFields(role) {
+      const discWrap = document.getElementById('register-discipline-wrapper');
+      const discInput = document.getElementById('register-discipline');
+      const adminKeyWrap = document.getElementById('register-admin-key-wrapper');
+      const adminKeyInput = document.getElementById('register-admin-key');
+      if (role === 'admin') {
+        if (discWrap) discWrap.classList.add('opacity-50');
+        if (discInput) discInput.value = 'Todas';
+        if (adminKeyWrap) adminKeyWrap.classList.remove('hidden');
+        if (adminKeyInput) adminKeyInput.required = true;
+      } else {
+        if (discWrap) discWrap.classList.remove('opacity-50');
+        if (discInput && discInput.value === 'Todas') discInput.value = '';
+        if (adminKeyWrap) adminKeyWrap.classList.add('hidden');
+        if (adminKeyInput) { adminKeyInput.required = false; adminKeyInput.value = ''; }
+      }
+    }
+
+    function applyLoggedInUser(user) {
+      const role = user.role === 'admin' ? 'admin' : 'professor';
+      const fullName = user.full_name || user.name || (role === 'admin' ? 'Coordenador Pedagógico' : 'Professor');
+      const email = user.email || (role === 'admin' ? 'admin@escola.gov.br' : 'professor@escola.gov.br');
+      const discipline = role === 'admin' ? 'Todas' : (user.discipline || 'Matemática');
+      const avatar = user.picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=${role === 'admin' ? '0284c7' : '10b981'}&color=fff`;
+
+      const sessionObj = { id: user.id || ('usr-' + Date.now()), full_name: fullName, email, role, discipline, picture_url: avatar };
+      localStorage.setItem('gia_session', JSON.stringify(sessionObj));
+
+      state.currentUser = { role, email, name: fullName, discipline };
+
+      // Apply role UI permissions first
+      switchRole(role);
+
+      // Override with exact authenticated user identity
+      state.currentUser.name = fullName;
+      state.currentUser.email = email;
+      state.currentUser.discipline = discipline;
+      const nameEl = document.getElementById('user-name');
+      if (nameEl) nameEl.innerText = fullName;
+      const avatarEl = document.getElementById('user-avatar');
+      if (avatarEl) avatarEl.src = avatar;
+      const discEl = document.getElementById('prof-sidebar-disc');
+      if (discEl) discEl.innerText = discipline;
+      const tInput = document.getElementById('upload-teacher');
+      if (tInput) tInput.value = fullName;
+      const dInput = document.getElementById('upload-discipline');
+      if (dInput && role === 'professor') dInput.value = discipline;
+
+      // Transition from Auth Screen to App Shell
+      const authScreen = document.getElementById('auth-screen');
+      const appShell = document.getElementById('app-shell');
+      if (authScreen) authScreen.classList.add('hidden');
+      if (appShell) appShell.classList.remove('hidden');
+
+      navigate('dashboard');
+      checkBackendConnectivity();
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+      const errBox = document.getElementById('login-error');
+      const errMsg = document.getElementById('login-error-msg');
+      if (errBox) errBox.classList.add('hidden');
+
+      let backendHandled = false;
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        if (res.ok) {
+          const user = await res.json();
+          document.getElementById('form-login').reset();
+          applyLoggedInUser(user);
+          return;
+        } else if (res.status === 401 || res.status === 403 || res.status === 400) {
+          backendHandled = true;
+          const data = await res.json().catch(() => ({}));
+          if (errBox) errBox.classList.remove('hidden');
+          if (errMsg) errMsg.innerText = data.detail || 'E-mail ou senha incorretos.';
+          return;
+        }
+      } catch (err) {
+        // Offline / GitHub Pages
+      }
+
+      if (!backendHandled) {
+        const stored = JSON.parse(localStorage.getItem('gia_users') || 'null') || [...DEFAULT_USERS];
+        const found = stored.find(u => (u.email || '').toLowerCase() === email);
+        if (found) {
+          const expectedPwd = found.password || (found.role === 'admin' ? 'admin123' : 'prof123');
+          if (password === expectedPwd || (found.role === 'admin' && password === 'admin123')) {
+            document.getElementById('form-login').reset();
+            applyLoggedInUser(found);
+            return;
+          }
+        }
+        if (errBox) errBox.classList.remove('hidden');
+        if (errMsg) errMsg.innerText = 'E-mail ou senha incorretos. Verifique suas credenciais ou crie uma conta.';
+      }
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('register-name').value.trim();
+      const email = document.getElementById('register-email').value.trim().toLowerCase();
+      const role = document.getElementById('register-role').value;
+      const discipline = role === 'admin' ? 'Todas' : (document.getElementById('register-discipline').value.trim() || 'Matemática');
+      const adminKey = document.getElementById('register-admin-key').value;
+      const password = document.getElementById('register-password').value;
+      const confirmPwd = document.getElementById('register-password-confirm').value;
+      const errBox = document.getElementById('register-error');
+      const errMsg = document.getElementById('register-error-msg');
+      if (errBox) errBox.classList.add('hidden');
+
+      if (password !== confirmPwd) {
+        if (errBox) errBox.classList.remove('hidden');
+        if (errMsg) errMsg.innerText = 'As senhas digitadas não conferem.';
+        return;
+      }
+
+      let backendHandled = false;
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: fullName,
+            email,
+            password,
+            role,
+            discipline,
+            admin_key: role === 'admin' ? adminKey : null
+          })
+        });
+        if (res.ok) {
+          const newUser = await res.json();
+          document.getElementById('form-register').reset();
+          toggleRegisterRoleFields('professor');
+          alert(`✅ Conta criada com sucesso! Bem-vindo(a), ${newUser.full_name}.`);
+          applyLoggedInUser(newUser);
+          return;
+        } else if (res.status === 400 || res.status === 403 || res.status === 422) {
+          backendHandled = true;
+          const data = await res.json().catch(() => ({}));
+          if (errBox) errBox.classList.remove('hidden');
+          if (errMsg) errMsg.innerText = data.detail || 'Não foi possível concluir o cadastro.';
+          return;
+        }
+      } catch (err) {
+        // Offline / GitHub Pages
+      }
+
+      if (!backendHandled) {
+        const stored = JSON.parse(localStorage.getItem('gia_users') || 'null') || [...DEFAULT_USERS];
+        if (stored.some(u => (u.email || '').toLowerCase() === email)) {
+          if (errBox) errBox.classList.remove('hidden');
+          if (errMsg) errMsg.innerText = 'Já existe uma conta cadastrada com este e-mail.';
+          return;
+        }
+        if (role === 'admin') {
+          const validAdminKey = adminKey === 'admin123' || stored.some(u => u.role === 'admin' && u.password && u.password === adminKey);
+          if (!validAdminKey) {
+            if (errBox) errBox.classList.remove('hidden');
+            if (errMsg) errMsg.innerText = 'Chave institucional administrativa inválida. Apenas a Coordenação pode criar contas Admin.';
+            return;
+          }
+        }
+        const newUser = {
+          id: 'usr-' + Date.now(),
+          full_name: fullName,
+          email,
+          role,
+          discipline,
+          password,
+          picture_url: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=${role === 'admin' ? '0284c7' : '10b981'}&color=fff`,
+          created_at: new Date().toISOString()
+        };
+        stored.push(newUser);
+        state.users = stored;
+        localStorage.setItem('gia_users', JSON.stringify(stored));
+        document.getElementById('form-register').reset();
+        toggleRegisterRoleFields('professor');
+        alert(`✅ Conta criada com sucesso! Bem-vindo(a), ${fullName}.`);
+        applyLoggedInUser(newUser);
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('gia_session');
+      const authScreen = document.getElementById('auth-screen');
+      const appShell = document.getElementById('app-shell');
+      if (appShell) appShell.classList.add('hidden');
+      if (authScreen) authScreen.classList.remove('hidden');
+      switchAuthTab('login');
+    }
 
     async function loadUsersList() {
       let users = [];
@@ -3158,11 +3677,21 @@ function exportarGabaritoParaPlanilha(dados) {
       pill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> GitHub Pages / PWA';
     }
 
-    // Init
+    // Init: Restore active session or show Login/Register screen
     if (state.exams && state.exams.length > 0) {
       currentActiveExam = state.exams[0];
     }
-    loadDashboard();
+    const savedSessionRaw = localStorage.getItem('gia_session');
+    if (savedSessionRaw) {
+      try {
+        const savedSession = JSON.parse(savedSessionRaw);
+        if (savedSession && savedSession.email) {
+          applyLoggedInUser(savedSession);
+        }
+      } catch (e) {
+        localStorage.removeItem('gia_session');
+      }
+    }
     checkBackendConnectivity();
   </script>
 </body>

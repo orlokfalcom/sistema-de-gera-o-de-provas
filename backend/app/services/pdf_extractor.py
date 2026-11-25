@@ -137,13 +137,31 @@ class PDFExtractionService:
             "Geopolítica", "Direitos Humanos", "Cidadania", "Empreendedorismo", "Empreendedorismo Social",
             "História Regional", "Patrimônio Cultural", "Ética e Política", "Antropologia",
 
-            # Itinerário 5: Educação Profissional e Técnica (Cursos Técnicos Integrados)
-            "Desenvolvimento de Sistemas", "Programação", "Robótica", "Inteligência Artificial",
-            "Ciência de Dados", "Banco de Dados", "Administração", "Logística", "Marketing Digital",
-            "Recursos Humanos", "Contabilidade", "Segurança do Trabalho", "Agropecuária", "Enfermagem",
+            # Itinerário 5: Educação Profissional e Técnica — SEE/MG (EMTI Profissional / Trilhas de Futuro)
+            "Desenvolvimento de Sistemas", "Informática", "Informática para Internet", "Redes de Computadores",
+            "Manutenção e Suporte em Informática", "Jogos Digitais", "Programação", "Robótica", "Inteligência Artificial",
+            "Ciência de Dados", "Banco de Dados", "Administração", "Logística", "Marketing Digital", "Marketing",
+            "Recursos Humanos", "Contabilidade", "Finanças", "Comércio", "Vendas", "Secretariado",
+            "Transações Imobiliárias", "Serviços Jurídicos", "Qualidade",
+            "Agropecuária", "Agronegócio", "Agricultura", "Zootecnia", "Agroecologia", "Florestas",
+            "Meio Ambiente", "Cafeicultura", "Fruticultura", "Piscicultura",
+            "Enfermagem", "Análises Clínicas", "Farmácia", "Nutrição e Dietética", "Segurança do Trabalho",
+            "Saúde Bucal", "Radiologia", "Agente Comunitário de Saúde", "Gerência em Saúde", "Estética",
+            "Eletrotécnica", "Eletrônica", "Mecânica", "Mecatrônica", "Automação Industrial", "Metalurgia",
+            "Eletromecânica", "Soldagem", "Refrigeração e Climatização", "Manutenção Automotiva",
+            "Edificações", "Mineração", "Agrimensura", "Estradas", "Saneamento", "Geoprocessamento", "Design de Interiores",
+            "Alimentos", "Agroindústria", "Laticínios", "Leite e Derivados", "Panificação e Confeitaria",
+            "Vestuário", "Moda", "Têxtil", "Móveis", "Biocombustíveis", "Açúcar e Álcool",
+            "Gastronomia", "Cozinha", "Hospedagem", "Eventos", "Guia de Turismo", "Lazer",
+            "Comunicação Visual", "Multimídia", "Áudio e Vídeo", "Design Gráfico",
+            "Secretaria Escolar", "Biblioteconomia", "Libras", "Multimeios Didáticos",
 
-            # Componentes Integradores / Eletivas
-            "Projeto de Vida", "Estudo Orientado", "Iniciação Científica", "Cultura Digital", "Liderança"
+            # Componentes Integradores da SEE-MG
+            "Projeto de Vida", "Estudos Orientados", "Práticas Experimentais",
+            "Nivelamento em Língua Portuguesa", "Nivelamento em Matemática",
+            "Projetos Integradores e de Corresponsabilidade Social (PICS)", "PICS",
+            "Cultura Digital e Fundamentos de IA", "Ferramentas para o Mundo do Trabalho",
+            "Eletivas", "Iniciação Científica", "Cultura Digital"
         ]
         text_lower = text.lower()
         for disc in disciplines:

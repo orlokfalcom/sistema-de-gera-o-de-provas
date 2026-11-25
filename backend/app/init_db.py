@@ -35,6 +35,7 @@ def init_database():
             full_name="Coordenador Pedagógico (Admin)",
             role="admin",
             discipline="Todas",
+            password_hash="admin123",
             picture_url="https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff"
         )
         db.add(admin)
@@ -47,6 +48,7 @@ def init_database():
             full_name="Prof. Carlos Silva",
             role="professor",
             discipline="Matemática",
+            password_hash="prof123",
             picture_url="https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff"
         )
         db.add(teacher)
@@ -59,6 +61,7 @@ def init_database():
             full_name="Profª. Mariana Santos",
             role="professor",
             discipline="Português",
+            password_hash="prof123",
             picture_url="https://ui-avatars.com/api/?name=Mariana+Santos&background=6366f1&color=fff"
         )
         db.add(teacher2)
@@ -71,12 +74,17 @@ def init_database():
             full_name="Prof. Henrique Lima",
             role="professor",
             discipline="Robótica e Inteligência Artificial",
+            password_hash="prof123",
             picture_url="https://ui-avatars.com/api/?name=Henrique+Lima&background=f59e0b&color=fff"
         )
         db.add(teacher3)
     db.commit()
+    # Seed default SEE/MG High School & Technical Itineraries question bank if DB is empty
+    if db.query(Question).count() == 0:
+        from backend.app.seed_questions import seed_seemg_questions
+        seed_seemg_questions(db)
     db.close()
-    print("Database initialized successfully with default admin and teacher accounts.")
+    print("Database initialized successfully with default admin, teacher accounts, and SEE/MG question bank.")
 
 if __name__ == "__main__":
     init_database()
