@@ -49,6 +49,8 @@ class Question(Base):
     document_id = Column(String(36), ForeignKey("documents.id", ondelete="CASCADE"), nullable=True)
     created_by = Column(String(36), ForeignKey("users.id"), nullable=True)
     discipline = Column(String(100), nullable=False)
+    target_grade = Column(String(50), default="3º Ano do Ensino Médio")  # '1º Ano do Ensino Médio', '2º Ano do Ensino Médio', '3º Ano do Ensino Médio'
+    school_modality = Column(String(30), default="ambos")  # 'regular', 'integral', 'ambos'
     teacher_name = Column(String(255), nullable=True)
     question_type = Column(String(20), nullable=False, default="multiple_choice")  # 'multiple_choice' or 'discursive'
     statement = Column(Text, nullable=False)

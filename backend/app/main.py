@@ -6,8 +6,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from backend.app.config import BASE_DIR, IMAGES_DIR, GENERATED_DIR
-from backend.app.init_db import init_database
+from backend.app.init_db import init_database, run_migrations
 from backend.app.routers import auth, documents, questions, exams, google_sync, dashboard
+
+# Ensure SQLite schema migrations are applied even before ASGI startup lifespan events
+run_migrations()
 
 app = FastAPI(
     title="Gerador Inteligente de Avaliações do Ensino Médio",

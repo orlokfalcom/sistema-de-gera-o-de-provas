@@ -790,11 +790,24 @@
               <p class="text-xs text-slate-500">Todas as questões extraídas e categorizadas por disciplina e autoria
                 original.</p>
             </div>
-            <div class="flex gap-2">
-              <input type="text" id="questions-search" oninput="filterQuestions()" placeholder="Buscar por enunciado..."
-                class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 w-64">
-              <select id="questions-filter-discipline" onchange="filterQuestions()"
-                class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <div class="flex flex-wrap gap-2">
+              <input type="text" id="questions-search" oninput="filterQuestions()" aria-label="Buscar por enunciado" placeholder="Buscar por enunciado..."
+                class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 w-52">
+              <select id="questions-filter-grade" onchange="filterQuestions()" aria-label="Filtrar por Ano do Ensino Médio"
+                class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold text-purple-700 dark:text-purple-300">
+                <option value="">Todos os Anos (1º, 2º e 3º)</option>
+                <option value="1º Ano">1º Ano do Ensino Médio</option>
+                <option value="2º Ano">2º Ano do Ensino Médio</option>
+                <option value="3º Ano">3º Ano do Ensino Médio</option>
+              </select>
+              <select id="questions-filter-modality" onchange="filterQuestions()" aria-label="Filtrar por Modalidade SEE-MG"
+                class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold text-sky-700 dark:text-sky-300">
+                <option value="">Regular & Integral (SEE-MG)</option>
+                <option value="regular">Ensino Médio Regular</option>
+                <option value="integral">Tempo Integral (EMTI / Técnico)</option>
+              </select>
+              <select id="questions-filter-discipline" onchange="filterQuestions()" aria-label="Filtrar por Disciplina"
+                class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 max-w-xs">
                 <option value="">Todas as disciplinas</option>
               </select>
             </div>
@@ -840,7 +853,7 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold mb-1">Ano / Série Alvo</label>
-                <select id="exam-target-grade"
+                <select id="exam-target-grade" onchange="loadExamSetup()"
                   class="w-full text-xs px-2.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
                   <option value="Todos os Anos (Integrada)">Todos os Anos (Geral Integrada)</option>
                   <option value="1º Ano do Ensino Médio">1º Ano do Ensino Médio</option>
@@ -2436,7 +2449,12 @@
           };
 
           state.documents.unshift(newDoc);
-          res.questions.forEach(q => state.questions.push(q));
+          const inferredModality = period.toLowerCase().includes('regular') ? 'regular' : 'integral';
+          res.questions.forEach(q => {
+            q.target_grade = q.target_grade || gradeInput || '3º Ano do Ensino Médio';
+            q.school_modality = q.school_modality || inferredModality;
+            state.questions.push(q);
+          });
         } catch (err) {
           if (err && err.message === 'CANCELLED_BY_USER') {
             cancelled = true;
@@ -2616,12 +2634,21 @@
       const profDisc = state.currentUser.discipline || 'Matemática';
       const search = document.getElementById('questions-search').value.toLowerCase();
       const discSelect = document.getElementById('questions-filter-discipline');
+      const gradeSelect = document.getElementById('questions-filter-grade');
+      const modSelect = document.getElementById('questions-filter-modality');
       const disc = isProf ? (discSelect ? discSelect.value || profDisc : profDisc) : (discSelect ? discSelect.value : '');
+      const gradeFilter = gradeSelect ? gradeSelect.value : '';
+      const modFilter = modSelect ? modSelect.value : '';
 
       const filtered = state.questions.filter(q => {
-        const matchSearch = q.statement.toLowerCase().includes(search);
+        const matchSearch = (q.statement || '').toLowerCase().includes(search);
         const matchDisc = !disc || q.discipline === disc;
-        return matchSearch && matchDisc;
+        const qGrade = q.target_grade || '3º Ano do Ensino Médio';
+        const matchGrade = !gradeFilter || qGrade.includes(gradeFilter);
+        const qMod = q.school_modality || 'ambos';
+        const matchMod = !modFilter
+          || (modFilter === 'regular' ? (qMod === 'regular' || qMod === 'ambos') : (qMod === 'integral' || qMod === 'ambos'));
+        return matchSearch && matchDisc && matchGrade && matchMod;
       });
       renderQuestionsList(filtered);
     }
@@ -2631,7 +2658,11 @@
       const isProf = state.currentUser.role === 'professor';
       const profDisc = state.currentUser.discipline || 'Matemática';
 
-      let banner = '';
+      let banner = `
+        <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 flex flex-wrap items-center justify-between gap-2">
+          <span>📚 <b>Acervo Filtrado SEE-MG:</b> Exibindo <b>${questions.length}</b> de <b>${state.questions.length}</b> questões cadastradas (1º, 2º e 3º Anos • Regular e Tempo Integral).</span>
+        </div>
+      `;
       if (isProf) {
         banner = `
         <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-200 flex items-center justify-between">
@@ -2648,16 +2679,26 @@
         return '<span class="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold">Confiança Alta</span>';
       };
 
+      const gradeModBadges = (q) => {
+        const g = window.GIAUI.escapeHTML((q.target_grade || '3º Ano EM').replace(' do Ensino Médio', ' EM'));
+        const m = q.school_modality === 'integral' ? 'Integral SEE-MG' : (q.school_modality === 'regular' ? 'Ensino Regular' : 'Regular & Integral');
+        return `
+          <span class="text-[10px] px-2 py-0.5 rounded bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 font-bold">${g}</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300 font-bold">${m}</span>
+        `;
+      };
+
       window.GIAUI.renderVirtualizedList(
         cont,
         questions,
         (q) => `
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3 mt-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center gap-1.5">
               <span class="px-2.5 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 text-[11px] font-bold uppercase">${window.GIAUI.escapeHTML(q.discipline)}</span>
+              ${gradeModBadges(q)}
               ${confBadge(q)}
-              <span class="text-xs text-slate-500 font-semibold">• Prof: ${window.GIAUI.escapeHTML(q.teacher_name || 'Docente')}</span>
+              <span class="text-xs text-slate-500 font-semibold">• ${window.GIAUI.escapeHTML(q.teacher_name || 'Docente')}</span>
             </div>
             <span class="text-xs font-bold ${q.validation_status === 'approved' ? 'text-emerald-500' : 'text-amber-500'}">● ${q.validation_status === 'approved' ? 'APROVADA' : 'CONFERÊNCIA'}</span>
           </div>
@@ -2684,9 +2725,29 @@
       );
     }
 
-    // Montagem da Prova Única
+    function getFilteredApprovedQuestionsForExam() {
+      const targetGradeEl = document.getElementById('exam-target-grade');
+      const modalityEl = document.getElementById('exam-school-modality');
+      const selectedGrade = targetGradeEl ? targetGradeEl.value : 'Todos os Anos (Integrada)';
+      const selectedModality = modalityEl ? modalityEl.value : 'integral';
+
+      const gradePrefix = selectedGrade.startsWith('1º') ? '1º Ano'
+        : (selectedGrade.startsWith('2º') ? '2º Ano'
+        : (selectedGrade.startsWith('3º') ? '3º Ano' : ''));
+
+      return state.questions.filter(q => {
+        if (q.validation_status !== 'approved') return false;
+        const qGrade = q.target_grade || '3º Ano do Ensino Médio';
+        if (gradePrefix && !qGrade.includes(gradePrefix)) return false;
+        const qMod = q.school_modality || 'ambos';
+        if (selectedModality === 'regular' && qMod === 'integral') return false;
+        return true;
+      });
+    }
+
+    // Montagem da Prova Única (filtrada dinamicamente por Série 1º/2º/3º Ano e Modalidade Regular/Integral)
     function loadExamSetup() {
-      const approved = state.questions.filter(q => q.validation_status === 'approved');
+      const approved = getFilteredApprovedQuestionsForExam();
 
       // Group approved questions by discipline
       const discMap = {};
@@ -2826,14 +2887,16 @@
 
     function applySchoolModalityPreset(modality) {
       const periodInput = document.getElementById('exam-period');
-      if (!periodInput) return;
-      if (modality === 'integral') {
-        periodInput.value = '2026 - 1º Trimestre (Tempo Integral)';
-      } else if (modality === 'regular') {
-        periodInput.value = '2026 - 1º Trimestre (Ensino Regular)';
-      } else if (modality === 'noturno') {
-        periodInput.value = '2026 - 1º Semestre (Ensino Noturno / EJA)';
+      if (periodInput) {
+        if (modality === 'integral') {
+          periodInput.value = '2026 - 1º Trimestre (Tempo Integral)';
+        } else if (modality === 'regular') {
+          periodInput.value = '2026 - 1º Trimestre (Ensino Regular)';
+        } else if (modality === 'noturno') {
+          periodInput.value = '2026 - 1º Semestre (Ensino Noturno / EJA)';
+        }
       }
+      loadExamSetup();
     }
 
     function applyCurricularPreset(type) {
@@ -2865,9 +2928,9 @@
         return;
       }
 
-      const approved = state.questions.filter(q => q.validation_status === 'approved');
+      const approved = getFilteredApprovedQuestionsForExam();
       if (!approved.length) {
-        return window.GIAUI.showToast('Nenhuma questão aprovada para gerar a prova. Verifique a tela de conferência.');
+        return window.GIAUI.showToast('Nenhuma questão aprovada para a série/modalidade selecionada. Verifique os filtros ou a Conferência.');
       }
 
       // Filter questions per discipline as configured by the user

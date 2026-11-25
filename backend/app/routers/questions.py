@@ -11,6 +11,8 @@ router = APIRouter(prefix="/api/questions", tags=["Banco de Questões & Conferê
 @router.get("", response_model=List[QuestionResponse])
 def list_questions(
     discipline: Optional[str] = None,
+    target_grade: Optional[str] = None,
+    school_modality: Optional[str] = None,
     validation_status: Optional[str] = None,
     is_duplicate: Optional[bool] = None,
     search: Optional[str] = None,
@@ -20,6 +22,11 @@ def list_questions(
 
     if discipline:
         query = query.filter(Question.discipline.ilike(f"%{discipline}%"))
+    if target_grade and not target_grade.lower().startswith("todos"):
+        query = query.filter(Question.target_grade.ilike(f"%{target_grade[:6]}%"))
+    if school_modality and school_modality in ("regular", "integral"):
+        allowed = ["regular", "ambos"] if school_modality == "regular" else ["integral", "regular", "ambos"]
+        query = query.filter(Question.school_modality.in_(allowed))
     if validation_status:
         query = query.filter(Question.validation_status == validation_status)
     if is_duplicate is not None:

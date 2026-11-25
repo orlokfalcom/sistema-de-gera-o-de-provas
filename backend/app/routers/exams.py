@@ -25,8 +25,16 @@ def build_multidisciplinary_exam(
     if req.question_ids:
         questions = db.query(Question).filter(Question.id.in_(req.question_ids)).all()
     else:
-        # Default pedagogical rule: use all approved questions
-        questions = db.query(Question).filter(Question.validation_status == "approved").all()
+        q_query = db.query(Question).filter(Question.validation_status == "approved")
+        if req.target_grade and not req.target_grade.lower().startswith("todos"):
+            grade_filtered = q_query.filter(Question.target_grade.ilike(f"%{req.target_grade[:6]}%")).all()
+            questions = grade_filtered if grade_filtered else q_query.all()
+        else:
+            questions = q_query.all()
+        if req.school_modality == "regular":
+            reg_filtered = [q for q in questions if (q.school_modality or "ambos") in ("regular", "ambos")]
+            if reg_filtered:
+                questions = reg_filtered
 
     # 1.1 Custom questions per discipline count if provided
     if req.questions_per_discipline:

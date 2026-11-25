@@ -311,18 +311,21 @@
       localStorage.removeItem('gia_catalog_version');
     } else if (savedCatalogVer !== catalogVersion && defaultQuestions.length > 0) {
       const existingQ = await getAllFromStore('questions');
-      if (existingQ.length < defaultQuestions.length) {
-        const existingIds = new Set(existingQ.map(q => q.id));
-        const mergedQ = [...existingQ, ...defaultQuestions.filter(q => !existingIds.has(q.id))];
-        const existingDocs = await getAllFromStore('documents');
-        const existingDocIds = new Set(existingDocs.map(d => d.id));
-        const mergedDocs = [...existingDocs, ...defaultDocs.filter(d => !existingDocIds.has(d.id))];
-        await Promise.all([
-          replaceStoreItems('questions', mergedQ),
-          replaceStoreItems('documents', mergedDocs),
-          setMeta('catalog_version', catalogVersion)
-        ]);
-      }
+      const catalogMap = new Map(defaultQuestions.map(q => [q.id, q]));
+      // Preserve user-uploaded custom questions while refreshing/expanding official SEE-MG catalog items
+      const customQ = existingQ.filter(q => !catalogMap.has(q.id) && !String(q.id || '').startsWith('q-seemg-') && !['q-mat-1','q-mat-2','q-por-1','q-por-2','q-bio-1','q-bio-2','q-his-1','q-his-2','q-fis-1','q-fis-2','q-rob-1','q-rob-2','q-fin-1','q-fin-2'].includes(q.id));
+      const mergedQ = [...defaultQuestions, ...customQ];
+
+      const existingDocs = await getAllFromStore('documents');
+      const catalogDocIds = new Set(defaultDocs.map(d => d.id));
+      const customDocs = existingDocs.filter(d => !catalogDocIds.has(d.id) && !String(d.id || '').startsWith('doc-seemg-') && !String(d.id || '').startsWith('doc-'));
+      const mergedDocs = [...defaultDocs, ...customDocs];
+
+      await Promise.all([
+        replaceStoreItems('questions', mergedQ),
+        replaceStoreItems('documents', mergedDocs),
+        setMeta('catalog_version', catalogVersion)
+      ]);
     }
 
     const [documents, questions, exams, rawUsers] = await Promise.all([

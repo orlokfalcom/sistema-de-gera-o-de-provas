@@ -35,22 +35,24 @@ def seed_seemg_questions(db: Session) -> dict:
     docs_added = 0
     questions_added = 0
 
-    # Group by discipline to create one source Document per discipline
-    by_discipline = {}
+    # Group by (discipline, target_grade) to create structured source Documents per series/modality
+    by_group = {}
     for q in questions_data:
-        by_discipline.setdefault(q["discipline"], []).append(q)
+        key = (q["discipline"], q.get("target_grade", "3º Ano do Ensino Médio"), q.get("school_modality", "ambos"))
+        by_group.setdefault(key, []).append(q)
 
-    for idx, (disc, q_list) in enumerate(by_discipline.items(), start=1):
-        doc_id = f"doc-seemg-{idx:03d}"
+    for idx, ((disc, grade, modality), q_list) in enumerate(by_group.items(), start=1):
+        doc_id = f"doc-seemg-{idx:04d}"
         doc = db.query(Document).filter(Document.id == doc_id).first()
+        mod_label = "Tempo Integral SEE-MG" if modality == "integral" else ("Ensino Regular SEE-MG" if modality == "regular" else "Regular & Integral SEE-MG")
         if not doc:
             doc = Document(
                 id=doc_id,
-                filename=q_list[0].get("source_filename", f"{idx:02d}_seemg.pdf"),
+                filename=q_list[0].get("source_filename", f"{idx:03d}_seemg.pdf"),
                 storage_path=f"seed/seemg/{doc_id}.pdf",
                 discipline=disc,
-                target_grade="Ensino Médio / SEE-MG",
-                academic_period="2026 - 1º Trimestre",
+                target_grade=grade,
+                academic_period=f"2026 - {mod_label}",
                 status="completed",
                 total_questions_found=len(q_list),
                 uploaded_by="admin-001"
@@ -65,17 +67,23 @@ def seed_seemg_questions(db: Session) -> dict:
                     id=q["id"],
                     document_id=doc_id,
                     discipline=disc,
+                    target_grade=grade,
+                    school_modality=modality,
                     teacher_name=q.get("teacher_name", "Docente SEE/MG"),
                     question_type=q.get("question_type", "multiple_choice"),
                     statement=q["statement"],
                     options_json=q.get("options_json"),
                     correct_answer=q.get("correct_answer", "A"),
-                    difficulty="medio",
+                    difficulty=q.get("difficulty", "medio"),
                     validation_status=q.get("validation_status", "approved"),
+                    source_filename=q.get("source_filename", f"{idx:03d}_seemg.pdf"),
                     page_number=1
                 )
                 db.add(new_q)
                 questions_added += 1
+            else:
+                existing_q.target_grade = grade
+                existing_q.school_modality = modality
 
     db.commit()
     return {

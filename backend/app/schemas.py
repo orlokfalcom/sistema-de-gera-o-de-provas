@@ -28,6 +28,8 @@ class UserResponse(UserBase):
 
 class QuestionBase(BaseModel):
     discipline: str
+    target_grade: Optional[str] = "3º Ano do Ensino Médio"
+    school_modality: Optional[str] = "ambos"
     teacher_name: Optional[str] = "Professor(a)"
     question_type: str = "multiple_choice"
     statement: str
@@ -46,6 +48,8 @@ class QuestionCreate(QuestionBase):
 
 class QuestionUpdate(BaseModel):
     discipline: Optional[str] = None
+    target_grade: Optional[str] = None
+    school_modality: Optional[str] = None
     statement: Optional[str] = None
     options_json: Optional[Dict[str, str]] = None
     correct_answer: Optional[str] = None
@@ -79,6 +83,7 @@ class ExamBuildRequest(BaseModel):
     academic_period: str = "2026 - Ensino Médio"
     institution_name: str = "Colégio Integrado de Ensino Médio"
     school_modality: Optional[str] = "integral" # 'integral', 'regular', 'noturno'
+    target_grade: Optional[str] = None # '1º Ano do Ensino Médio', '2º Ano do Ensino Médio', '3º Ano do Ensino Médio'
     organization_mode: str = "by_discipline" # by_discipline, interleaved, random
     show_discipline_header: bool = True
     question_ids: Optional[List[str]] = None # If None, uses all approved questions

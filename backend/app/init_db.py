@@ -18,6 +18,14 @@ def run_migrations():
             exam_cols = [row[1] for row in res_exams.fetchall()]
             if "school_modality" not in exam_cols:
                 conn.execute(text("ALTER TABLE exams ADD COLUMN school_modality VARCHAR(50) DEFAULT 'integral'"))
+
+            # Check questions columns (1º, 2º, 3º Ano & Regular / Integral SEE-MG)
+            res_q = conn.execute(text("PRAGMA table_info(questions)"))
+            q_cols = [row[1] for row in res_q.fetchall()]
+            if "target_grade" not in q_cols:
+                conn.execute(text("ALTER TABLE questions ADD COLUMN target_grade VARCHAR(50) DEFAULT '3º Ano do Ensino Médio'"))
+            if "school_modality" not in q_cols:
+                conn.execute(text("ALTER TABLE questions ADD COLUMN school_modality VARCHAR(30) DEFAULT 'ambos'"))
             conn.commit()
         except Exception:
             pass
