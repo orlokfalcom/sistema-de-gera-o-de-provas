@@ -4,13 +4,18 @@ from sqlalchemy.orm import Session
 from typing import Dict, Any
 
 from backend.app.database import get_db
-from backend.app.models import Exam, Document, Question
+from backend.app.models import Exam, Document, Question, User
 from backend.app.services.google_service import GoogleWorkspaceService
+from backend.app.routers.auth import require_admin
 
 router = APIRouter(prefix="/api/google", tags=["Integração Google Workspace"])
 
 @router.post("/drive/sync-exam/{exam_id}")
-def sync_exam_to_drive(exam_id: str, db: Session = Depends(get_db)):
+def sync_exam_to_drive(
+    exam_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
     exam = db.query(Exam).filter(Exam.id == exam_id).first()
     if not exam:
         raise HTTPException(status_code=404, detail="Avaliação não encontrada.")
@@ -30,7 +35,10 @@ def sync_exam_to_drive(exam_id: str, db: Session = Depends(get_db)):
     return result
 
 @router.post("/sheets/export-log")
-def export_processing_log_to_sheets(db: Session = Depends(get_db)):
+def export_processing_log_to_sheets(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
     docs = db.query(Document).order_by(Document.created_at.desc()).all()
     records = []
     for d in docs:

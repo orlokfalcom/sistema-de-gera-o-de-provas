@@ -72,6 +72,7 @@ class ExamBuildRequest(BaseModel):
     organization_mode: str = "by_discipline" # by_discipline, interleaved, random
     show_discipline_header: bool = True
     question_ids: Optional[List[str]] = None # If None, uses all approved questions
+    questions_per_discipline: Optional[Dict[str, int]] = None # Optional custom count per discipline
 
 class ExamResponse(BaseModel):
     id: str

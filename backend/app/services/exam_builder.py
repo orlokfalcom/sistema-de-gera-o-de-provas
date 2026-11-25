@@ -4,6 +4,30 @@ from backend.app.models import Question
 
 class ExamBuilderService:
     @staticmethod
+    def select_questions_by_discipline_counts(
+        questions: List[Question],
+        counts_per_discipline: Dict[str, int]
+    ) -> List[Question]:
+        """
+        Filters questions according to a dict { discipline_name: count }.
+        If a discipline is present in counts_per_discipline, takes at most that many questions.
+        If a discipline is omitted or None, all its questions are preserved.
+        """
+        disc_map: Dict[str, List[Question]] = {}
+        for q in questions:
+            disc_map.setdefault(q.discipline, []).append(q)
+
+        selected: List[Question] = []
+        for disc, q_list in disc_map.items():
+            if disc in counts_per_discipline:
+                limit = counts_per_discipline[disc]
+                if limit > 0:
+                    selected.extend(q_list[:limit])
+            else:
+                selected.extend(q_list)
+        return selected
+
+    @staticmethod
     def organize_questions(
         questions: List[Question],
         mode: str = "by_discipline"

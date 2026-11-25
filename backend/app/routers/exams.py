@@ -6,16 +6,21 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from backend.app.database import get_db
-from backend.app.models import Exam, ExamItem, Question
+from backend.app.models import Exam, ExamItem, Question, User
 from backend.app.schemas import ExamBuildRequest, ExamResponse
 from backend.app.services.exam_builder import ExamBuilderService
 from backend.app.services.pdf_generator import PDFGeneratorService
 from backend.app.services.docx_generator import DocxGeneratorService
+from backend.app.routers.auth import require_admin
 
 router = APIRouter(prefix="/api/exams", tags=["Montagem e Geração da Prova Única"])
 
 @router.post("/build", response_model=ExamResponse)
-def build_multidisciplinary_exam(req: ExamBuildRequest, db: Session = Depends(get_db)):
+def build_multidisciplinary_exam(
+    req: ExamBuildRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
     # 1. Fetch questions to include: either specified list or all approved questions
     if req.question_ids:
         questions = db.query(Question).filter(Question.id.in_(req.question_ids)).all()
@@ -23,10 +28,16 @@ def build_multidisciplinary_exam(req: ExamBuildRequest, db: Session = Depends(ge
         # Default pedagogical rule: use all approved questions
         questions = db.query(Question).filter(Question.validation_status == "approved").all()
 
+    # 1.1 Custom questions per discipline count if provided
+    if req.questions_per_discipline:
+        questions = ExamBuilderService.select_questions_by_discipline_counts(
+            questions, req.questions_per_discipline
+        )
+
     if not questions:
         raise HTTPException(
             status_code=400,
-            detail="Nenhuma questão aprovada encontrada para montar a avaliação. Verifique a tela de conferência."
+            detail="Nenhuma questão aprovada encontrada para montar a avaliação com os critérios selecionados."
         )
 
     # 2. Organize questions according to rule (by_discipline, interleaved, or random)
@@ -39,7 +50,8 @@ def build_multidisciplinary_exam(req: ExamBuildRequest, db: Session = Depends(ge
         institution_name=req.institution_name,
         organization_mode=req.organization_mode,
         show_discipline_header=req.show_discipline_header,
-        total_questions=len(ordered_questions)
+        total_questions=len(ordered_questions),
+        created_by=current_user.id
     )
     db.add(exam)
     db.commit()

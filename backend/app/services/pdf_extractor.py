@@ -115,9 +115,16 @@ class PDFExtractionService:
 
     def _detect_discipline(self, text: str) -> str:
         disciplines = [
+            # Formação Geral Básica (BNCC)
             "Matemática", "Português", "Língua Portuguesa", "Literatura", "Redação",
             "Física", "Química", "Biologia", "História", "Geografia",
-            "Filosofia", "Sociologia", "Inglês", "Espanhol", "Artes", "Educação Física"
+            "Filosofia", "Sociologia", "Inglês", "Língua Inglesa", "Espanhol", "Artes", "Arte", "Educação Física",
+            # Itinerários Formativos & Cursos Integrados (Novo Ensino Médio)
+            "Robótica", "Educação Financeira", "Empreendedorismo", "Projeto de Vida",
+            "Iniciação Científica", "Biotecnologia", "Redação Avançada", "Geopolítica",
+            "Astronomia", "Desenvolvimento de Sistemas", "Informática", "Administração",
+            "Logística", "Marketing Digital", "Meio Ambiente", "Inteligência Artificial",
+            "Comunicação e Mídias", "Cultura Digital"
         ]
         text_lower = text.lower()
         for disc in disciplines:

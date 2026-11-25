@@ -74,8 +74,8 @@
       </div>
       <!-- Quick Role Toggle Button -->
       <div class="mt-3 flex gap-2">
-        <button onclick="switchRole('admin')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition">Admin</button>
-        <button onclick="switchRole('professor')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition">Professor</button>
+        <button id="role-admin-btn" onclick="switchRole('admin')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 bg-sky-600 text-white hover:bg-sky-700 transition">Admin (Total)</button>
+        <button id="role-prof-btn" onclick="switchRole('professor')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition">Professor</button>
       </div>
     </div>
 
@@ -104,19 +104,28 @@
         Banco de Questões
       </a>
 
-      <a href="#montagem" onclick="navigate('montagem')" id="nav-montagem" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
-        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        Montar Prova Única
+      <a href="#montagem" onclick="navigate('montagem')" id="nav-montagem" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          Montar Prova Única
+        </div>
+        <span id="lock-montagem" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold flex items-center gap-1">🔒 Admin</span>
       </a>
 
-      <a href="#historico" onclick="navigate('historico')" id="nav-historico" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
-        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Histórico & Provas
+      <a href="#historico" onclick="navigate('historico')" id="nav-historico" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Histórico & Provas
+        </div>
+        <span id="lock-historico" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold flex items-center gap-1">🔒 Admin</span>
       </a>
 
-      <a href="#google" onclick="navigate('google')" id="nav-google" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
-        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
-        Google Workspace
+      <a href="#google" onclick="navigate('google')" id="nav-google" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+          Google Workspace
+        </div>
+        <span id="lock-google" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold flex items-center gap-1">🔒 Admin</span>
       </a>
     </nav>
 
@@ -156,6 +165,7 @@
 
       <!-- VIEW: DASHBOARD -->
       <section id="view-dashboard" class="space-y-6">
+        <div id="dashboard-role-banner"></div>
         <h3 class="text-lg font-bold">Painel de Indicadores Gerais</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard-metrics-grid">
           <!-- Metric Cards -->
@@ -178,7 +188,8 @@
               Regras Pedagógicas Inegociáveis
             </h4>
             <ul class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
-              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Prova 100% Multidisciplinar: Todas as matérias num único caderno.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> <b>Todas as Matérias do Ensino Médio:</b> Inclui Formação Geral Básica (BNCC) e Itinerários Formativos / Cursos Técnicos.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Prova 100% Multidisciplinar: Todas as disciplinas num único caderno integrado.</li>
               <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Preservação da autoria: Questões e respostas originais dos professores.</li>
               <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> IA não inventa questões nem respostas: Gabaritos ausentes ficam marcados como PENDENTES.</li>
               <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Numeração contínua (01 a N) com Gabarito Oficial ao final.</li>
@@ -191,7 +202,7 @@
       <section id="view-upload" class="hidden space-y-6">
         <div>
           <h3 class="text-lg font-bold">Recebimento de PDFs dos Professores</h3>
-          <p class="text-xs text-slate-500">Envie múltiplos arquivos PDF (digitais ou digitalizados). O motor extrai automaticamente as questões e gabaritos diretamente no navegador ou via backend.</p>
+          <p class="text-xs text-slate-500">Envie múltiplos arquivos PDF de qualquer matéria do Ensino Médio (Base Comum ou Itinerários Formativos). O motor extrai automaticamente questões, alternativas e gabarito.</p>
         </div>
 
         <form id="upload-form" class="space-y-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -201,11 +212,41 @@
               <input type="text" id="upload-teacher" value="Prof. Carlos Silva" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1">Disciplina</label>
-              <input type="text" id="upload-discipline" placeholder="Ex: Química, Geografia (ou auto-detectar)" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <label class="block text-xs font-semibold mb-1">Disciplina / Componente Curricular</label>
+              <input type="text" id="upload-discipline" list="disciplines-suggestions" placeholder="Ex: Matemática, Robótica, Educação Financeira..." class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <datalist id="disciplines-suggestions">
+                <!-- Base Nacional Comum Curricular (FGB) -->
+                <option value="Matemática">
+                <option value="Língua Portuguesa">
+                <option value="Literatura">
+                <option value="Redação">
+                <option value="Física">
+                <option value="Química">
+                <option value="Biologia">
+                <option value="História">
+                <option value="Geografia">
+                <option value="Filosofia">
+                <option value="Sociologia">
+                <option value="Inglês">
+                <option value="Espanhol">
+                <option value="Artes">
+                <option value="Educação Física">
+                <!-- Itinerários Formativos & Cursos Técnicos (Novo EM) -->
+                <option value="Robótica e Inteligência Artificial">
+                <option value="Educação Financeira">
+                <option value="Empreendedorismo">
+                <option value="Projeto de Vida">
+                <option value="Biotecnologia e Meio Ambiente">
+                <option value="Iniciação Científica">
+                <option value="Redação Avançada e Mídias">
+                <option value="Geopolítica Contemporânea">
+                <option value="Desenvolvimento de Sistemas / TI">
+                <option value="Administração">
+                <option value="Logística">
+              </datalist>
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1">Série / Período</label>
+              <label class="block text-xs font-semibold mb-1">Etapa / Segmento</label>
               <input type="text" id="upload-period" value="Ensino Médio - 2026" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
             </div>
           </div>
@@ -335,10 +376,33 @@
             </div>
           </div>
 
+          <!-- Configuração de Questões por Matéria -->
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/40 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200 dark:border-slate-700/60">
+              <div>
+                <h4 class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                  Definição do Número de Questões por Matéria
+                </h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400">Configure exatamente quantas questões de cada disciplina entrarão na avaliação única.</p>
+              </div>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <button type="button" onclick="setAllQuestionsMax()" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">Todas Disponíveis</button>
+                <button type="button" onclick="setEqualQuestionsCount(1)" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">1 por Matéria</button>
+                <button type="button" onclick="setEqualQuestionsCount(2)" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">2 por Matéria</button>
+              </div>
+            </div>
+
+            <!-- Grade Dinâmica de Disciplinas -->
+            <div id="disciplines-distribution-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-1">
+              <!-- Preenchido dinamicamente via loadExamSetup() -->
+            </div>
+          </div>
+
           <div class="p-4 rounded-xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-900/50 flex items-center justify-between">
             <div>
-              <p class="text-xs font-bold text-sky-900 dark:text-sky-200">Total de Questões Aprovadas Prontas para a Prova</p>
-              <p class="text-xs text-sky-700 dark:text-sky-400 mt-0.5">Todas as questões de todas as disciplinas enviadas serão incluídas sem exceção.</p>
+              <p class="text-xs font-bold text-sky-900 dark:text-sky-200">Total de Questões Selecionadas para a Prova</p>
+              <p class="text-xs text-sky-700 dark:text-sky-400 mt-0.5">Calculado automaticamente somando a quantidade definida para cada matéria.</p>
             </div>
             <span id="exam-ready-questions-count" class="text-2xl font-extrabold text-sky-600 dark:text-sky-400">0</span>
           </div>
@@ -503,7 +567,7 @@
     documents: JSON.parse(localStorage.getItem('gia_docs')) || DEFAULT_SAMPLE_DOCS,
     questions: JSON.parse(localStorage.getItem('gia_questions')) || DEFAULT_SAMPLE_QUESTIONS,
     exams: JSON.parse(localStorage.getItem('gia_exams')) || [],
-    currentUser: { role: 'admin', email: 'admin@escola.gov.br', name: 'Coordenador Pedagógico' }
+    currentUser: { role: 'admin', email: 'admin@escola.gov.br', name: 'Coordenador Pedagógico', discipline: 'Todas' }
   };
 
   function saveState() {
@@ -526,8 +590,15 @@
     }
   }
 
-  // Navigation
+  // Navigation & Access Control
+  const ADMIN_ONLY_VIEWS = ['montagem', 'historico', 'google'];
+
   function navigate(viewId) {
+    if (state.currentUser.role === 'professor' && ADMIN_ONLY_VIEWS.includes(viewId)) {
+      showRestrictedAccessModal(viewId);
+      return;
+    }
+
     document.querySelectorAll('main section').forEach(el => el.classList.add('hidden'));
     const target = document.getElementById('view-' + viewId);
     if (target) target.classList.remove('hidden');
@@ -546,22 +617,82 @@
     if (viewId === 'historico') loadExamsHistory();
   }
 
+  function showRestrictedAccessModal(viewId) {
+    const viewNames = {
+      'montagem': 'Montagem da Prova Única Integrada',
+      'historico': 'Histórico e Cadernos Oficiais com Gabarito',
+      'google': 'Integração Institucional Google Workspace'
+    };
+    const title = viewNames[viewId] || 'Área Restrita';
+    alert(`🔒 ACESSO RESTRITO À COORDENAÇÃO PEDAGÓGICA (ADMIN)\n\nA tela "${title}" possui acesso restrito para resguardar o sigilo escolar e a integridade da avaliação integrada antes de sua aplicação.\n\nComo Professor, você possui acesso ao Recebimento de PDFs e à Conferência/Validação das questões da sua matéria (${state.currentUser.discipline || 'sua disciplina'}).`);
+  }
+
   function switchRole(role) {
     state.currentUser.role = role;
     if (role === 'admin') {
       state.currentUser.email = 'admin@escola.gov.br';
       state.currentUser.name = 'Coordenador Pedagógico';
+      state.currentUser.discipline = 'Todas';
       document.getElementById('user-name').innerText = state.currentUser.name;
       document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff';
-      document.getElementById('user-role-badge').innerText = 'ADMIN';
+      document.getElementById('user-role-badge').innerText = 'ADMIN (ACESSO TOTAL)';
       document.getElementById('user-role-badge').className = 'px-1.5 py-0.5 text-[9px] font-bold rounded bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 uppercase';
+      
+      const btnAdmin = document.getElementById('role-admin-btn');
+      const btnProf = document.getElementById('role-prof-btn');
+      if (btnAdmin) btnAdmin.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-sky-600 bg-sky-600 text-white transition shadow-xs';
+      if (btnProf) btnProf.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300';
+
+      ['montagem', 'historico', 'google'].forEach(id => {
+        const lock = document.getElementById('lock-' + id);
+        if (lock) lock.classList.add('hidden');
+        const nav = document.getElementById('nav-' + id);
+        if (nav) nav.classList.remove('opacity-50');
+      });
     } else {
       state.currentUser.email = 'professor@escola.gov.br';
       state.currentUser.name = 'Prof. Carlos Silva';
+      state.currentUser.discipline = 'Matemática';
       document.getElementById('user-name').innerText = state.currentUser.name;
       document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff';
-      document.getElementById('user-role-badge').innerText = 'PROFESSOR';
+      document.getElementById('user-role-badge').innerText = 'PROFESSOR (ACESSO LIMITADO)';
       document.getElementById('user-role-badge').className = 'px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 uppercase';
+      
+      const btnAdmin = document.getElementById('role-admin-btn');
+      const btnProf = document.getElementById('role-prof-btn');
+      if (btnProf) btnProf.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-emerald-600 bg-emerald-600 text-white transition shadow-xs';
+      if (btnAdmin) btnAdmin.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300';
+
+      ['montagem', 'historico', 'google'].forEach(id => {
+        const lock = document.getElementById('lock-' + id);
+        if (lock) lock.classList.remove('hidden');
+        const nav = document.getElementById('nav-' + id);
+        if (nav) nav.classList.add('opacity-50');
+      });
+
+      const tInput = document.getElementById('upload-teacher');
+      if (tInput) tInput.value = state.currentUser.name;
+      const dInput = document.getElementById('upload-discipline');
+      if (dInput) dInput.value = state.currentUser.discipline;
+
+      // If user is currently on an admin-only view, navigate away to dashboard
+      const activeSection = document.querySelector('main section:not(.hidden)');
+      if (activeSection && ADMIN_ONLY_VIEWS.includes(activeSection.id.replace('view-', ''))) {
+        navigate('dashboard');
+        return;
+      }
+    }
+
+    // Refresh whichever view is open
+    const activeSection = document.querySelector('main section:not(.hidden)');
+    if (activeSection) {
+      const vId = activeSection.id.replace('view-', '');
+      if (vId === 'dashboard') loadDashboard();
+      if (vId === 'upload') loadDocuments();
+      if (vId === 'conferencia') loadPendingQuestions();
+      if (vId === 'questoes') loadQuestions();
+      if (vId === 'montagem') loadExamSetup();
+      if (vId === 'historico') loadExamsHistory();
     }
   }
 
@@ -576,9 +707,51 @@
 
   // Dashboard Loader
   function loadDashboard() {
+    const isProf = state.currentUser.role === 'professor';
+    const profDisc = state.currentUser.discipline || 'Matemática';
+
+    // Role Banner
+    const roleBanner = document.getElementById('dashboard-role-banner');
+    if (roleBanner) {
+      if (isProf) {
+        roleBanner.innerHTML = `
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/10 border border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-200 text-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+            <div class="flex items-start gap-3">
+              <span class="text-xl">👤</span>
+              <div>
+                <p class="font-bold text-emerald-900 dark:text-emerald-100 text-sm">Perfil Ativo: Professor — Acesso Limitado Pedagógico</p>
+                <p class="text-emerald-700 dark:text-emerald-300 mt-0.5">Seu perfil permite envio de PDFs e validação de questões exclusivamente da sua disciplina (<b>${profDisc}</b>). A montagem da prova única e configurações de nuvem são restritas à Coordenação.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end md:self-auto">
+              <span class="text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">Minha Matéria:</span>
+              <select onchange="changeTeacherDiscipline(this.value)" class="text-xs font-bold py-1 px-2.5 rounded-lg border border-emerald-300 dark:border-emerald-700 bg-white dark:bg-slate-800 text-emerald-900 dark:text-emerald-200">
+                ${[...new Set(state.questions.map(q => q.discipline))].map(d => `<option value="${d}" ${d === profDisc ? 'selected' : ''}>${d}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+        `;
+      } else {
+        roleBanner.innerHTML = `
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-sky-500/10 border border-sky-300 dark:border-sky-800 text-sky-950 dark:text-sky-200 text-xs flex items-center justify-between shadow-xs">
+            <div class="flex items-start gap-3">
+              <span class="text-xl">🛡️</span>
+              <div>
+                <p class="font-bold text-sky-900 dark:text-sky-100 text-sm">Perfil Ativo: Administrador / Coordenação Pedagógica (Acesso Total)</p>
+                <p class="text-sky-700 dark:text-sky-300 mt-0.5">Acesso total a todas as disciplinas, recebimento amplo, conferência global, definição de questões por matéria na prova única e integração com Google Drive/Sheets.</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg bg-sky-600 text-white font-extrabold text-[10px] tracking-wider uppercase">Controle Total</span>
+          </div>
+        `;
+      }
+    }
+
     const totalDocs = state.documents.length;
     const totalQuestions = state.questions.length;
-    const pending = state.questions.filter(q => q.validation_status === 'pending_review').length;
+    const myQuestions = state.questions.filter(q => q.discipline === profDisc);
+    const myPending = myQuestions.filter(q => q.validation_status === 'pending_review').length;
+    const allPending = state.questions.filter(q => q.validation_status === 'pending_review').length;
     
     // Unique disciplines
     const discMap = {};
@@ -588,38 +761,66 @@
     const uniqueDiscCount = Object.keys(discMap).length;
 
     const grid = document.getElementById('dashboard-metrics-grid');
-    grid.innerHTML = `
-      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <p class="text-xs text-slate-500 font-semibold">Arquivos Enviados</p>
-        <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${totalDocs}</p>
-      </div>
-      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <p class="text-xs text-slate-500 font-semibold">Disciplinas Identificadas</p>
-        <p class="text-2xl font-extrabold text-sky-600 dark:text-sky-400 mt-1">${uniqueDiscCount}</p>
-      </div>
-      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <p class="text-xs text-slate-500 font-semibold">Questões Extraídas</p>
-        <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">${totalQuestions}</p>
-      </div>
-      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <p class="text-xs text-slate-500 font-semibold">Pendentes de Conferência</p>
-        <p class="text-2xl font-extrabold ${pending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-1">${pending}</p>
-      </div>
-    `;
-
-    document.getElementById('badge-pending').innerText = pending;
+    if (isProf) {
+      grid.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Minha Disciplina</p>
+          <p class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">${profDisc}</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Questões da Minha Matéria</p>
+          <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">${myQuestions.length}</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Pendências da Minha Matéria</p>
+          <p class="text-2xl font-extrabold ${myPending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-1">${myPending}</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Total Geral da Escola</p>
+          <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${totalQuestions}</p>
+        </div>
+      `;
+      document.getElementById('badge-pending').innerText = myPending;
+    } else {
+      grid.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Arquivos Enviados</p>
+          <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${totalDocs}</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Disciplinas Identificadas</p>
+          <p class="text-2xl font-extrabold text-sky-600 dark:text-sky-400 mt-1">${uniqueDiscCount}</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Questões Extraídas</p>
+          <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">${totalQuestions}</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-xs text-slate-500 font-semibold">Pendentes de Conferência</p>
+          <p class="text-2xl font-extrabold ${allPending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-1">${allPending}</p>
+        </div>
+      `;
+      document.getElementById('badge-pending').innerText = allPending;
+    }
 
     const list = document.getElementById('discipline-breakdown-list');
     if (uniqueDiscCount > 0) {
       list.innerHTML = Object.entries(discMap).map(([disc, count]) => `
-        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
-          <span class="font-medium">${disc}</span>
-          <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold">${count} questões</span>
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 ${isProf && disc === profDisc ? 'bg-emerald-50/60 dark:bg-emerald-950/30 px-2 rounded-lg font-bold text-emerald-900 dark:text-emerald-200' : ''}">
+          <span class="font-medium">${disc} ${isProf && disc === profDisc ? '(Minha Disciplina)' : ''}</span>
+          <span class="px-2 py-0.5 rounded-full ${isProf && disc === profDisc ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200' : 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300'} font-bold">${count} questões</span>
         </div>
       `).join('');
     } else {
       list.innerHTML = `<p class="text-slate-400">Nenhum documento processado ainda. Envie os primeiros PDFs!</p>`;
     }
+  }
+
+  function changeTeacherDiscipline(disc) {
+    state.currentUser.discipline = disc;
+    loadDashboard();
+    loadPendingQuestions();
+    loadQuestions();
   }
 
   // Upload Management
@@ -833,22 +1034,54 @@
 
   // Conferência
   function loadPendingQuestions() {
-    const pending = state.questions.filter(q => q.validation_status === 'pending_review');
+    const isProf = state.currentUser.role === 'professor';
+    const profDisc = state.currentUser.discipline || 'Matemática';
+
+    let pending = state.questions.filter(q => q.validation_status === 'pending_review');
+    if (isProf) {
+      pending = pending.filter(q => q.discipline === profDisc);
+    }
     document.getElementById('badge-pending').innerText = pending.length;
 
     const cont = document.getElementById('pending-questions-container');
+    let bannerHTML = '';
+    if (isProf) {
+      bannerHTML = `
+        <div class="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-xs">
+          <span class="flex items-center gap-2">
+            <span class="text-base">👤</span> <span><b>Perfil Professor (${profDisc}):</b> Você está conferindo apenas as questões da sua matéria para garantir sigilo e autoria.</span>
+          </span>
+          <div class="flex items-center gap-2 self-end sm:self-auto">
+            <span class="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">Alternar Matéria:</span>
+            <select onchange="changeTeacherDiscipline(this.value)" class="text-[11px] font-bold px-2 py-1 rounded-lg bg-white dark:bg-slate-800 border border-emerald-300 dark:border-emerald-700">
+              ${[...new Set(state.questions.map(q => q.discipline))].map(d => `<option value="${d}" ${d === profDisc ? 'selected' : ''}>${d}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      `;
+    } else {
+      bannerHTML = `
+        <div class="p-3.5 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200 text-xs flex items-center justify-between shadow-xs">
+          <span class="flex items-center gap-2">
+            <span class="text-base">🛡️</span> <span><b>Perfil Coordenação Pedagógica (Admin):</b> Visualização e validação irrestrita de todas as pendências de todas as disciplinas.</span>
+          </span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-sky-200 dark:bg-sky-900 text-sky-800 dark:text-sky-200 font-bold uppercase">Acesso Global</span>
+        </div>
+      `;
+    }
+
     if (!pending.length) {
-      cont.innerHTML = `
-        <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl p-8 text-center">
-          <p class="text-sm font-bold text-emerald-800 dark:text-emerald-300">Todas as questões estão conferidas e aprovadas!</p>
+      cont.innerHTML = bannerHTML + `
+        <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl p-8 text-center mt-3">
+          <p class="text-sm font-bold text-emerald-800 dark:text-emerald-300">Todas as questões ${isProf ? 'da sua disciplina (' + profDisc + ')' : ''} estão conferidas e aprovadas!</p>
           <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Não há pendências de gabarito ou inconsistências.</p>
         </div>
       `;
       return;
     }
 
-    cont.innerHTML = pending.map(q => `
-      <div class="bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-800 rounded-2xl p-5 shadow-sm space-y-3">
+    cont.innerHTML = bannerHTML + pending.map(q => `
+      <div class="bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-800 rounded-2xl p-5 shadow-sm space-y-3 mt-3">
         <div class="flex items-center justify-between">
           <span class="px-2.5 py-1 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200 text-xs font-bold uppercase">${q.discipline}</span>
           <span class="text-xs text-slate-500">Arquivo: ${q.source_filename || 'PDF'}</span>
@@ -877,7 +1110,7 @@
     if (q) {
       q.correct_answer = ans || 'A';
       q.validation_status = 'approved';
-      q.validation_notes = 'Aprovada manualmente pela coordenação.';
+      q.validation_notes = 'Aprovada manualmente na conferência.';
       saveState();
       loadPendingQuestions();
       loadDashboard();
@@ -886,15 +1119,27 @@
 
   // Banco de Questões
   function loadQuestions() {
+    const isProf = state.currentUser.role === 'professor';
+    const profDisc = state.currentUser.discipline || 'Matemática';
     const discSelect = document.getElementById('questions-filter-discipline');
     const uniqueDisc = [...new Set(state.questions.map(q => q.discipline))];
-    discSelect.innerHTML = '<option value="">Todas as disciplinas</option>' + uniqueDisc.map(d => `<option value="${d}">${d}</option>`).join('');
-    renderQuestionsList(state.questions);
+
+    if (isProf) {
+      discSelect.innerHTML = uniqueDisc.map(d => `<option value="${d}" ${d === profDisc ? 'selected' : ''}>${d} (Minha Disciplina)</option>`).join('');
+      discSelect.value = profDisc;
+    } else {
+      discSelect.innerHTML = '<option value="">Todas as disciplinas</option>' + uniqueDisc.map(d => `<option value="${d}">${d}</option>`).join('');
+    }
+    filterQuestions();
   }
 
   function filterQuestions() {
+    const isProf = state.currentUser.role === 'professor';
+    const profDisc = state.currentUser.discipline || 'Matemática';
     const search = document.getElementById('questions-search').value.toLowerCase();
-    const disc = document.getElementById('questions-filter-discipline').value;
+    const discSelect = document.getElementById('questions-filter-discipline');
+    const disc = isProf ? (discSelect ? discSelect.value || profDisc : profDisc) : (discSelect ? discSelect.value : '');
+
     const filtered = state.questions.filter(q => {
       const matchSearch = q.statement.toLowerCase().includes(search);
       const matchDisc = !disc || q.discipline === disc;
@@ -905,12 +1150,26 @@
 
   function renderQuestionsList(questions) {
     const cont = document.getElementById('questions-list-container');
+    const isProf = state.currentUser.role === 'professor';
+    const profDisc = state.currentUser.discipline || 'Matemática';
+
+    let banner = '';
+    if (isProf) {
+      banner = `
+        <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-200 flex items-center justify-between">
+          <span>🔒 <b>Modo Docente Ativo:</b> Exibindo questões da disciplina selecionada (<b>${profDisc}</b>).</span>
+          <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">${questions.length} questões encontradas</span>
+        </div>
+      `;
+    }
+
     if (!questions.length) {
-      cont.innerHTML = `<div class="p-8 text-center text-slate-400">Nenhuma questão encontrada.</div>`;
+      cont.innerHTML = banner + `<div class="p-8 text-center text-slate-400 mt-2">Nenhuma questão encontrada para os critérios selecionados.</div>`;
       return;
     }
-    cont.innerHTML = questions.map(q => `
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+
+    cont.innerHTML = banner + questions.map(q => `
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3 mt-3">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 text-[11px] font-bold uppercase">${q.discipline}</span>
@@ -939,15 +1198,118 @@
   // Montagem da Prova Única
   function loadExamSetup() {
     const approved = state.questions.filter(q => q.validation_status === 'approved');
-    document.getElementById('exam-ready-questions-count').innerText = approved.length;
+    
+    // Group approved questions by discipline
+    const discMap = {};
+    approved.forEach(q => {
+      discMap[q.discipline] = (discMap[q.discipline] || 0) + 1;
+    });
+
+    const grid = document.getElementById('disciplines-distribution-grid');
+    const disciplines = Object.keys(discMap).sort();
+
+    if (disciplines.length === 0) {
+      if (grid) grid.innerHTML = `<p class="col-span-full text-xs text-amber-600 dark:text-amber-400">Nenhuma questão aprovada no banco. Aprove questões na aba de Conferência primeiro.</p>`;
+      document.getElementById('exam-ready-questions-count').innerText = '0';
+      return;
+    }
+
+    if (grid) {
+      grid.innerHTML = disciplines.map(disc => {
+        const maxCount = discMap[disc];
+        const safeId = 'qty-disc-' + encodeURIComponent(disc).replace(/[^a-zA-Z0-9]/g, '_');
+        const existingInput = document.getElementById(safeId);
+        const currentVal = existingInput ? Math.min(parseInt(existingInput.value) || maxCount, maxCount) : maxCount;
+
+        return `
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center justify-between shadow-xs">
+            <div>
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">${disc}</span>
+              <span class="text-[10px] text-slate-500">${maxCount} ${maxCount === 1 ? 'questão disponível' : 'questões disponíveis'}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-[10px] font-semibold text-slate-400">Qtd:</label>
+              <input type="number" id="${safeId}" data-discipline="${disc}" data-max="${maxCount}" min="0" max="${maxCount}" value="${currentVal}"
+                oninput="onDisciplineQtyChange(this)"
+                class="w-16 text-center text-xs font-bold py-1 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sky-600 dark:text-sky-400 focus:ring-1 focus:ring-sky-500">
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    updateTotalExamQuestionsCount();
+  }
+
+  function onDisciplineQtyChange(input) {
+    const max = parseInt(input.dataset.max) || 0;
+    let val = parseInt(input.value);
+    if (isNaN(val) || val < 0) val = 0;
+    if (val > max) val = max;
+    input.value = val;
+    updateTotalExamQuestionsCount();
+  }
+
+  function updateTotalExamQuestionsCount() {
+    let total = 0;
+    document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
+      total += parseInt(inp.value) || 0;
+    });
+    const countEl = document.getElementById('exam-ready-questions-count');
+    if (countEl) countEl.innerText = total;
+  }
+
+  function setAllQuestionsMax() {
+    document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
+      inp.value = inp.dataset.max;
+    });
+    updateTotalExamQuestionsCount();
+  }
+
+  function setEqualQuestionsCount(count) {
+    document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
+      const max = parseInt(inp.dataset.max) || 0;
+      inp.value = Math.min(count, max);
+    });
+    updateTotalExamQuestionsCount();
   }
 
   let currentActiveExam = null;
 
   function buildExam() {
+    if (state.currentUser.role === 'professor') {
+      alert('Acesso negado: Apenas a Coordenação Pedagógica (Admin) pode montar a avaliação final multidisciplinar.');
+      return;
+    }
+
     const approved = state.questions.filter(q => q.validation_status === 'approved');
     if (!approved.length) {
       return alert('Nenhuma questão aprovada para gerar a prova. Verifique a tela de conferência.');
+    }
+
+    // Filter questions per discipline as configured by the user
+    const qtyInputs = document.querySelectorAll('#disciplines-distribution-grid input[type="number"]');
+    const selectedQuestions = [];
+
+    if (qtyInputs.length > 0) {
+      const discMap = {};
+      approved.forEach(q => {
+        discMap[q.discipline] = discMap[q.discipline] || [];
+        discMap[q.discipline].push(q);
+      });
+
+      qtyInputs.forEach(inp => {
+        const disc = inp.dataset.discipline;
+        const requestedQty = parseInt(inp.value) || 0;
+        const available = discMap[disc] || [];
+        selectedQuestions.push(...available.slice(0, requestedQty));
+      });
+    } else {
+      selectedQuestions.push(...approved);
+    }
+
+    if (!selectedQuestions.length) {
+      return alert('Nenhuma questão selecionada para a prova. Defina ao menos 1 questão nas disciplinas.');
     }
 
     const title = document.getElementById('exam-title').value;
@@ -956,14 +1318,14 @@
     const mode = document.getElementById('exam-order-mode').value;
     const showHeader = document.getElementById('exam-show-disc-header').checked;
 
-    let ordered = [...approved];
+    let ordered = [...selectedQuestions];
     if (mode === 'by_discipline') {
       ordered.sort((a, b) => a.discipline.localeCompare(b.discipline));
     } else if (mode === 'random') {
       ordered.sort(() => Math.random() - 0.5);
     } else if (mode === 'interleaved') {
       const grouped = {};
-      approved.forEach(q => { grouped[q.discipline] = grouped[q.discipline] || []; grouped[q.discipline].push(q); });
+      selectedQuestions.forEach(q => { grouped[q.discipline] = grouped[q.discipline] || []; grouped[q.discipline].push(q); });
       const keys = Object.keys(grouped);
       const maxL = Math.max(...keys.map(k => grouped[k].length));
       ordered = [];
@@ -993,10 +1355,10 @@
     const resArea = document.getElementById('exam-generated-result');
     resArea.classList.remove('hidden');
     document.getElementById('result-exam-title').innerText = `${exam.title} — ${exam.total_questions} Questões`;
-    document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • Todas as disciplinas incluídas • Gabarito oficial ao final.`;
+    document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • ${[...new Set(ordered.map(q => q.discipline))].length} disciplinas incluídas • Gabarito oficial ao final.`;
 
     loadDashboard();
-    alert('Prova Multidisciplinar Única montada com sucesso!');
+    alert(`Prova Multidisciplinar Única montada com sucesso contendo ${exam.total_questions} questões!`);
   }
 
   // Visualização e Impressão da Prova
