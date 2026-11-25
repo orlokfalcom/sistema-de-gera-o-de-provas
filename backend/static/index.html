@@ -662,35 +662,19 @@
                   class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
               </div>
               <div>
-                <label class="block text-xs font-semibold mb-1">Período Letivo / Trimestre</label>
-                <input type="text" id="upload-period" list="periods-suggestions"
-                  value="2026 - 1º Trimestre (Tempo Integral)"
-                  class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                <datalist id="periods-suggestions">
-                  <!-- Escolas de Tempo Integral (EMTI / PEI) -->
-                  <option value="2026 - 1º Trimestre (Tempo Integral)">
-                  <option value="2026 - 2º Trimestre (Tempo Integral)">
-                  <option value="2026 - 3º Trimestre (Tempo Integral)">
-                  <option value="2026 - 1º Bimestre (Tempo Integral)">
-                  <option value="2026 - 2º Bimestre (Tempo Integral)">
-                  <option value="2026 - 3º Bimestre (Tempo Integral)">
-                  <option value="2026 - 4º Bimestre (Tempo Integral)">
-                    <!-- Escolas Não Integrais (Ensino Médio Regular / Parcial / Turno Único) -->
-                  <option value="2026 - 1º Trimestre (Ensino Regular)">
-                  <option value="2026 - 2º Trimestre (Ensino Regular)">
-                  <option value="2026 - 3º Trimestre (Ensino Regular)">
-                  <option value="2026 - 1º Bimestre (Ensino Regular)">
-                  <option value="2026 - 2º Bimestre (Ensino Regular)">
-                  <option value="2026 - 3º Bimestre (Ensino Regular)">
-                  <option value="2026 - 4º Bimestre (Ensino Regular)">
-                    <!-- Ensino Noturno e EJA -->
-                  <option value="2026 - 1º Semestre (Ensino Noturno / EJA)">
-                  <option value="2026 - 2º Semestre (Ensino Noturno / EJA)">
-                    <!-- Exames Especiais -->
-                  <option value="2026 - Simulado Geral ENEM / Vestibulares">
-                  <option value="2026 - Avaliação de Recuperação">
-                  <option value="2026 - Exame Final Oficial">
-                </datalist>
+                <label class="block text-xs font-semibold mb-1">Período / Trimestre</label>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <select id="upload-year" onchange="syncUploadPeriod()" aria-label="Ano Letivo (a partir de 2000)"
+                    class="w-full text-xs px-2 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                  </select>
+                  <select id="upload-trimester" onchange="syncUploadPeriod()" aria-label="Trimestre (1º, 2º ou 3º)"
+                    class="w-full text-xs px-2 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                    <option value="1º Trimestre" selected>1º Trimestre</option>
+                    <option value="2º Trimestre">2º Trimestre</option>
+                    <option value="3º Trimestre">3º Trimestre</option>
+                  </select>
+                </div>
+                <input type="hidden" id="upload-period" value="2026 - 1º Trimestre">
               </div>
             </div>
 
@@ -863,9 +847,18 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold mb-1">Período / Trimestre</label>
-                <input type="text" id="exam-period" list="periods-suggestions"
-                  value="2026 - 1º Trimestre (Tempo Integral)"
-                  class="w-full text-xs px-2.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                <div class="grid grid-cols-2 gap-1.5">
+                  <select id="exam-year" onchange="syncExamPeriod()" aria-label="Ano da Prova (a partir de 2000)"
+                    class="w-full text-xs px-2 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                  </select>
+                  <select id="exam-trimester" onchange="syncExamPeriod()" aria-label="Trimestre da Prova (1º, 2º ou 3º)"
+                    class="w-full text-xs px-2 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                    <option value="1º Trimestre" selected>1º Trimestre</option>
+                    <option value="2º Trimestre">2º Trimestre</option>
+                    <option value="3º Trimestre">3º Trimestre</option>
+                  </select>
+                </div>
+                <input type="hidden" id="exam-period" value="2026 - 1º Trimestre (Tempo Integral)">
               </div>
               <div>
                 <label class="block text-xs font-semibold mb-1">Modo de Organização</label>
@@ -919,7 +912,7 @@
               </div>
 
               <!-- Grade Dinâmica de Disciplinas -->
-              <div id="disciplines-distribution-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-1">
+              <div id="disciplines-distribution-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-1 max-h-96 overflow-y-auto pr-1">
                 <!-- Preenchido dinamicamente via loadExamSetup() -->
               </div>
             </div>
@@ -947,41 +940,71 @@
             </div>
           </div>
 
-          <!-- Generated Exam Modal / Result Area -->
+          <!-- Generated Exam Result & Instant Download Panel -->
           <div id="exam-generated-result"
-            class="hidden bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-800 rounded-2xl p-6 space-y-4">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">✓
+            class="hidden bg-emerald-50 dark:bg-emerald-950/30 border-2 border-emerald-400 dark:border-emerald-700 rounded-2xl p-6 space-y-4 shadow-md">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-xs">✓
+                </div>
+                <div>
+                  <h4 class="text-sm font-extrabold text-emerald-900 dark:text-emerald-100" id="result-exam-title">Prova Gerada
+                    com Sucesso!</h4>
+                  <p class="text-xs text-emerald-700 dark:text-emerald-300" id="result-exam-meta"></p>
+                </div>
               </div>
-              <div>
-                <h4 class="text-sm font-bold text-emerald-900 dark:text-emerald-200" id="result-exam-title">Prova Gerada
-                  com Sucesso!</h4>
-                <p class="text-xs text-emerald-700 dark:text-emerald-400" id="result-exam-meta"></p>
+              <span class="hidden sm:inline-block px-2.5 py-1 rounded-full bg-emerald-200/80 dark:bg-emerald-900 text-emerald-900 dark:text-emerald-200 text-[10px] font-extrabold uppercase">Pronta para Download</span>
+            </div>
+
+            <!-- Downloads Diretos -->
+            <div class="space-y-2 pt-2 border-t border-emerald-200 dark:border-emerald-800/60">
+              <p class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-900 dark:text-emerald-200">⬇️ Opções de Download da Prova</p>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="exportExamDOCX('student')"
+                  class="px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition shadow-xs flex items-center gap-2"
+                  title="Baixar Caderno do Aluno Editável no Word (Padrão ABNT NBR 14724)">
+                  ⬇️ Baixar Prova do Aluno — Word ABNT (.doc)
+                </button>
+                <button type="button" onclick="exportExamDOCX('complete')"
+                  class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition shadow-xs flex items-center gap-2"
+                  title="Baixar Prova Completa com Gabarito Oficial ao Final no Word (Padrão ABNT)">
+                  ⬇️ Baixar Prova Completa + Gabarito — Word ABNT (.doc)
+                </button>
+                <button type="button" onclick="exportExamDOCX('answer_key')"
+                  class="px-4 py-2.5 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 transition shadow-xs flex items-center gap-2"
+                  title="Baixar somente o Gabarito Oficial Editável">
+                  ⬇️ Baixar Gabarito Oficial (.doc)
+                </button>
+                <button type="button" onclick="downloadExamPDF('student')"
+                  class="px-4 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition shadow-xs flex items-center gap-2"
+                  title="Baixar / Salvar PDF da Prova do Aluno (sem gabarito)">
+                  ⬇️ Baixar PDF (Aluno)
+                </button>
+                <button type="button" onclick="downloadExamPDF('complete')"
+                  class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition shadow-xs flex items-center gap-2"
+                  title="Baixar / Salvar PDF Completo com Gabarito Oficial ao final">
+                  ⬇️ Baixar PDF (Completa c/ Gabarito)
+                </button>
               </div>
             </div>
-            <div class="flex flex-wrap gap-2 pt-2">
-              <button onclick="previewExamInBrowser('complete')"
-                class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition flex items-center gap-2">
-                📄 Visualizar Prova Completa (Gabarito ao final)
-              </button>
-              <button onclick="previewExamInBrowser('student')"
-                class="px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition flex items-center gap-2">
-                🎓 Visualizar Prova do Aluno (Sem gabarito)
-              </button>
-              <button onclick="previewExamInBrowser('answer_key')"
-                class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 transition flex items-center gap-2">
-                🔑 Gabarito Oficial Separado
-              </button>
-              <button onclick="exportExamDOCX('student')"
-                class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition flex items-center gap-2"
-                title="Exportar Caderno do Aluno Editável em Padrão ABNT">
-                📝 Prova Editável Aluno ABNT (.doc / Word)
-              </button>
-              <button onclick="exportExamDOCX('complete')"
-                class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold hover:bg-slate-900 transition flex items-center gap-2"
-                title="Exportar Prova Completa com Gabarito Oficial ao Final em Padrão ABNT">
-                📋 Prova Completa + Gabarito ABNT (.doc)
-              </button>
+
+            <!-- Visualização em Tela -->
+            <div class="space-y-1.5 pt-2 border-t border-emerald-200/70 dark:border-emerald-800/50">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">👁️ Pré-visualizar Antes de Baixar</p>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="previewExamInBrowser('complete')"
+                  class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-950 transition">
+                  📄 Visualizar Prova Completa
+                </button>
+                <button type="button" onclick="previewExamInBrowser('student')"
+                  class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-sky-300 dark:border-sky-700 text-sky-800 dark:text-sky-200 text-xs font-bold hover:bg-sky-50 dark:hover:bg-sky-950 transition">
+                  🎓 Visualizar Versão do Aluno
+                </button>
+                <button type="button" onclick="previewExamInBrowser('answer_key')"
+                  class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-200 text-xs font-bold hover:bg-amber-50 dark:hover:bg-amber-950 transition">
+                  🔑 Visualizar Gabarito Separado
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -1225,11 +1248,15 @@
       <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
         <h3 class="text-sm font-bold" id="preview-modal-title">Visualização Oficial da Avaliação</h3>
         <div class="flex items-center gap-2">
-          <button onclick="window.print()"
+          <button type="button" onclick="exportExamDOCX(currentPreviewType)"
+            class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition flex items-center gap-1.5">
+            ⬇️ Baixar Word ABNT
+          </button>
+          <button type="button" onclick="window.print()"
             class="px-3 py-1.5 rounded-lg bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition flex items-center gap-1.5">
             🖨️ Imprimir / Salvar PDF
           </button>
-          <button onclick="closePreviewModal()"
+          <button type="button" onclick="closePreviewModal()"
             class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 font-bold">✕</button>
         </div>
       </div>
@@ -2885,17 +2912,47 @@
       });
     }
 
-    function applySchoolModalityPreset(modality) {
-      const periodInput = document.getElementById('exam-period');
-      if (periodInput) {
-        if (modality === 'integral') {
-          periodInput.value = '2026 - 1º Trimestre (Tempo Integral)';
-        } else if (modality === 'regular') {
-          periodInput.value = '2026 - 1º Trimestre (Ensino Regular)';
-        } else if (modality === 'noturno') {
-          periodInput.value = '2026 - 1º Semestre (Ensino Noturno / EJA)';
-        }
+    function initPeriodSelectors() {
+      const years = [];
+      for (let y = 2000; y <= 2035; y++) {
+        years.push(`<option value="${y}" ${y === 2026 ? 'selected' : ''}>${y}</option>`);
       }
+      const yearOptionsHTML = years.join('');
+      const uploadYearEl = document.getElementById('upload-year');
+      const examYearEl = document.getElementById('exam-year');
+      if (uploadYearEl && !uploadYearEl.options.length) uploadYearEl.innerHTML = yearOptionsHTML;
+      if (examYearEl && !examYearEl.options.length) examYearEl.innerHTML = yearOptionsHTML;
+      syncUploadPeriod();
+      syncExamPeriod();
+    }
+
+    function syncUploadPeriod() {
+      const yEl = document.getElementById('upload-year');
+      const tEl = document.getElementById('upload-trimester');
+      const hiddenEl = document.getElementById('upload-period');
+      if (!hiddenEl) return;
+      const y = yEl ? yEl.value : '2026';
+      const t = tEl ? tEl.value : '1º Trimestre';
+      hiddenEl.value = `${y} - ${t}`;
+    }
+
+    function syncExamPeriod() {
+      const yEl = document.getElementById('exam-year');
+      const tEl = document.getElementById('exam-trimester');
+      const modEl = document.getElementById('exam-school-modality');
+      const hiddenEl = document.getElementById('exam-period');
+      if (!hiddenEl) return;
+      const y = yEl ? yEl.value : '2026';
+      const t = tEl ? tEl.value : '1º Trimestre';
+      const modality = modEl ? modEl.value : 'integral';
+      const modLabel = modality === 'regular'
+        ? 'Ensino Regular'
+        : (modality === 'noturno' ? 'Ensino Noturno / EJA' : 'Tempo Integral');
+      hiddenEl.value = `${y} - ${t} (${modLabel})`;
+    }
+
+    function applySchoolModalityPreset(modality) {
+      syncExamPeriod();
       loadExamSetup();
     }
 
@@ -3032,14 +3089,69 @@
       resArea.classList.remove('hidden');
       document.getElementById('result-exam-title').innerText = `${exam.title} — ${exam.total_questions} Questões`;
       const modalityLabel = schoolModality === 'regular' ? 'Ensino Regular (Não Integral)' : 'Tempo Integral';
-      document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • ${[...new Set(ordered.map(q => q.discipline))].length} disciplinas • ${targetGrade} • ${modalityLabel} • Gabarito oficial ao final.`;
+      document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • ${[...new Set(ordered.map(q => q.discipline))].length} disciplinas • ${targetGrade} • ${modalityLabel} • Opções de download liberadas abaixo.`;
 
       loadDashboard();
-      window.GIAUI.showToast(`Prova Multidisciplinar Única montada com sucesso contendo ${exam.total_questions} questões (${modalityLabel})!`);
+      resArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      window.GIAUI.showToast(`Prova com ${exam.total_questions} questões gerada! Escolha o formato de download abaixo.`, 'success');
+
+      // Optional backend sync for native .docx / ReportLab .pdf downloads when local server is running
+      try {
+        fetch('/api/exams/build', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-User-Role': state.currentUser.role,
+            'X-User-Email': state.currentUser.email
+          },
+          body: JSON.stringify({
+            title,
+            academic_period: period,
+            institution_name: institution,
+            school_modality: schoolModality,
+            target_grade: targetGrade,
+            organization_mode: mode,
+            show_discipline_header: showHeader
+          })
+        }).then(async (r) => {
+          if (r.ok) {
+            const bExam = await r.json();
+            if (bExam && bExam.id) {
+              exam.backend_id = bExam.id;
+              saveState();
+            }
+          }
+        }).catch(() => {});
+      } catch (_) {}
+    }
+
+    let currentPreviewType = 'complete';
+
+    function downloadExamPDF(type = 'student') {
+      if (!currentActiveExam) {
+        if (state.exams.length) currentActiveExam = state.exams[0];
+        else return window.GIAUI.showToast('Gere uma avaliação primeiro.', 'warning');
+      }
+      if (currentActiveExam.backend_id) {
+        const fileType = type === 'complete' ? 'pdf' : (type === 'answer_key' ? 'answer_key_pdf' : 'student_pdf');
+        const a = document.createElement('a');
+        a.href = `/api/exams/${currentActiveExam.backend_id}/download/${fileType}`;
+        a.download = `prova_${currentActiveExam.backend_id.slice(0, 8)}_${fileType}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.GIAUI.showToast('Download do PDF oficial iniciado!', 'success');
+        return;
+      }
+      // Static / GitHub Pages mode: open formatted print-ready PDF preview & trigger Save as PDF dialog
+      previewExamInBrowser(type);
+      window.GIAUI.showToast('Selecione "Salvar como PDF" na janela de impressão que será aberta.', 'info');
+      setTimeout(() => { window.print(); }, 250);
     }
 
     // Visualização e Impressão da Prova
     function previewExamInBrowser(type) {
+      currentPreviewType = type || 'complete';
       if (!currentActiveExam) {
         if (state.exams.length) currentActiveExam = state.exams[0];
         else return window.GIAUI.showToast('Gere uma avaliação primeiro.');
@@ -3176,11 +3288,12 @@
       // Isolamento estrito Fase 4.3: versão do aluno NUNCA recebe correct_answer na árvore DOM/memória de renderização
       const exam = (type === 'student') ? window.GIAUI.sanitizeExamForStudentDOM(currentActiveExam) : currentActiveExam;
       const isComplete = type === 'complete';
+      const isOnlyAnswerKey = type === 'answer_key';
 
       // Group discipline header flag
       let currentDisc = null;
 
-      const questionsHTML = exam.items.map(it => {
+      const questionsHTML = isOnlyAnswerKey ? '' : exam.items.map(it => {
         let discHeader = '';
         if (exam.show_discipline_header && exam.organization_mode === 'by_discipline') {
           if (it.question.discipline !== currentDisc) {
@@ -3219,9 +3332,9 @@
       }).join('');
 
       let answerKeyHTML = '';
-      if (isComplete) {
+      if (isComplete || isOnlyAnswerKey) {
         answerKeyHTML = `
-        <div style="page-break-before: always; margin-top: 24pt;">
+        <div style="${isOnlyAnswerKey ? '' : 'page-break-before: always; margin-top: 24pt;'}">
           <h2 style="text-align: center; font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 8pt;">
             GABARITO OFICIAL — ${exam.title.toUpperCase()} (${exam.academic_period})
           </h2>
@@ -3385,9 +3498,13 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `prova_${(exam.id || 'ensino_medio').slice(0, 8)}_${isComplete ? 'completa_abnt' : 'aluno_abnt'}.doc`;
+      const suffix = isOnlyAnswerKey ? 'gabarito_abnt' : (isComplete ? 'completa_abnt' : 'aluno_abnt');
+      a.download = `prova_${(exam.id || 'ensino_medio').slice(0, 8)}_${suffix}.doc`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      window.GIAUI.showToast(`Download iniciado: ${a.download}`, 'success');
     }
 
     // Histórico
@@ -3762,6 +3879,7 @@ function exportarGabaritoParaPlanilha(dados) {
 
     // Async Bootstrap: Migrate & load IndexedDB v2 + Lazy Catalog
     (async function bootstrapApp() {
+      initPeriodSelectors();
       try {
         const catalog = await ensureCatalogModule();
         const hydrated = await window.GIADatabase.initAndMigrate(catalog || {});
