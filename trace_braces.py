@@ -2,10 +2,12 @@ with open('index.html', 'r', encoding='utf-8') as f:
     text = f.read()
 
 import re
-m = re.search(r'<script\b[^>]*>([\s\S]*?)<\/script>', text)
+scripts = list(re.finditer(r'<script\b[^>]*>([\s\S]*?)<\/script>', text))
+m = scripts[-1]
 script = m.group(1)
+script_start_line = text[:m.start(1)].count('\n') + 1
+print(f"Main script starts at line {script_start_line}")
 
-# Full lexer tracking line numbers of all braces
 NORMAL = 0
 IN_S_QUOTE = 1
 IN_D_QUOTE = 2
@@ -20,11 +22,11 @@ i = 0
 n = len(script)
 line = 1
 col = 1
-script_start_line = text[:m.start(1)].count('\n') + 1
 
 while i < n:
     c = script[i]
     next_c = script[i+1] if i + 1 < n else ''
+    cur_file_line = script_start_line + line - 1
     
     if c == '\n':
         line += 1
@@ -52,17 +54,17 @@ while i < n:
         elif c == '`':
             state = IN_TEMPLATE
         elif c == '{':
-            brace_stack.append((script_start_line + line - 1, col, False))
+            brace_stack.append((cur_file_line, col, False))
         elif c == '}':
             if template_brace_stack and template_brace_stack[-1] == len(brace_stack):
                 template_brace_stack.pop()
                 state = IN_TEMPLATE
             if brace_stack:
                 open_line, open_col, is_tpl = brace_stack.pop()
-                if script_start_line + line - 1 in range(1525, 1535):
-                    print(f"Closing brace at file line {script_start_line + line - 1}:{col} matched opening from line {open_line}:{open_col}")
+                if cur_file_line in range(1520, 1535):
+                    print(f"Closing brace at file line {cur_file_line}:{col} matched opening from line {open_line}:{open_col}")
             else:
-                print(f"UNMATCHED CLOSING BRACE at file line {script_start_line + line - 1}:{col}!")
+                print(f"UNMATCHED CLOSING BRACE at file line {cur_file_line}:{col}!")
     elif state == IN_S_QUOTE:
         if c == '\\':
             i += 2
@@ -82,7 +84,7 @@ while i < n:
         elif c == '$' and next_c == '{':
             state = NORMAL
             template_brace_stack.append(len(brace_stack) + 1)
-            brace_stack.append((script_start_line + line - 1, col, True))
+            brace_stack.append((cur_file_line, col, True))
             i += 2
             continue
         elif c == '`':
