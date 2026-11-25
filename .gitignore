@@ -14,3 +14,4 @@ backend/storage/generated_exams/*
 !backend/storage/generated_exams/.gitkeep
 .idea/
 .vscode/
+senhas.md

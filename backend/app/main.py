@@ -34,9 +34,12 @@ app.include_router(dashboard.router)
 
 # Mount Static Files (Extracted Images & PWA Frontend)
 STATIC_DIR = BASE_DIR / "static"
+ASSETS_DIR = STATIC_DIR / "assets"
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
+ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
+app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
 app.mount("/static/images", StaticFiles(directory=str(IMAGES_DIR)), name="images")
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 

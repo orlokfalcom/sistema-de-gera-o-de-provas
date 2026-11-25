@@ -9,8 +9,6 @@
   <meta name="theme-color" content="#0284c7">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- PDF.js CDN for in-browser client-side PDF parsing on GitHub Pages -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <!-- Google Fonts: Inter / Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,10 +26,7 @@
         }
       }
     };
-    if (typeof pdfjsLib !== 'undefined') {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    }
-  </script>
+</script>
   <style>
     .glass-card {
       backdrop-filter: blur(8px);
@@ -49,6 +44,12 @@
 
     .dark ::-webkit-scrollbar-thumb {
       background: #475569;
+    }
+
+    /* Acessibilidade WCAG AA: Foco visível por teclado */
+    :focus-visible {
+      outline: 2px solid #0284c7 !important;
+      outline-offset: 2px !important;
     }
 
     @media print {
@@ -74,161 +75,7 @@
 <body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
 
   <!-- CATÁLOGO GLOBAL DE DISCIPLINAS DO ENSINO MÉDIO E ITINERÁRIOS TÉCNICOS SEE/MG -->
-  <datalist id="disciplines-suggestions">
-    <!-- 1. FORMAÇÃO GERAL BÁSICA (FGB / BNCC - 12 COMPONENTES - 1º, 2º e 3º ANOS - SEE/MG) -->
-    <option value="Língua Portuguesa">
-    <option value="Língua Inglesa">
-    <option value="Arte">
-    <option value="Educação Física">
-    <option value="Matemática">
-    <option value="Biologia">
-    <option value="Física">
-    <option value="Química">
-    <option value="História">
-    <option value="Geografia">
-    <option value="Filosofia">
-    <option value="Sociologia">
-    <option value="Literatura Brasileira">
-    <option value="Redação e Produção Textual">
-    <option value="Língua Espanhola">
-
-    <!-- 2. COMPONENTES INTEGRADORES DA SEE-MG (EMTI & REGULAR) -->
-    <option value="Projeto de Vida">
-    <option value="Estudos Orientados">
-    <option value="Práticas Experimentais">
-    <option value="Nivelamento em Língua Portuguesa">
-    <option value="Nivelamento em Matemática">
-    <option value="Projetos Integradores e de Corresponsabilidade Social (PICS)">
-    <option value="Cultura Digital e Fundamentos de IA">
-    <option value="Ferramentas para o Mundo do Trabalho">
-    <option value="Eletivas">
-    <option value="Educação Financeira e Empreendedorismo">
-    <option value="Iniciação Científica / Pesquisa e Intervenção">
-
-    <!-- 3. ITINERÁRIOS FORMATIVOS DE APROFUNDAMENTO (CURRÍCULO REFERÊNCIA SEE/MG) -->
-    <option value="Linguagens — Produção Textual Avançada e Escrita Criativa">
-    <option value="Linguagens — Práticas de Linguagens Digitais e Mídias">
-    <option value="Linguagens — Comunicação, Mídias e Oratória">
-    <option value="Linguagens — Literatura Comparada e Contemporânea">
-    <option value="Linguagens — Teatro, Expressão Corporal e Artes Cênicas">
-    <option value="Matemática — Educação Financeira">
-    <option value="Matemática — Matemática Financeira e Estatística Aplicada">
-    <option value="Matemática — Modelagem Matemática e Resolução de Problemas">
-    <option value="Matemática — Geometria Espacial e Desenho Técnico">
-    <option value="Matemática — Lógica Matemática e Algoritmos">
-    <option value="Natureza — Biotecnologia e Genética Aplicada">
-    <option value="Natureza — Sustentabilidade e Gestão Ambiental">
-    <option value="Natureza — Astronomia e Astrofísica">
-    <option value="Natureza — Química Tecnológica e Farmacologia">
-    <option value="Natureza — Saúde Pública e Bioética">
-    <option value="Humanas — Geopolítica Contemporânea e Relações Internacionais">
-    <option value="Humanas — Direitos Humanos, Cidadania e Movimentos Sociais">
-    <option value="Humanas — Empreendedorismo Social">
-    <option value="Humanas — História de Minas Gerais, Patrimônio e Memória">
-    <option value="Humanas — Ética, Política e Sociedade Contemporânea">
-    <option value="Humanas — Antropologia e Estudos Culturais">
-
-    <!-- 4. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO INFORMAÇÃO E COMUNICAÇÃO -->
-    <option value="Técnico em Desenvolvimento de Sistemas (SEE/MG)">
-    <option value="Técnico em Informática (SEE/MG)">
-    <option value="Técnico em Informática para Internet (SEE/MG)">
-    <option value="Técnico em Redes de Computadores (SEE/MG)">
-    <option value="Técnico em Manutenção e Suporte em Informática (SEE/MG)">
-    <option value="Técnico em Programação de Jogos Digitais (SEE/MG)">
-    <option value="Técnico em Ciência de Dados e Inteligência Artificial (SEE/MG)">
-    <option value="Técnico em Robótica e Automação (SEE/MG)">
-
-    <!-- 5. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO GESTÃO E NEGÓCIOS -->
-    <option value="Técnico em Administração (SEE/MG)">
-    <option value="Técnico em Logística (SEE/MG)">
-    <option value="Técnico em Contabilidade (SEE/MG)">
-    <option value="Técnico em Recursos Humanos (SEE/MG)">
-    <option value="Técnico em Marketing e Marketing Digital (SEE/MG)">
-    <option value="Técnico em Comércio / Vendas (SEE/MG)">
-    <option value="Técnico em Finanças (SEE/MG)">
-    <option value="Técnico em Secretariado (SEE/MG)">
-    <option value="Técnico em Transações Imobiliárias (SEE/MG)">
-    <option value="Técnico em Serviços Jurídicos (SEE/MG)">
-    <option value="Técnico em Qualidade (SEE/MG)">
-
-    <!-- 6. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO RECURSOS NATURAIS -->
-    <option value="Técnico em Agropecuária (SEE/MG)">
-    <option value="Técnico em Agronegócio (SEE/MG)">
-    <option value="Técnico em Agricultura (SEE/MG)">
-    <option value="Técnico em Zootecnia (SEE/MG)">
-    <option value="Técnico em Agroecologia (SEE/MG)">
-    <option value="Técnico em Florestas (SEE/MG)">
-    <option value="Técnico em Meio Ambiente (SEE/MG)">
-    <option value="Técnico em Cafeicultura (SEE/MG)">
-    <option value="Técnico em Fruticultura (SEE/MG)">
-    <option value="Técnico em Piscicultura (SEE/MG)">
-
-    <!-- 7. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO AMBIENTE E SAÚDE -->
-    <option value="Técnico em Enfermagem (SEE/MG)">
-    <option value="Técnico em Análises Clínicas (SEE/MG)">
-    <option value="Técnico em Farmácia (SEE/MG)">
-    <option value="Técnico em Nutrição e Dietética (SEE/MG)">
-    <option value="Técnico em Segurança do Trabalho (SEE/MG)">
-    <option value="Técnico em Saúde Bucal (SEE/MG)">
-    <option value="Técnico em Radiologia (SEE/MG)">
-    <option value="Técnico em Agente Comunitário de Saúde (SEE/MG)">
-    <option value="Técnico em Gerência em Saúde (SEE/MG)">
-    <option value="Técnico em Estética (SEE/MG)">
-
-    <!-- 8. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO CONTROLE E PROCESSOS INDUSTRIAIS -->
-    <option value="Técnico em Eletrotécnica (SEE/MG)">
-    <option value="Técnico em Eletrônica (SEE/MG)">
-    <option value="Técnico em Mecânica (SEE/MG)">
-    <option value="Técnico em Mecatrônica (SEE/MG)">
-    <option value="Técnico em Automação Industrial (SEE/MG)">
-    <option value="Técnico em Química (SEE/MG)">
-    <option value="Técnico em Metalurgia (SEE/MG)">
-    <option value="Técnico em Eletromecânica (SEE/MG)">
-    <option value="Técnico em Soldagem (SEE/MG)">
-    <option value="Técnico em Refrigeração e Climatização (SEE/MG)">
-    <option value="Técnico em Manutenção Automotiva (SEE/MG)">
-
-    <!-- 9. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO INFRAESTRUTURA E MINERAÇÃO -->
-    <option value="Técnico em Edificações (SEE/MG)">
-    <option value="Técnico em Mineração (SEE/MG)">
-    <option value="Técnico em Agrimensura (SEE/MG)">
-    <option value="Técnico em Estradas (SEE/MG)">
-    <option value="Técnico em Saneamento (SEE/MG)">
-    <option value="Técnico em Geoprocessamento (SEE/MG)">
-    <option value="Técnico em Design de Interiores (SEE/MG)">
-
-    <!-- 10. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO PRODUÇÃO ALIMENTÍCIA -->
-    <option value="Técnico em Alimentos (SEE/MG)">
-    <option value="Técnico em Agroindústria (SEE/MG)">
-    <option value="Técnico em Leite e Derivados / Laticínios (SEE/MG)">
-    <option value="Técnico em Panificação e Confeitaria (SEE/MG)">
-
-    <!-- 11. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO PRODUÇÃO INDUSTRIAL -->
-    <option value="Técnico em Vestuário e Moda (SEE/MG)">
-    <option value="Técnico em Têxtil (SEE/MG)">
-    <option value="Técnico em Móveis (SEE/MG)">
-    <option value="Técnico em Biocombustíveis (SEE/MG)">
-    <option value="Técnico em Açúcar e Álcool (SEE/MG)">
-
-    <!-- 12. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO TURISMO, HOSPITALIDADE E LAZER -->
-    <option value="Técnico em Gastronomia / Cozinha (SEE/MG)">
-    <option value="Técnico em Hospedagem (SEE/MG)">
-    <option value="Técnico em Eventos (SEE/MG)">
-    <option value="Técnico em Guia de Turismo (SEE/MG)">
-    <option value="Técnico em Lazer (SEE/MG)">
-
-    <!-- 13. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO PRODUÇÃO CULTURAL E DESIGN -->
-    <option value="Técnico em Comunicação Visual (SEE/MG)">
-    <option value="Técnico em Multimídia (SEE/MG)">
-    <option value="Técnico em Produção de Áudio e Vídeo (SEE/MG)">
-    <option value="Técnico em Design Gráfico (SEE/MG)">
-
-    <!-- 14. ITINERÁRIOS TÉCNICOS SEE/MG — EIXO DESENVOLVIMENTO EDUCACIONAL E SOCIAL -->
-    <option value="Técnico em Secretaria Escolar (SEE/MG)">
-    <option value="Técnico em Biblioteconomia (SEE/MG)">
-    <option value="Técnico em Tradução e Interpretação de Libras (SEE/MG)">
-    <option value="Técnico em Multimeios Didáticos (SEE/MG)">
-  </datalist>
+  <datalist id="disciplines-suggestions"></datalist>
 
   <!-- TELA DE LOGIN E CADASTRO INSTITUCIONAL -->
   <div id="auth-screen"
@@ -283,10 +130,10 @@
           </div>
         </div>
 
-        <div class="pt-4 border-t border-white/15 text-[10px] text-sky-100/80">
-          <p class="font-bold uppercase tracking-wider mb-1">Contas de Demonstração:</p>
-          <p>👤 Professor: <code class="bg-black/20 px-1.5 py-0.5 rounded">professor@escola.gov.br</code> / <code class="bg-black/20 px-1.5 py-0.5 rounded">prof123</code></p>
-          <p class="mt-1">🛡️ Admin: <code class="bg-black/20 px-1.5 py-0.5 rounded">admin@escola.gov.br</code> / <code class="bg-black/20 px-1.5 py-0.5 rounded">admin123</code></p>
+        <div class="pt-4 border-t border-white/15 text-[10px] text-sky-100/85 space-y-1">
+          <p class="font-bold uppercase tracking-wider">Segurança Criptográfica Ativa:</p>
+          <p>🔒 Senhas protegidas com hash <b>PBKDF2-SHA256</b> (100k iterações + salt) e persistência local em <b>IndexedDB v2</b>.</p>
+          <p>💡 Utilize sua conta institucional cadastrada ou a aba <b>Criar Nova Conta</b>.</p>
         </div>
       </div>
 
@@ -625,8 +472,15 @@
               d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg> Instalar App
         </button>
-        <button onclick="resetDemoData()" title="Restaurar dados de demonstração"
-          class="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</button>
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="exportBackupJSON()" aria-label="Exportar Backup JSON" title="Exportar Backup Completo (.json)"
+            class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-300 hover:bg-sky-100 dark:hover:bg-sky-950 transition">Backup</button>
+          <button type="button" onclick="triggerImportBackupJSON()" aria-label="Importar Backup JSON" title="Restaurar Backup (.json)"
+            class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-300 hover:bg-emerald-100 dark:hover:bg-emerald-950 transition">Importar</button>
+          <input type="file" id="backup-json-input" accept=".json,application/json" class="hidden" onchange="handleImportBackupJSON(event)">
+          <button type="button" onclick="resetDemoData()" aria-label="Restaurar dados iniciais" title="Restaurar catálogo padrão SEE/MG"
+            class="px-1.5 py-1 text-[10px] text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 font-semibold">Reset</button>
+        </div>
       </div>
     </aside>
 
@@ -853,14 +707,20 @@
               <p id="file-list-preview" class="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-3"></p>
             </div>
 
-            <!-- Progress Bar -->
-            <div id="upload-progress-container" class="hidden space-y-1">
-              <div class="flex justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-400">
-                <span id="upload-progress-label">Lendo e segmentando questões do PDF...</span>
-                <span id="upload-progress-pct">0%</span>
+            <!-- Progress Bar Real (Web Worker + Cancelamento) -->
+            <div id="upload-progress-container" class="hidden space-y-2 p-3 rounded-xl bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800" role="region" aria-label="Progresso de leitura do PDF">
+              <div class="flex items-center justify-between gap-2 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                <span id="upload-progress-label">Iniciando Web Worker de extração...</span>
+                <div class="flex items-center gap-2">
+                  <span id="upload-progress-pct" class="font-mono font-bold text-sky-600 dark:text-sky-400">0%</span>
+                  <button type="button" id="btn-cancel-pdf" onclick="cancelPDFUploadProcessing()"
+                    class="px-2 py-0.5 rounded bg-rose-100 hover:bg-rose-200 dark:bg-rose-950 dark:hover:bg-rose-900 text-rose-700 dark:text-rose-300 text-[10px] font-bold transition">
+                    Cancelar
+                  </button>
+                </div>
               </div>
               <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                <div id="upload-progress-bar" class="bg-sky-600 h-full w-0 transition-all duration-300"></div>
+                <div id="upload-progress-bar" class="bg-sky-600 h-full w-0 transition-all duration-200"></div>
               </div>
             </div>
 
@@ -1284,7 +1144,7 @@
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Senha de
                   Acesso:</label>
                 <input type="password" id="new-user-password" required
-                  placeholder="Senha de login (padrão: prof123 ou admin123)"
+                  placeholder="Defina uma senha segura (mín. 4 caracteres)"
                   class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
               </div>
 
@@ -1415,1951 +1275,145 @@
     </div>
   </div>
 
-  <!-- SCRIPT CORE ENGINE -->
+  <!-- MÓDULOS EXTERNOS (CODE-SPLITTING, SEGURANÇA PBKDF2, INDEXEDDB & UI VIRTUALIZADA) -->
+  <script src="./assets/js/security-db.js"></script>
+  <script src="./assets/js/ui-ux.js"></script>
   <script>
-    // Initial Sample Disciplines & Questions (Formação Geral Básica + Itinerários Formativos)
-    const CATALOG_VERSION = 'seemg_full_v3';
-    const DEFAULT_SAMPLE_DOCS = [
-      {
-            "id": "doc-seemg-1",
-            "filename": "01_língua_portuguesa.pdf",
-            "discipline": "Língua Portuguesa",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 2,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-2",
-            "filename": "02_literatura_brasileira.pdf",
-            "discipline": "Literatura Brasileira",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-3",
-            "filename": "03_redação_e_produção_textual.pdf",
-            "discipline": "Redação e Produção Textual",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-4",
-            "filename": "04_língua_inglesa.pdf",
-            "discipline": "Língua Inglesa",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-5",
-            "filename": "05_língua_espanhola.pdf",
-            "discipline": "Língua Espanhola",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-6",
-            "filename": "06_arte.pdf",
-            "discipline": "Arte",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-7",
-            "filename": "07_educação_física.pdf",
-            "discipline": "Educação Física",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-8",
-            "filename": "08_matemática.pdf",
-            "discipline": "Matemática",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 2,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-9",
-            "filename": "09_física.pdf",
-            "discipline": "Física",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 2,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-10",
-            "filename": "10_química.pdf",
-            "discipline": "Química",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-11",
-            "filename": "11_biologia.pdf",
-            "discipline": "Biologia",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 2,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-12",
-            "filename": "12_história.pdf",
-            "discipline": "História",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-13",
-            "filename": "13_geografia.pdf",
-            "discipline": "Geografia",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-14",
-            "filename": "14_filosofia.pdf",
-            "discipline": "Filosofia",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-15",
-            "filename": "15_sociologia.pdf",
-            "discipline": "Sociologia",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-16",
-            "filename": "16_projeto_de_vida.pdf",
-            "discipline": "Projeto de Vida",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-17",
-            "filename": "17_estudos_orientados.pdf",
-            "discipline": "Estudos Orientados",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-18",
-            "filename": "18_práticas_experimentais.pdf",
-            "discipline": "Práticas Experimentais",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-19",
-            "filename": "19_eletivas.pdf",
-            "discipline": "Eletivas",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-20",
-            "filename": "20_nivelamento_em_língua_portug.pdf",
-            "discipline": "Nivelamento em Língua Portuguesa",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-21",
-            "filename": "21_nivelamento_em_matemática.pdf",
-            "discipline": "Nivelamento em Matemática",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-22",
-            "filename": "22_projetos_integradores_e_de_c.pdf",
-            "discipline": "Projetos Integradores e de Corresponsabilidade Social (PICS)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-23",
-            "filename": "23_cultura_digital_e_fundamento.pdf",
-            "discipline": "Cultura Digital e Fundamentos de IA",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-24",
-            "filename": "24_ferramentas_para_o_mundo_do_.pdf",
-            "discipline": "Ferramentas para o Mundo do Trabalho",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-25",
-            "filename": "25_linguagens__produção_textual.pdf",
-            "discipline": "Linguagens — Produção Textual Avançada e Escrita Criativa",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-26",
-            "filename": "26_matemática__matemática_finan.pdf",
-            "discipline": "Matemática — Matemática Financeira e Estatística Aplicada",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-27",
-            "filename": "27_natureza__biotecnologia_e_ge.pdf",
-            "discipline": "Natureza — Biotecnologia e Genética Aplicada",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-28",
-            "filename": "28_humanas__história_de_minas_g.pdf",
-            "discipline": "Humanas — História de Minas Gerais, Patrimônio e Memória",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-29",
-            "filename": "29_técnico_em_desenvolvimento_d.pdf",
-            "discipline": "Técnico em Desenvolvimento de Sistemas (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-30",
-            "filename": "30_técnico_em_informática_see_m.pdf",
-            "discipline": "Técnico em Informática (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-31",
-            "filename": "31_técnico_em_informática_para_.pdf",
-            "discipline": "Técnico em Informática para Internet (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-32",
-            "filename": "32_técnico_em_redes_de_computad.pdf",
-            "discipline": "Técnico em Redes de Computadores (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-33",
-            "filename": "33_técnico_em_manutenção_e_supo.pdf",
-            "discipline": "Técnico em Manutenção e Suporte em Informática (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-34",
-            "filename": "34_técnico_em_programação_de_jo.pdf",
-            "discipline": "Técnico em Programação de Jogos Digitais (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-35",
-            "filename": "35_técnico_em_ciência_de_dados_.pdf",
-            "discipline": "Técnico em Ciência de Dados e Inteligência Artificial (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-36",
-            "filename": "36_técnico_em_robótica_e_automa.pdf",
-            "discipline": "Técnico em Robótica e Automação (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-37",
-            "filename": "37_técnico_em_administração_see.pdf",
-            "discipline": "Técnico em Administração (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-38",
-            "filename": "38_técnico_em_logística_see_mg.pdf",
-            "discipline": "Técnico em Logística (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-39",
-            "filename": "39_técnico_em_contabilidade_see.pdf",
-            "discipline": "Técnico em Contabilidade (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-40",
-            "filename": "40_técnico_em_recursos_humanos_.pdf",
-            "discipline": "Técnico em Recursos Humanos (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-41",
-            "filename": "41_técnico_em_marketing_e_marke.pdf",
-            "discipline": "Técnico em Marketing e Marketing Digital (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-42",
-            "filename": "42_técnico_em_finanças_see_mg.pdf",
-            "discipline": "Técnico em Finanças (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-43",
-            "filename": "43_técnico_em_secretariado_see_.pdf",
-            "discipline": "Técnico em Secretariado (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-44",
-            "filename": "44_técnico_em_serviços_jurídico.pdf",
-            "discipline": "Técnico em Serviços Jurídicos (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-45",
-            "filename": "45_técnico_em_qualidade_see_mg.pdf",
-            "discipline": "Técnico em Qualidade (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-46",
-            "filename": "46_técnico_em_agropecuária_see_.pdf",
-            "discipline": "Técnico em Agropecuária (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-47",
-            "filename": "47_técnico_em_agronegócio_see_m.pdf",
-            "discipline": "Técnico em Agronegócio (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-48",
-            "filename": "48_técnico_em_zootecnia_see_mg.pdf",
-            "discipline": "Técnico em Zootecnia (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-49",
-            "filename": "49_técnico_em_meio_ambiente_see.pdf",
-            "discipline": "Técnico em Meio Ambiente (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-50",
-            "filename": "50_técnico_em_cafeicultura_see_.pdf",
-            "discipline": "Técnico em Cafeicultura (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-51",
-            "filename": "51_técnico_em_enfermagem_see_mg.pdf",
-            "discipline": "Técnico em Enfermagem (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-52",
-            "filename": "52_técnico_em_farmácia_see_mg.pdf",
-            "discipline": "Técnico em Farmácia (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-53",
-            "filename": "53_técnico_em_nutrição_e_dietét.pdf",
-            "discipline": "Técnico em Nutrição e Dietética (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-54",
-            "filename": "54_técnico_em_segurança_do_trab.pdf",
-            "discipline": "Técnico em Segurança do Trabalho (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-55",
-            "filename": "55_técnico_em_eletrotécnica_see.pdf",
-            "discipline": "Técnico em Eletrotécnica (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-56",
-            "filename": "56_técnico_em_mecânica_see_mg.pdf",
-            "discipline": "Técnico em Mecânica (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-57",
-            "filename": "57_técnico_em_automação_industr.pdf",
-            "discipline": "Técnico em Automação Industrial (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-58",
-            "filename": "58_técnico_em_química_see_mg.pdf",
-            "discipline": "Técnico em Química (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-59",
-            "filename": "59_técnico_em_edificações_see_m.pdf",
-            "discipline": "Técnico em Edificações (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-60",
-            "filename": "60_técnico_em_mineração_see_mg.pdf",
-            "discipline": "Técnico em Mineração (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-61",
-            "filename": "61_técnico_em_alimentos_see_mg.pdf",
-            "discipline": "Técnico em Alimentos (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-62",
-            "filename": "62_técnico_em_leite_e_derivados.pdf",
-            "discipline": "Técnico em Leite e Derivados / Laticínios (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-63",
-            "filename": "63_técnico_em_vestuário_e_moda_.pdf",
-            "discipline": "Técnico em Vestuário e Moda (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-64",
-            "filename": "64_técnico_em_gastronomia___coz.pdf",
-            "discipline": "Técnico em Gastronomia / Cozinha (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-65",
-            "filename": "65_técnico_em_guia_de_turismo_s.pdf",
-            "discipline": "Técnico em Guia de Turismo (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-66",
-            "filename": "66_técnico_em_design_gráfico_se.pdf",
-            "discipline": "Técnico em Design Gráfico (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-67",
-            "filename": "67_técnico_em_secretaria_escola.pdf",
-            "discipline": "Técnico em Secretaria Escolar (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      },
-      {
-            "id": "doc-seemg-68",
-            "filename": "68_técnico_em_tradução_e_interp.pdf",
-            "discipline": "Técnico em Tradução e Interpretação de Libras (SEE/MG)",
-            "target_grade": "Ensino Médio / SEE-MG",
-            "academic_period": "2026 - 1º Trimestre",
-            "total_questions_found": 1,
-            "status": "completed",
-            "created_at": new Date().toISOString()
-      }
-];
-
-    const DEFAULT_SAMPLE_QUESTIONS = [
-      {
-            "id": "q-por-1",
-            "discipline": "Língua Portuguesa",
-            "teacher_name": "Profª. Mariana Santos",
-            "question_type": "multiple_choice",
-            "statement": "Assinale a alternativa em que todas as palavras estão grafadas em estrita conformidade com o Novo Acordo Ortográfico:",
-            "options_json": {
-                  "A": "Micro-ondas, autoestrada, contraproposta, anti-inflamatório.",
-                  "B": "Microondas, auto-estrada, contra-proposta, antiinflamatório.",
-                  "C": "Micro-ondas, auto-estrada, contraproposta, antiinflamatório.",
-                  "D": "Microondas, autoestrada, contraproposta, anti-inflamatório.",
-                  "E": "Micro-ondas, autoestrada, contra-proposta, antiinflamatório."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "língua_portuguesa.pdf"
-      },
-      {
-            "id": "q-por-2",
-            "discipline": "Língua Portuguesa",
-            "teacher_name": "Profª. Mariana Santos",
-            "question_type": "multiple_choice",
-            "statement": "Na oração 'Embora estivesse exausto, continuou estudando para o simulado', a conjunção em destaque estabelece relação semântica de:",
-            "options_json": {
-                  "A": "Causa.",
-                  "B": "Consequência.",
-                  "C": "Concessão.",
-                  "D": "Condição.",
-                  "E": "Proporção."
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "língua_portuguesa.pdf"
-      },
-      {
-            "id": "q-lit-1",
-            "discipline": "Literatura Brasileira",
-            "teacher_name": "Profª. Mariana Santos",
-            "question_type": "multiple_choice",
-            "statement": "Qual movimento literário brasileiro do século XIX destacou-se pela análise psicológica, crítica social à burguesia e ironia refinada, tendo Machado de Assis como principal expoente?",
-            "options_json": {
-                  "A": "Barroco.",
-                  "B": "Arcadismo.",
-                  "C": "Romantismo.",
-                  "D": "Realismo.",
-                  "E": "Parnasianismo."
-            },
-            "correct_answer": "D",
-            "validation_status": "approved",
-            "source_filename": "literatura_brasileira.pdf"
-      },
-      {
-            "id": "q-red-1",
-            "discipline": "Redação e Produção Textual",
-            "teacher_name": "Profª. Mariana Santos",
-            "question_type": "multiple_choice",
-            "statement": "Na estrutura do texto dissertativo-argumentativo padrão ENEM, a proposta de intervenção na conclusão deve apresentar obrigatoriamente:",
-            "options_json": {
-                  "A": "Apenas a repetição literal da tese da introdução.",
-                  "B": "Agente, ação, meio/modo, finalidade e detalhamento, respeitando os direitos humanos.",
-                  "C": "Citações em língua estrangeira sem tradução.",
-                  "D": "Narrativa pessoal em primeira pessoa do singular.",
-                  "E": "Lista de tópicos numerados sem conectivos."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "redação_e_produção_textual.pdf"
-      },
-      {
-            "id": "q-ing-1",
-            "discipline": "Língua Inglesa",
-            "teacher_name": "Profª. Aline Costa",
-            "question_type": "multiple_choice",
-            "statement": "Choose the correct alternative that completes the sentence in the Present Perfect tense: 'She _____ in Belo Horizonte since 2020.'",
-            "options_json": {
-                  "A": "live",
-                  "B": "lived",
-                  "C": "has lived",
-                  "D": "is living",
-                  "E": "will live"
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "língua_inglesa.pdf"
-      },
-      {
-            "id": "q-esp-1",
-            "discipline": "Língua Espanhola",
-            "teacher_name": "Prof. Diego Morales",
-            "question_type": "multiple_choice",
-            "statement": "En español, la palabra 'embarazada' es un falso cognado (heterosemántico) con respecto al portugués y significa:",
-            "options_json": {
-                  "A": "Envergonhada.",
-                  "B": "Confusa.",
-                  "C": "Grávida.",
-                  "D": "Ocupada.",
-                  "E": "Atrasada."
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "língua_espanhola.pdf"
-      },
-      {
-            "id": "q-art-1",
-            "discipline": "Arte",
-            "teacher_name": "Profª. Clara Nogueira",
-            "question_type": "multiple_choice",
-            "statement": "Em Minas Gerais, o estilo artístico que floresceu no século XVIII nas cidades históricas como Ouro Preto e Congonhas, tendo Aleijadinho e Mestre Ataíde como expoentes, é o:",
-            "options_json": {
-                  "A": "Cubismo.",
-                  "B": "Barroco Mineiro.",
-                  "C": "Surrealismo.",
-                  "D": "Expressionismo Abstrato.",
-                  "E": "Pop Art."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "arte.pdf"
-      },
-      {
-            "id": "q-edf-1",
-            "discipline": "Educação Física",
-            "teacher_name": "Prof. Rafael Oliveira",
-            "question_type": "multiple_choice",
-            "statement": "Durante a prática regular de exercícios aeróbicos de intensidade moderada, qual adaptação fisiológica ocorre no sistema cardiovascular?",
-            "options_json": {
-                  "A": "Redução da capacidade pulmonar vital.",
-                  "B": "Aumento da eficiência cardíaca e melhora do condicionamento cardiorrespiratório.",
-                  "C": "Diminuição permanente do fluxo sanguíneo muscular.",
-                  "D": "Perda de elasticidade arterial.",
-                  "E": "Bloqueio do metabolismo oxidativo."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "educação_física.pdf"
-      },
-      {
-            "id": "q-mat-1",
-            "discipline": "Matemática",
-            "teacher_name": "Prof. Carlos Silva",
-            "question_type": "multiple_choice",
-            "statement": "Determine o valor do determinante da matriz quadrada de ordem 2 cujos elementos são a11 = 3, a12 = 5, a21 = 2 e a22 = 4.",
-            "options_json": {
-                  "A": "2",
-                  "B": "7",
-                  "C": "-2",
-                  "D": "10",
-                  "E": "12"
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "matemática.pdf"
-      },
-      {
-            "id": "q-mat-2",
-            "discipline": "Matemática",
-            "teacher_name": "Prof. Carlos Silva",
-            "question_type": "multiple_choice",
-            "statement": "Uma progressão aritmética (PA) possui primeiro termo igual a 5 e razão igual a 3. Qual é o décimo termo dessa PA?",
-            "options_json": {
-                  "A": "28",
-                  "B": "32",
-                  "C": "35",
-                  "D": "40",
-                  "E": "45"
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "matemática.pdf"
-      },
-      {
-            "id": "q-fis-1",
-            "discipline": "Física",
-            "teacher_name": "Prof. Marcos Dias",
-            "question_type": "multiple_choice",
-            "statement": "Um veículo trafega em movimento retilíneo uniforme com velocidade constante de 72 km/h. Qual a distância, em metros, percorrida em 10 segundos?",
-            "options_json": {
-                  "A": "100 m",
-                  "B": "150 m",
-                  "C": "200 m",
-                  "D": "720 m",
-                  "E": "2000 m"
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "física.pdf"
-      },
-      {
-            "id": "q-fis-2",
-            "discipline": "Física",
-            "teacher_name": "Prof. Marcos Dias",
-            "question_type": "multiple_choice",
-            "statement": "De acordo com a Primeira Lei de Newton (Princípio da Inércia), um corpo em repouso ou em MRU continuará nesse estado a menos que:",
-            "options_json": {
-                  "A": "Exista atrito suficiente.",
-                  "B": "Uma força resultante não nula atue sobre ele.",
-                  "C": "Sua aceleração seja zero.",
-                  "D": "Sua energia cinética permaneça constante.",
-                  "E": "A gravidade seja anulada."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "física.pdf"
-      },
-      {
-            "id": "q-qui-1",
-            "discipline": "Química",
-            "teacher_name": "Profª. Beatriz Rocha",
-            "question_type": "multiple_choice",
-            "statement": "Qual é o pH de uma solução aquosa neutra a 25 °C, como a água pura?",
-            "options_json": {
-                  "A": "0",
-                  "B": "3",
-                  "C": "7",
-                  "D": "10",
-                  "E": "14"
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "química.pdf"
-      },
-      {
-            "id": "q-bio-1",
-            "discipline": "Biologia",
-            "teacher_name": "Profª. Carla Souza",
-            "question_type": "multiple_choice",
-            "statement": "No cruzamento entre dois indivíduos heterozigotos para dominância completa (Aa x Aa), a proporção fenotípica esperada é:",
-            "options_json": {
-                  "A": "1 : 2 : 1",
-                  "B": "3 : 1",
-                  "C": "9 : 3 : 3 : 1",
-                  "D": "1 : 1",
-                  "E": "4 : 0"
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "biologia.pdf"
-      },
-      {
-            "id": "q-bio-2",
-            "discipline": "Biologia",
-            "teacher_name": "Profª. Carla Souza",
-            "question_type": "multiple_choice",
-            "statement": "A organela celular responsável pela síntese de ATP por meio da respiração celular aeróbia é denominada:",
-            "options_json": {
-                  "A": "Complexo golgiense.",
-                  "B": "Retículo endoplasmático liso.",
-                  "C": "Ribossomo.",
-                  "D": "Mitocôndria.",
-                  "E": "Lisossomo."
-            },
-            "correct_answer": "D",
-            "validation_status": "approved",
-            "source_filename": "biologia.pdf"
-      },
-      {
-            "id": "q-his-1",
-            "discipline": "História",
-            "teacher_name": "Prof. André Martins",
-            "question_type": "multiple_choice",
-            "statement": "A Inconfidência Mineira (1789), ocorrida em Vila Rica (atual Ouro Preto), foi motivada principalmente por:",
-            "options_json": {
-                  "A": "Apoio irrestrito à cobrança da derrama pela Coroa Portuguesa.",
-                  "B": "Insatisfação com a alta carga tributária colonial e inspiração nos ideais iluministas.",
-                  "C": "Reivindicação pela volta do regime feudal europeu.",
-                  "D": "Conflito fronteiriço com a Argentina.",
-                  "E": "Proibição do cultivo de café em São Paulo."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "história.pdf"
-      },
-      {
-            "id": "q-geo-1",
-            "discipline": "Geografia",
-            "teacher_name": "Prof. Lucas Ferreira",
-            "question_type": "multiple_choice",
-            "statement": "Qual bioma brasileiro, predominante em grande parte do território de Minas Gerais, caracteriza-se por vegetação savânica, árvores de troncos retorcidos e duas estações bem definidas?",
-            "options_json": {
-                  "A": "Amazônia.",
-                  "B": "Caatinga.",
-                  "C": "Cerrado.",
-                  "D": "Pampa.",
-                  "E": "Pantanal."
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "geografia.pdf"
-      },
-      {
-            "id": "q-fil-1",
-            "discipline": "Filosofia",
-            "teacher_name": "Prof. Gustavo Ribeiro",
-            "question_type": "multiple_choice",
-            "statement": "Na filosofia de René Descartes, a famosa máxima 'Penso, logo existo' (Cogito, ergo sum) representa:",
-            "options_json": {
-                  "A": "O abandono total da razão em favor dos sentidos.",
-                  "B": "A primeira certeza indubitável alcançada por meio da dúvida metódica.",
-                  "C": "A defesa do empirismo radical baseado apenas na experiência sensorial.",
-                  "D": "A negação da existência do pensamento humano.",
-                  "E": "Um dogma teológico medieval."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "filosofia.pdf"
-      },
-      {
-            "id": "q-soc-1",
-            "discipline": "Sociologia",
-            "teacher_name": "Profª. Fernanda Lima",
-            "question_type": "multiple_choice",
-            "statement": "Para Émile Durkheim, o objeto de estudo próprio da Sociologia que exerce coerção exterior sobre os indivíduos é denominado:",
-            "options_json": {
-                  "A": "Ação social subjetiva.",
-                  "B": "Luta de classes.",
-                  "C": "Fato social.",
-                  "D": "Mais-valia absoluta.",
-                  "E": "Tipo ideal."
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "sociologia.pdf"
-      },
-      {
-            "id": "q-pv-1",
-            "discipline": "Projeto de Vida",
-            "teacher_name": "Profª. Patrícia Alves",
-            "question_type": "multiple_choice",
-            "statement": "No componente Projeto de Vida da rede SEE/MG, o planejamento pessoal, acadêmico e profissional do estudante baseia-se fundamentalmente em:",
-            "options_json": {
-                  "A": "Autoconhecimento, definição de metas realistas e protagonismo juvenil.",
-                  "B": "Escolha aleatória de profissões sem reflexão sobre interesses.",
-                  "C": "Exclusão do convívio comunitário e familiar.",
-                  "D": "Memorização mecânica de fórmulas sem aplicação prática.",
-                  "E": "Substituição das disciplinas da Base Nacional Comum."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "projeto_de_vida.pdf"
-      },
-      {
-            "id": "q-eo-1",
-            "discipline": "Estudos Orientados",
-            "teacher_name": "Profª. Patrícia Alves",
-            "question_type": "multiple_choice",
-            "statement": "Qual técnica de estudo é recomendada nos Estudos Orientados para melhorar a retenção de conteúdos a longo prazo?",
-            "options_json": {
-                  "A": "Estudar apenas na véspera da prova sem pausas.",
-                  "B": "Revisão espaçada, mapas mentais e resolução ativa de exercícios.",
-                  "C": "Copiar textos inteiros sem compreender o significado.",
-                  "D": "Evitar anotações e resumos próprios.",
-                  "E": "Ler em ambientes com distrações constantes."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "estudos_orientados.pdf"
-      },
-      {
-            "id": "q-pe-1",
-            "discipline": "Práticas Experimentais",
-            "teacher_name": "Profª. Beatriz Rocha",
-            "question_type": "multiple_choice",
-            "statement": "Ao conduzir uma prática em laboratório escolar de Ciências, qual medida de segurança é indispensável?",
-            "options_json": {
-                  "A": "Provar reagentes desconhecidos para identificar o sabor.",
-                  "B": "Utilizar EPIs adequados (jaleco, óculos) e seguir o roteiro experimental sob supervisão.",
-                  "C": "Descartar substâncias químicas diretamente no lixo comum.",
-                  "D": "Aquecer frascos fechados hermeticamente.",
-                  "E": "Correr ou consumir alimentos na bancada."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "práticas_experimentais.pdf"
-      },
-      {
-            "id": "q-ele-1",
-            "discipline": "Eletivas",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "As disciplinas Eletivas no Ensino Médio em Tempo Integral (EMTI) da SEE/MG têm como objetivo principal:",
-            "options_json": {
-                  "A": "Aprofundar e diversificar experiências de aprendizagem conectadas aos interesses dos estudantes.",
-                  "B": "Repetir exatamente o mesmo conteúdo das aulas regulares sem inovação.",
-                  "C": "Eliminar a interdisciplinaridade na escola.",
-                  "D": "Restringir o acesso dos alunos à cultura e tecnologia.",
-                  "E": "Substituir a avaliação escolar oficial."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "eletivas.pdf"
-      },
-      {
-            "id": "q-niv-lp-1",
-            "discipline": "Nivelamento em Língua Portuguesa",
-            "teacher_name": "Profª. Mariana Santos",
-            "question_type": "multiple_choice",
-            "statement": "No componente Nivelamento em Língua Portuguesa da SEE-MG, qual estratégia é fundamental para a recomposição das aprendizagens em leitura e interpretação textual?",
-            "options_json": {
-                  "A": "Identificar ideia central, inferências, elementos de coesão e gênero textual antes de responder.",
-                  "B": "Ler apenas o título ignorando o corpo do texto.",
-                  "C": "Memorizar listas isoladas de palavras fora de contexto.",
-                  "D": "Evitar a produção escrita e a reescrita orientada.",
-                  "E": "Substituir a leitura por respostas aleatórias."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "nivelamento_em_língua_portug.pdf"
-      },
-      {
-            "id": "q-niv-mat-1",
-            "discipline": "Nivelamento em Matemática",
-            "teacher_name": "Prof. Carlos Silva",
-            "question_type": "multiple_choice",
-            "statement": "No Nivelamento em Matemática da SEE-MG, para resolver corretamente a expressão numérica 4 + 3 × (8 − 2) ÷ 2, deve-se respeitar a ordem de operações obtendo:",
-            "options_json": {
-                  "A": "10",
-                  "B": "13",
-                  "C": "21",
-                  "D": "7",
-                  "E": "18"
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "nivelamento_em_matemática.pdf"
-      },
-      {
-            "id": "q-pics-1",
-            "discipline": "Projetos Integradores e de Corresponsabilidade Social (PICS)",
-            "teacher_name": "Profª. Patrícia Alves",
-            "question_type": "multiple_choice",
-            "statement": "Os Projetos Integradores e de Corresponsabilidade Social (PICS) da SEE-MG têm como finalidade central:",
-            "options_json": {
-                  "A": "Articular conhecimentos de diferentes áreas para propor soluções solidárias a desafios reais da comunidade escolar.",
-                  "B": "Isolar as disciplinas sem diálogo entre professores.",
-                  "C": "Substituir a participação estudantil por aulas exclusivamente expositivas.",
-                  "D": "Focar apenas em exercícios individuais descontextualizados.",
-                  "E": "Restringir projetos sociais ao ambiente externo sem vínculo pedagógico."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "projetos_integradores_e_de_c.pdf"
-      },
-      {
-            "id": "q-cdia-1",
-            "discipline": "Cultura Digital e Fundamentos de IA",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "No componente Cultura Digital e Fundamentos de IA (SEE-MG), o uso ético e crítico da Inteligência Artificial Generativa na escola pressupõe:",
-            "options_json": {
-                  "A": "Verificar fontes, combater vieses algorítmicos, respeitar a LGPD e usar a IA como apoio à aprendizagem autoral.",
-                  "B": "Copiar respostas geradas automaticamente sem revisão crítica.",
-                  "C": "Compartilhar dados pessoais sensíveis de alunos em plataformas abertas.",
-                  "D": "Acreditar que sistemas de IA nunca cometem erros factuais.",
-                  "E": "Abandonar o pensamento computacional e o senso crítico."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "cultura_digital_e_fundamento.pdf"
-      },
-      {
-            "id": "q-fmt-1",
-            "discipline": "Ferramentas para o Mundo do Trabalho",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "Em Ferramentas para o Mundo do Trabalho (SEE-MG), qual conjunto de competências socioemocionais e técnicas é mais valorizado na inserção profissional do jovem?",
-            "options_json": {
-                  "A": "Comunicação assertiva, trabalho em equipe, ética profissional, domínio digital e elaboração de currículo.",
-                  "B": "Isolamento interpessoal e recusa de feedback.",
-                  "C": "Desconhecimento de direitos trabalhistas e normas de segurança.",
-                  "D": "Falta de pontualidade e planejamento.",
-                  "E": "Ausência de qualificação contínua."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "ferramentas_para_o_mundo_do_.pdf"
-      },
-      {
-            "id": "q-ap-lin-1",
-            "discipline": "Linguagens — Produção Textual Avançada e Escrita Criativa",
-            "teacher_name": "Profª. Mariana Santos",
-            "question_type": "multiple_choice",
-            "statement": "A intertextualidade em produções textuais avançadas ocorre quando:",
-            "options_json": {
-                  "A": "Um texto estabelece diálogo explícito ou implícito com outros textos ou obras culturais.",
-                  "B": "O autor evita qualquer referência cultural ou histórica.",
-                  "C": "O texto não possui coesão nem coerência.",
-                  "D": "Utiliza-se apenas linguagem matemática.",
-                  "E": "Há repetição involuntária de palavras."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "linguagens__produção_textual.pdf"
-      },
-      {
-            "id": "q-ap-mat-1",
-            "discipline": "Matemática — Matemática Financeira e Estatística Aplicada",
-            "teacher_name": "Prof. Carlos Silva",
-            "question_type": "multiple_choice",
-            "statement": "Em um conjunto de dados com valores extremos (outliers) muito discrepantes, qual medida de tendência central é menos distorcida?",
-            "options_json": {
-                  "A": "Média aritmética simples.",
-                  "B": "Mediana.",
-                  "C": "Amplitude total.",
-                  "D": "Soma simples.",
-                  "E": "Produto dos extremos."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "matemática__matemática_finan.pdf"
-      },
-      {
-            "id": "q-ap-nat-1",
-            "discipline": "Natureza — Biotecnologia e Genética Aplicada",
-            "teacher_name": "Profª. Carla Souza",
-            "question_type": "multiple_choice",
-            "statement": "A técnica CRISPR-Cas9 revolucionou a biotecnologia moderna por permitir:",
-            "options_json": {
-                  "A": "A edição precisa de sequências específicas de DNA em organismos vivos.",
-                  "B": "A geração de energia nuclear em usinas solares.",
-                  "C": "A fabricação de cimento Portland.",
-                  "D": "A comunicação via satélite de rádio.",
-                  "E": "A destilação fracionada do petróleo."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "natureza__biotecnologia_e_ge.pdf"
-      },
-      {
-            "id": "q-ap-hum-1",
-            "discipline": "Humanas — História de Minas Gerais, Patrimônio e Memória",
-            "teacher_name": "Prof. André Martins",
-            "question_type": "multiple_choice",
-            "statement": "O Conjunto Moderno da Pampulha, em Belo Horizonte, reconhecido pela UNESCO como Patrimônio Cultural da Humanidade, foi projetado pelo arquiteto:",
-            "options_json": {
-                  "A": "Aleijadinho.",
-                  "B": "Oscar Niemeyer.",
-                  "C": "Lúcio Costa.",
-                  "D": "Ruy Ohtake.",
-                  "E": "Paulo Mendes da Rocha."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "humanas__história_de_minas_g.pdf"
-      },
-      {
-            "id": "q-tec-ds-1",
-            "discipline": "Técnico em Desenvolvimento de Sistemas (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "No desenvolvimento de bancos de dados relacionais, qual comando SQL é utilizado para consultar e recuperar registros de uma tabela?",
-            "options_json": {
-                  "A": "SELECT",
-                  "B": "DELETE",
-                  "C": "DROP",
-                  "D": "INSERT",
-                  "E": "ALTER"
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_desenvolvimento_d.pdf"
-      },
-      {
-            "id": "q-tec-inf-1",
-            "discipline": "Técnico em Informática (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "Na arquitetura de computadores, qual memória é volátil e armazena temporariamente os dados e programas em execução pela CPU?",
-            "options_json": {
-                  "A": "Memória ROM.",
-                  "B": "Disco SSD.",
-                  "C": "Memória RAM.",
-                  "D": "Pendrive USB.",
-                  "E": "Cartão SD."
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_informática_see_m.pdf"
-      },
-      {
-            "id": "q-tec-web-1",
-            "discipline": "Técnico em Informática para Internet (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "No desenvolvimento web front-end, qual tecnologia é responsável especificamente pela estilização visual e layout responsivo das páginas?",
-            "options_json": {
-                  "A": "HTML5.",
-                  "B": "CSS3.",
-                  "C": "SQL.",
-                  "D": "FTP.",
-                  "E": "SMTP."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_informática_para_.pdf"
-      },
-      {
-            "id": "q-tec-red-1",
-            "discipline": "Técnico em Redes de Computadores (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "Qual protocolo da pilha TCP/IP é responsável por traduzir nomes de domínio (ex: educacao.mg.gov.br) em endereços IP numéricos?",
-            "options_json": {
-                  "A": "DHCP.",
-                  "B": "DNS.",
-                  "C": "FTP.",
-                  "D": "SSH.",
-                  "E": "ICMP."
-            },
-            "correct_answer": "B",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_redes_de_computad.pdf"
-      },
-      {
-            "id": "q-tec-msi-1",
-            "discipline": "Técnico em Manutenção e Suporte em Informática (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "Ao realizar manutenção preventiva em um computador com superaquecimento do processador, qual procedimento técnico é o mais indicado?",
-            "options_json": {
-                  "A": "Limpeza do cooler/dissipador e substituição adequada da pasta térmica.",
-                  "B": "Remoção definitiva da ventoinha.",
-                  "C": "Lavagem da placa-mãe com água corrente.",
-                  "D": "Desligamento do cabo de força com o sistema em uso.",
-                  "E": "Aumento da voltagem da fonte para o dobro."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_manutenção_e_supo.pdf"
-      },
-      {
-            "id": "q-tec-jog-1",
-            "discipline": "Técnico em Programação de Jogos Digitais (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "No desenvolvimento de jogos digitais, o ciclo contínuo que processa entradas do jogador, atualiza a física/lógica e renderiza quadros na tela chama-se:",
-            "options_json": {
-                  "A": "Game Loop.",
-                  "B": "Firewall.",
-                  "C": "Compiler Error.",
-                  "D": "SQL Injection.",
-                  "E": "BIOS Setup."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_programação_de_jo.pdf"
-      },
-      {
-            "id": "q-tec-ia-1",
-            "discipline": "Técnico em Ciência de Dados e Inteligência Artificial (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "Em Aprendizado de Máquina (Machine Learning), quando um modelo aprende a partir de exemplos rotulados (entradas e respostas conhecidas), trata-se de aprendizado:",
-            "options_json": {
-                  "A": "Supervisionado.",
-                  "B": "Não supervisionado.",
-                  "C": "Aleatório.",
-                  "D": "Manual estático.",
-                  "E": "Desconectado."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_ciência_de_dados_.pdf"
-      },
-      {
-            "id": "q-tec-rob-1",
-            "discipline": "Técnico em Robótica e Automação (SEE/MG)",
-            "teacher_name": "Prof. Henrique Lima",
-            "question_type": "multiple_choice",
-            "statement": "Em projetos de robótica com microcontroladores (como Arduino), qual sensor mede distâncias por emissão e reflexão de ondas ultrassônicas?",
-            "options_json": {
-                  "A": "Sensor ultrassônico (HC-SR04).",
-                  "B": "Servomotor de passo.",
-                  "C": "Potenciômetro linear.",
-                  "D": "Ponte H.",
-                  "E": "Fusível térmico."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_robótica_e_automa.pdf"
-      },
-      {
-            "id": "q-tec-adm-1",
-            "discipline": "Técnico em Administração (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "Na matriz SWOT (FOFA), ferramenta clássica de planejamento estratégico organizacional, os fatores internos controláveis pela empresa são:",
-            "options_json": {
-                  "A": "Forças e Fraquezas.",
-                  "B": "Oportunidades e Ameaças.",
-                  "C": "Inflação e Juros.",
-                  "D": "Concorrentes e Legislação.",
-                  "E": "Clima e Câmbio."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_administração_see.pdf"
-      },
-      {
-            "id": "q-tec-log-1",
-            "discipline": "Técnico em Logística (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "Na gestão de estoques, o método PEPS (ou FIFO) determina que:",
-            "options_json": {
-                  "A": "O primeiro item a entrar no estoque deve ser o primeiro a sair.",
-                  "B": "O último item a entrar deve sair primeiro.",
-                  "C": "Os produtos vencidos devem ser mantidos na frente.",
-                  "D": "O estoque não precisa de inventário.",
-                  "E": "Apenas produtos caros são controlados."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_logística_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-con-1",
-            "discipline": "Técnico em Contabilidade (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "Na equação fundamental do patrimônio contábil, o Patrimônio Líquido (PL) corresponde a:",
-            "options_json": {
-                  "A": "Ativo menos Passivo Exigível.",
-                  "B": "Ativo mais Passivo.",
-                  "C": "Receitas multiplicadas por Despesas.",
-                  "D": "Apenas o saldo em caixa.",
-                  "E": "Total de impostos anuais."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_contabilidade_see.pdf"
-      },
-      {
-            "id": "q-tec-rh-1",
-            "discipline": "Técnico em Recursos Humanos (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "No subsistema de Gestão de Pessoas, o processo voltado a atrair candidatos qualificados para as vagas disponíveis na organização é chamado de:",
-            "options_json": {
-                  "A": "Recrutamento.",
-                  "B": "Demissão.",
-                  "C": "Auditoria fiscal.",
-                  "D": "Logística reversa.",
-                  "E": "Faturamento."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_recursos_humanos_.pdf"
-      },
-      {
-            "id": "q-tec-mkt-1",
-            "discipline": "Técnico em Marketing e Marketing Digital (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "Os 4 Ps clássicos do Mix de Marketing (Composto Mercadológico) definidos por Jerome McCarthy e popularizados por Philip Kotler são:",
-            "options_json": {
-                  "A": "Produto, Preço, Praça e Promoção.",
-                  "B": "Lucro, Custo, Imposto e Frete.",
-                  "C": "Venda, Compra, Troca e Estoque.",
-                  "D": "Site, Blog, E-mail e Vídeo.",
-                  "E": "Marca, Cor, Fonte e Papel."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_marketing_e_marke.pdf"
-      },
-      {
-            "id": "q-tec-fin-1",
-            "discipline": "Técnico em Finanças (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "O demonstrativo financeiro que registra todas as entradas e saídas efetivas de recursos monetários de uma empresa em determinado período é o:",
-            "options_json": {
-                  "A": "Fluxo de Caixa.",
-                  "B": "Organograma Funcional.",
-                  "C": "Manual de Conduta.",
-                  "D": "Contrato Social.",
-                  "E": "Mapa de Risco."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_finanças_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-sec-1",
-            "discipline": "Técnico em Secretariado (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "Qual documento oficial registra de forma fiel e resumida as deliberações e ocorrências de uma reunião institucional?",
-            "options_json": {
-                  "A": "Ata.",
-                  "B": "Nota Fiscal.",
-                  "C": "Boleto Bancário.",
-                  "D": "Curriculum Vitae.",
-                  "E": "Alvará."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_secretariado_see_.pdf"
-      },
-      {
-            "id": "q-tec-jur-1",
-            "discipline": "Técnico em Serviços Jurídicos (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "No ordenamento jurídico brasileiro, qual é a lei máxima que organiza o Estado e garante os direitos e garantias fundamentais?",
-            "options_json": {
-                  "A": "Constituição Federal de 1988.",
-                  "B": "Regimento Interno Escolar.",
-                  "C": "Portaria Municipal.",
-                  "D": "Contrato de Locação.",
-                  "E": "Estatuto de Condomínio."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_serviços_jurídico.pdf"
-      },
-      {
-            "id": "q-tec-qua-1",
-            "discipline": "Técnico em Qualidade (SEE/MG)",
-            "teacher_name": "Profª. Juliana Prado",
-            "question_type": "multiple_choice",
-            "statement": "O Ciclo PDCA, amplamente utilizado na melhoria contínua de processos e gestão da qualidade, corresponde às etapas:",
-            "options_json": {
-                  "A": "Plan (Planejar), Do (Fazer), Check (Checar) e Act (Agir).",
-                  "B": "Pagar, Dividir, Cobrar e Arquivar.",
-                  "C": "Produzir, Descartar, Comprar e Anunciar.",
-                  "D": "Pesquisar, Desenhar, Cortar e Acabar.",
-                  "E": "Postar, Deletar, Compartilhar e Acessar."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_qualidade_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-agr-1",
-            "discipline": "Técnico em Agropecuária (SEE/MG)",
-            "teacher_name": "Prof. Eduardo Campos",
-            "question_type": "multiple_choice",
-            "statement": "A prática conservacionista de correção da acidez do solo agrícola mediante aplicação de calcário é conhecida como:",
-            "options_json": {
-                  "A": "Calagem.",
-                  "B": "Desmatamento.",
-                  "C": "Queimada controlada.",
-                  "D": "Salinização.",
-                  "E": "Compactação."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_agropecuária_see_.pdf"
-      },
-      {
-            "id": "q-tec-agn-1",
-            "discipline": "Técnico em Agronegócio (SEE/MG)",
-            "teacher_name": "Prof. Eduardo Campos",
-            "question_type": "multiple_choice",
-            "statement": "Na cadeia produtiva do agronegócio, o segmento 'antes da porteira' compreende:",
-            "options_json": {
-                  "A": "Fornecimento de insumos, sementes, fertilizantes, máquinas e crédito rural.",
-                  "B": "Apenas o varejo em supermercados urbanos.",
-                  "C": "Exclusivamente o consumo doméstico.",
-                  "D": "O descarte de embalagens pelo consumidor final.",
-                  "E": "A exportação portuária apenas."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_agronegócio_see_m.pdf"
-      },
-      {
-            "id": "q-tec-zoo-1",
-            "discipline": "Técnico em Zootecnia (SEE/MG)",
-            "teacher_name": "Prof. Eduardo Campos",
-            "question_type": "multiple_choice",
-            "statement": "Na pecuária leiteira — atividade de grande relevância em Minas Gerais — o bem-estar animal contribui diretamente para:",
-            "options_json": {
-                  "A": "Maior produtividade, melhor qualidade do leite e redução de doenças no rebanho.",
-                  "B": "Queda na qualidade nutricional do leite.",
-                  "C": "Aumento do estresse térmico nos bovinos.",
-                  "D": "Redução da longevidade do rebanho.",
-                  "E": "Eliminação da necessidade de vacinação."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_zootecnia_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-mae-1",
-            "discipline": "Técnico em Meio Ambiente (SEE/MG)",
-            "teacher_name": "Prof. Eduardo Campos",
-            "question_type": "multiple_choice",
-            "statement": "A política dos 3 Rs da sustentabilidade para gestão de resíduos sólidos refere-se a:",
-            "options_json": {
-                  "A": "Reduzir, Reutilizar e Reciclar.",
-                  "B": "Remover, Romper e Rejeitar.",
-                  "C": "Reservar, Reter e Represar.",
-                  "D": "Riscar, Rasgar e Reembolsar.",
-                  "E": "Recuar, Retardar e Repetir."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_meio_ambiente_see.pdf"
-      },
-      {
-            "id": "q-tec-caf-1",
-            "discipline": "Técnico em Cafeicultura (SEE/MG)",
-            "teacher_name": "Prof. Eduardo Campos",
-            "question_type": "multiple_choice",
-            "statement": "Minas Gerais é o maior produtor nacional de café. Qual espécie botânica domina a cafeicultura mineira pela alta qualidade de bebida?",
-            "options_json": {
-                  "A": "Coffea arabica (Café Arábica).",
-                  "B": "Zea mays.",
-                  "C": "Glycine max.",
-                  "D": "Saccharum officinarum.",
-                  "E": "Eucalyptus grandis."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_cafeicultura_see_.pdf"
-      },
-      {
-            "id": "q-tec-enf-1",
-            "discipline": "Técnico em Enfermagem (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "Na aferição dos sinais vitais de um adulto saudável em repouso, quais parâmetros são avaliados rotineiramente?",
-            "options_json": {
-                  "A": "Pressão arterial, frequência cardíaca, frequência respiratória e temperatura corporal.",
-                  "B": "Apenas altura e peso mensal.",
-                  "C": "Exclusivamente acuidade visual.",
-                  "D": "Apenas tipo sanguíneo.",
-                  "E": "Somente histórico escolar."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_enfermagem_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-far-1",
-            "discipline": "Técnico em Farmácia (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "Nas Boas Práticas de Armazenamento de medicamentos em farmácias, quais fatores ambientais devem ser monitorados diariamente?",
-            "options_json": {
-                  "A": "Temperatura e umidade relativa do ar.",
-                  "B": "Cor das paredes e música ambiente.",
-                  "C": "Apenas a luminosidade externa da rua.",
-                  "D": "Velocidade do vento na calçada.",
-                  "E": "Número de visitantes diários."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_farmácia_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-nut-1",
-            "discipline": "Técnico em Nutrição e Dietética (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "Segundo o Guia Alimentar para a População Brasileira, a base de uma alimentação saudável deve priorizar:",
-            "options_json": {
-                  "A": "Alimentos in natura ou minimamente processados.",
-                  "B": "Alimentos ultraprocessados ricos em sódio e açúcares.",
-                  "C": "Suplementos industriais em substituição a todas as refeições.",
-                  "D": "Jejum prolongado sem orientação.",
-                  "E": "Exclusivamente gorduras trans."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_nutrição_e_dietét.pdf"
-      },
-      {
-            "id": "q-tec-seg-1",
-            "discipline": "Técnico em Segurança do Trabalho (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "De acordo com a Norma Regulamentadora NR-6, o Equipamento de Proteção Individual (EPI) deve ser fornecido pelo empregador:",
-            "options_json": {
-                  "A": "Gratuitamente, adequado ao risco e em perfeito estado de conservação e funcionamento.",
-                  "B": "Mediante desconto integral no salário do trabalhador.",
-                  "C": "Apenas após a ocorrência de um acidente grave.",
-                  "D": "Sem necessidade de Certificado de Aprovação (CA).",
-                  "E": "Somente para diretores administrativos."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_segurança_do_trab.pdf"
-      },
-      {
-            "id": "q-tec-elt-1",
-            "discipline": "Técnico em Eletrotécnica (SEE/MG)",
-            "teacher_name": "Prof. Sérgio Mendes",
-            "question_type": "multiple_choice",
-            "statement": "Pela Primeira Lei de Ohm, em um resistor ôhmico de 20 Ω percorrido por uma corrente elétrica de 2 A, a diferença de potencial (tensão) aplicada é:",
-            "options_json": {
-                  "A": "10 V",
-                  "B": "22 V",
-                  "C": "40 V",
-                  "D": "80 V",
-                  "E": "100 V"
-            },
-            "correct_answer": "C",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_eletrotécnica_see.pdf"
-      },
-      {
-            "id": "q-tec-mec-1",
-            "discipline": "Técnico em Mecânica (SEE/MG)",
-            "teacher_name": "Prof. Sérgio Mendes",
-            "question_type": "multiple_choice",
-            "statement": "Qual instrumento de metrologia industrial permite medir dimensões externas, internas e profundidades com precisão de centésimos de milímetro?",
-            "options_json": {
-                  "A": "Paquímetro.",
-                  "B": "Trena de costura.",
-                  "C": "Prumo de pedreiro.",
-                  "D": "Termômetro clínico.",
-                  "E": "Bússola magnética."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_mecânica_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-aut-1",
-            "discipline": "Técnico em Automação Industrial (SEE/MG)",
-            "teacher_name": "Prof. Sérgio Mendes",
-            "question_type": "multiple_choice",
-            "statement": "Na automação de linhas industriais, o equipamento eletrônico programável projetado para controlar máquinas e processos em tempo real é o:",
-            "options_json": {
-                  "A": "CLP (Controlador Lógico Programável).",
-                  "B": "Projetor multimídia.",
-                  "C": "Impressora térmica.",
-                  "D": "Roteador doméstico.",
-                  "E": "Estabilizador simples."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_automação_industr.pdf"
-      },
-      {
-            "id": "q-tec-qui-1",
-            "discipline": "Técnico em Química (SEE/MG)",
-            "teacher_name": "Profª. Beatriz Rocha",
-            "question_type": "multiple_choice",
-            "statement": "Em uma titulação ácido-base em laboratório, qual vidraria graduada com torneira é utilizada para dispensar com precisão o volume da solução titulante?",
-            "options_json": {
-                  "A": "Bureta.",
-                  "B": "Béquer comum.",
-                  "C": "Vidro de relógio.",
-                  "D": "Cadinho de porcelana.",
-                  "E": "Tubo de ensaio."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_química_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-edi-1",
-            "discipline": "Técnico em Edificações (SEE/MG)",
-            "teacher_name": "Prof. Sérgio Mendes",
-            "question_type": "multiple_choice",
-            "statement": "Na representação gráfica de projetos arquitetônicos, a vista resultante de um corte horizontal a cerca de 1,50 m do piso acabado chama-se:",
-            "options_json": {
-                  "A": "Planta Baixa.",
-                  "B": "Fachada Principal.",
-                  "C": "Perspectiva Isométrica.",
-                  "D": "Detalhe de Cobertura.",
-                  "E": "Corte Longitudinal."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_edificações_see_m.pdf"
-      },
-      {
-            "id": "q-tec-min-1",
-            "discipline": "Técnico em Mineração (SEE/MG)",
-            "teacher_name": "Prof. Sérgio Mendes",
-            "question_type": "multiple_choice",
-            "statement": "Em Minas Gerais, estado líder na produção mineral brasileira, qual minério metálico é o principal responsável pela pauta de exportação mineral?",
-            "options_json": {
-                  "A": "Minério de Ferro.",
-                  "B": "Sal-gema marinho.",
-                  "C": "Gesso agrícola.",
-                  "D": "Petróleo offshore.",
-                  "E": "Carvão mineral sulista."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_mineração_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-ali-1",
-            "discipline": "Técnico em Alimentos (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "O processo térmico de pasteurização aplicado ao leite tem como objetivo sanitário principal:",
-            "options_json": {
-                  "A": "Eliminar micro-organismos patogênicos preservando ao máximo as características nutricionais.",
-                  "B": "Congelar o produto a -80 °C.",
-                  "C": "Adicionar corantes artificiais.",
-                  "D": "Retirar toda a proteína do leite.",
-                  "E": "Aumentar a acidez lática."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_alimentos_see_mg.pdf"
-      },
-      {
-            "id": "q-tec-lat-1",
-            "discipline": "Técnico em Leite e Derivados / Laticínios (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "Na fabricação do tradicional Queijo Minas Artesanal, a etapa responsável pela coagulação da caseína do leite utiliza:",
-            "options_json": {
-                  "A": "Coalho (enzimas coagulantes) e fermento lático natural (pingo).",
-                  "B": "Ácido sulfúrico concentrado.",
-                  "C": "Bicarbonato de sódio em excesso.",
-                  "D": "Destilação a vácuo.",
-                  "E": "Fervura por 6 horas contínuas."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_leite_e_derivados.pdf"
-      },
-      {
-            "id": "q-tec-ves-1",
-            "discipline": "Técnico em Vestuário e Moda (SEE/MG)",
-            "teacher_name": "Profª. Clara Nogueira",
-            "question_type": "multiple_choice",
-            "statement": "Na indústria de confecção do vestuário, a etapa que transforma o desenho técnico em peças-molde dimensionadas por grade de tamanhos chama-se:",
-            "options_json": {
-                  "A": "Modelagem e gradação.",
-                  "B": "Expedição.",
-                  "C": "Tingimento de solo.",
-                  "D": "Fundição.",
-                  "E": "Refino."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_vestuário_e_moda_.pdf"
-      },
-      {
-            "id": "q-tec-gas-1",
-            "discipline": "Técnico em Gastronomia / Cozinha (SEE/MG)",
-            "teacher_name": "Profª. Renata Medeiros",
-            "question_type": "multiple_choice",
-            "statement": "Na gastronomia profissional, a expressão francesa 'Mise en place' refere-se a:",
-            "options_json": {
-                  "A": "Organização, medição e preparo prévio de todos os ingredientes e utensílios antes do cozimento.",
-                  "B": "Limpeza externa do restaurante após o expediente.",
-                  "C": "Fechamento do caixa financeiro.",
-                  "D": "Apenas a decoração de sobremesas.",
-                  "E": "Entrega por aplicativo."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_gastronomia___coz.pdf"
-      },
-      {
-            "id": "q-tec-tur-1",
-            "discipline": "Técnico em Guia de Turismo (SEE/MG)",
-            "teacher_name": "Prof. Lucas Ferreira",
-            "question_type": "multiple_choice",
-            "statement": "Em Minas Gerais, o Circuito do Ouro e a Estrada Real destacam-se nacionalmente principalmente pelo turismo:",
-            "options_json": {
-                  "A": "Histórico, cultural, gastronômico e ecológico.",
-                  "B": "Exclusivamente praiano e marítimo.",
-                  "C": "De esportes na neve.",
-                  "D": "De deserto árido.",
-                  "E": "Apenas industrial pesado."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_guia_de_turismo_s.pdf"
-      },
-      {
-            "id": "q-tec-des-1",
-            "discipline": "Técnico em Design Gráfico (SEE/MG)",
-            "teacher_name": "Profª. Clara Nogueira",
-            "question_type": "multiple_choice",
-            "statement": "Na produção gráfica destinada à impressão profissional em gráfica (offset/digital), qual sistema de cores deve ser utilizado?",
-            "options_json": {
-                  "A": "CMYK (Ciano, Magenta, Amarelo e Preto).",
-                  "B": "RGB exclusivo de monitores.",
-                  "C": "Apenas escala infravermelha.",
-                  "D": "Hexadecimal web sem conversão.",
-                  "E": "Código Morse."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_design_gráfico_se.pdf"
-      },
-      {
-            "id": "q-tec-sce-1",
-            "discipline": "Técnico em Secretaria Escolar (SEE/MG)",
-            "teacher_name": "Profª. Patrícia Alves",
-            "question_type": "multiple_choice",
-            "statement": "Qual documento oficial da escrituração escolar comprova a trajetória acadêmica completa do estudante para fins de transferência ou conclusão do Ensino Médio?",
-            "options_json": {
-                  "A": "Histórico Escolar.",
-                  "B": "Bilhete de autorização de passeio.",
-                  "C": "Cardápio da merenda.",
-                  "D": "Escala de recreio.",
-                  "E": "Folha de ponto docente."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_secretaria_escola.pdf"
-      },
-      {
-            "id": "q-tec-lib-1",
-            "discipline": "Técnico em Tradução e Interpretação de Libras (SEE/MG)",
-            "teacher_name": "Profª. Patrícia Alves",
-            "question_type": "multiple_choice",
-            "statement": "Reconhecida oficialmente pela Lei nº 10.436/2002 no Brasil, a Libras (Língua Brasileira de Sinais) possui modalidade linguística:",
-            "options_json": {
-                  "A": "Visual-espacial, com gramática própria e estrutura independente do português.",
-                  "B": "Oral-auditiva idêntica ao português falado.",
-                  "C": "Universal e igual em todos os países do mundo.",
-                  "D": "Apenas mímica sem regras gramaticais.",
-                  "E": "Baseada somente em leitura labial."
-            },
-            "correct_answer": "A",
-            "validation_status": "approved",
-            "source_filename": "técnico_em_tradução_e_interp.pdf"
-      }
-];
-
-    // Storage In-Browser (Auto-sync catalog upgrade for SEE/MG complete subjects)
-    if (localStorage.getItem('gia_catalog_version') !== CATALOG_VERSION) {
-      localStorage.setItem('gia_docs', JSON.stringify(DEFAULT_SAMPLE_DOCS));
-      localStorage.setItem('gia_questions', JSON.stringify(DEFAULT_SAMPLE_QUESTIONS));
-      localStorage.setItem('gia_catalog_version', CATALOG_VERSION);
+    // Lazy Module Loader (Code-Splitting sob demanda por tela)
+    const _loadedModules = {};
+    function loadModuleOnce(src) {
+      if (_loadedModules[src]) return _loadedModules[src];
+      _loadedModules[src] = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        s.onload = () => resolve(true);
+        s.onerror = () => reject(new Error('Falha ao carregar módulo: ' + src));
+        document.head.appendChild(s);
+      });
+      return _loadedModules[src];
     }
+
+    async function ensureCatalogModule() {
+      if (!window.GIACatalog) {
+        await loadModuleOnce('./assets/js/catalog-data.js');
+      }
+      if (window.GIACatalog) {
+        window.GIACatalog.bindLazyDisciplineInputs();
+      }
+      return window.GIACatalog;
+    }
+
+    async function ensurePDFParserModule() {
+      await ensureCatalogModule();
+      if (!window.GIAPDFParser) {
+        await loadModuleOnce('./assets/js/pdf-parser.js');
+      }
+      return window.GIAPDFParser;
+    }
+
+    // Estado reativo em memória sincronizado com IndexedDB v2 (autosave transacional)
     let state = {
-      documents: JSON.parse(localStorage.getItem('gia_docs')) || DEFAULT_SAMPLE_DOCS,
-      questions: JSON.parse(localStorage.getItem('gia_questions')) || DEFAULT_SAMPLE_QUESTIONS,
-      exams: JSON.parse(localStorage.getItem('gia_exams')) || [],
-      currentUser: { role: 'admin', email: 'admin@escola.gov.br', name: 'Coordenador Pedagógico', discipline: 'Todas' }
+      documents: [],
+      questions: [],
+      exams: [],
+      users: [],
+      currentUser: { role: 'professor', email: '', name: 'Visitante', discipline: 'Matemática' }
     };
 
     function saveState() {
-      localStorage.setItem('gia_docs', JSON.stringify(state.documents));
-      localStorage.setItem('gia_questions', JSON.stringify(state.questions));
-      localStorage.setItem('gia_exams', JSON.stringify(state.exams));
+      if (window.GIADatabase) {
+        window.GIADatabase.autosaveState({
+          documents: state.documents,
+          questions: state.questions,
+          exams: state.exams,
+          users: state.users
+        }).catch(console.error);
+      }
     }
 
-    function resetDemoData() {
-      if (confirm('Restaurar dados iniciais de demonstração com as 5 disciplinas?')) {
-        localStorage.removeItem('gia_docs');
-        localStorage.removeItem('gia_questions');
-        localStorage.removeItem('gia_exams');
-        state.documents = [...DEFAULT_SAMPLE_DOCS];
-        state.questions = [...DEFAULT_SAMPLE_QUESTIONS];
-        state.exams = [];
-        saveState();
-        loadDashboard();
-        alert('Dados restaurados com sucesso!');
+    async function exportBackupJSON() {
+      try {
+        const counts = await window.GIADatabase.exportFullBackupJSON(state);
+        window.GIAUI.showToast(`Backup JSON exportado (${counts.questions} questões, ${counts.exams} provas).`, 'success');
+      } catch (err) {
+        window.GIAUI.showToast('Erro ao exportar backup: ' + err.message, 'error');
       }
+    }
+
+    function triggerImportBackupJSON() {
+      const inp = document.getElementById('backup-json-input');
+      if (inp) inp.click();
+    }
+
+    async function handleImportBackupJSON(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const snapshot = {
+        documents: [...state.documents],
+        questions: [...state.questions],
+        exams: [...state.exams],
+        users: [...(state.users || [])]
+      };
+      try {
+        const restored = await window.GIADatabase.importFullBackupJSON(file);
+        state.documents = restored.documents;
+        state.questions = restored.questions;
+        state.exams = restored.exams;
+        state.users = restored.users;
+        currentActiveExam = state.exams[0] || null;
+        refreshActiveView();
+        window.GIAUI.showToast(`Backup restaurado com ${state.questions.length} questões!`, 'success', {
+          undoLabel: 'Desfazer',
+          onUndo: () => {
+            Object.assign(state, snapshot);
+            saveState();
+            refreshActiveView();
+            window.GIAUI.showToast('Importação desfeita.', 'info');
+          }
+        });
+      } catch (err) {
+        window.GIAUI.showToast('Falha ao importar JSON: ' + err.message, 'error');
+      } finally {
+        event.target.value = '';
+      }
+    }
+
+    async function resetDemoData() {
+      const ok = await window.GIAUI.confirmDialog({
+        title: 'Restaurar Catálogo Oficial SEE/MG',
+        message: 'Deseja restaurar os documentos e questões de demonstração da matriz SEE/MG? Você poderá desfazer esta ação em seguida.',
+        confirmLabel: 'Sim, Restaurar',
+        danger: true
+      });
+      if (!ok) return;
+
+      const prevSnapshot = {
+        documents: [...state.documents],
+        questions: [...state.questions],
+        exams: [...state.exams]
+      };
+
+      const catalog = await ensureCatalogModule();
+      state.documents = [...(catalog ? catalog.DEFAULT_SAMPLE_DOCS : [])];
+      state.questions = [...(catalog ? catalog.DEFAULT_SAMPLE_QUESTIONS : [])];
+      state.exams = [];
+      currentActiveExam = null;
+      saveState();
+      refreshActiveView();
+
+      window.GIAUI.showToast('Dados padrão SEE/MG restaurados com sucesso!', 'success', {
+        undoLabel: 'Desfazer Reset',
+        onUndo: () => {
+          state.documents = prevSnapshot.documents;
+          state.questions = prevSnapshot.questions;
+          state.exams = prevSnapshot.exams;
+          currentActiveExam = state.exams[0] || null;
+          saveState();
+          refreshActiveView();
+          window.GIAUI.showToast('Estado anterior restaurado!', 'info');
+        }
+      });
     }
 
     // Navigation & Access Control
@@ -3382,15 +1436,27 @@
       if (activeNav) activeNav.classList.add('bg-sky-50', 'text-sky-700', 'dark:bg-sky-950/50', 'dark:text-sky-300');
 
       if (viewId === 'dashboard') loadDashboard();
-      if (viewId === 'upload') loadDocuments();
+      if (viewId === 'upload') { ensurePDFParserModule(); loadDocuments(); }
       if (viewId === 'conferencia') loadPendingQuestions();
       if (viewId === 'questoes') loadQuestions();
       if (viewId === 'montagem') loadExamSetup();
       if (viewId === 'historico') loadExamsHistory();
-      if (viewId === 'usuarios') loadUsersList();
+      if (viewId === 'usuarios') { ensureCatalogModule(); loadUsersList(); }
     }
 
-    function showRestrictedAccessModal(viewId) {
+    function refreshActiveView() {
+      const activeSection = document.querySelector('main section:not(.hidden)');
+      const vId = activeSection ? activeSection.id.replace('view-', '') : 'dashboard';
+      loadDashboard();
+      if (vId === 'upload') loadDocuments();
+      if (vId === 'conferencia') loadPendingQuestions();
+      if (vId === 'questoes') loadQuestions();
+      if (vId === 'montagem') loadExamSetup();
+      if (vId === 'historico') loadExamsHistory();
+      if (vId === 'usuarios') loadUsersList();
+    }
+
+    async function showRestrictedAccessModal(viewId) {
       const viewNames = {
         'montagem': 'Montagem da Prova Única Integrada',
         'historico': 'Histórico e Cadernos Oficiais com Gabarito',
@@ -3398,9 +1464,12 @@
         'usuarios': 'Gerenciamento e Cadastro de Usuários'
       };
       const title = viewNames[viewId] || 'Área Restrita';
-      if (confirm(`🔒 ACESSO RESTRITO À COORDENAÇÃO PEDAGÓGICA (ADMIN)\n\nA tela "${title}" possui acesso restrito para resguardar o sigilo escolar e a gestão da avaliação integrada.\n\nComo Professor, você possui acesso ao Recebimento de PDFs e à Conferência/Validação das questões da sua matéria (${state.currentUser.discipline || 'sua disciplina'}).\n\nDeseja inserir a senha administrativa para liberar o acesso total?`)) {
-        openAdminPasswordModal();
-      }
+      const ok = await window.GIAUI.confirmDialog({
+        title: 'Acesso Restrito à Coordenação (Admin)',
+        message: `A tela "${title}" é restrita para resguardar o sigilo da avaliação integrada.\n\nDeseja autenticar-se com a senha da Coordenação para liberar o acesso total?`,
+        confirmLabel: 'Inserir Senha Admin'
+      });
+      if (ok) openAdminPasswordModal();
     }
 
     function openAdminPasswordModal() {
@@ -3441,7 +1510,7 @@
         if (response.ok) {
           closeAdminPasswordModal();
           switchRole('admin');
-          alert('🔓 Acesso total de Administrador / Coordenação liberado com sucesso!');
+          window.GIAUI.showToast('Acesso total de Coordenação liberado com sucesso!', 'success');
           return;
         } else if (response.status === 401 || response.status === 403) {
           backendHandled = true;
@@ -3451,13 +1520,11 @@
       }
 
       if (!backendHandled) {
-        // Offline / GitHub Pages fallback: accept default 'admin123' or any admin password registered in localStorage
-        const storedUsers = state.users || JSON.parse(localStorage.getItem('gia_users') || '[]');
-        const matchesCustomAdmin = storedUsers.some(u => u.role === 'admin' && u.password && u.password === pwd);
-        if (pwd === 'admin123' || matchesCustomAdmin) {
+        const isValidAdmin = await window.GIASecurity.verifyInstitutionalAdminKey(pwd, state.users || []);
+        if (isValidAdmin) {
           closeAdminPasswordModal();
           switchRole('admin');
-          alert('🔓 Acesso total de Administrador / Coordenação liberado com sucesso!');
+          window.GIAUI.showToast('Acesso total de Coordenação liberado com sucesso!', 'success');
           return;
         }
       }
@@ -3544,16 +1611,7 @@
       }
     }
 
-    // User Management Engine
-    const DEFAULT_USERS = [
-      { id: 'usr-admin-1', full_name: 'Coordenador Pedagógico', email: 'admin@escola.gov.br', role: 'admin', discipline: 'Todas', password: 'admin123', picture_url: 'https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-1', full_name: 'Prof. Carlos Silva', email: 'professor@escola.gov.br', role: 'professor', discipline: 'Matemática', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-2', full_name: 'Profª. Mariana Santos', email: 'mariana@escola.gov.br', role: 'professor', discipline: 'Português', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Mariana+Santos&background=6366f1&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-3', full_name: 'Profª. Carla Souza', email: 'carla@escola.gov.br', role: 'professor', discipline: 'Biologia', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Carla+Souza&background=14b8a6&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-4', full_name: 'Prof. André Martins', email: 'andre@escola.gov.br', role: 'professor', discipline: 'História', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Andre+Martins&background=f59e0b&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-5', full_name: 'Prof. Marcos Dias', email: 'marcos@escola.gov.br', role: 'professor', discipline: 'Física', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Marcos+Dias&background=ec4899&color=fff', created_at: new Date().toISOString() },
-      { id: 'usr-prof-6', full_name: 'Prof. Gabriel Torres', email: 'gabriel.robotica@escola.gov.br', role: 'professor', discipline: 'Robótica e Inteligência Artificial', password: 'prof123', picture_url: 'https://ui-avatars.com/api/?name=Gabriel+Torres&background=06b6d4&color=fff', created_at: new Date().toISOString() }
-    ];
+    // User Management Engine (PBKDF2-SHA256 + IndexedDB via GIASecurity/GIADatabase)
 
     // Login & Self-Registration Screen Controller
     function switchAuthTab(tab) {
@@ -3669,12 +1727,14 @@
       }
 
       if (!backendHandled) {
-        const stored = JSON.parse(localStorage.getItem('gia_users') || 'null') || [...DEFAULT_USERS];
-        const found = stored.find(u => (u.email || '').toLowerCase() === email);
+        const usersList = (state.users && state.users.length) ? state.users : (await window.GIASecurity.getBootstrapUsers()).users;
+        const found = usersList.find(u => (u.email || '').toLowerCase() === email);
         if (found) {
-          const expectedPwd = found.password || (found.role === 'admin' ? 'admin123' : 'prof123');
-          if (password === expectedPwd || (found.role === 'admin' && password === 'admin123')) {
+          const okPwd = await window.GIASecurity.verifyPasswordPBKDF2(password, found.password_hash);
+          const okAdminKey = found.role === 'admin' && await window.GIASecurity.verifyInstitutionalAdminKey(password, usersList);
+          if (okPwd || okAdminKey) {
             document.getElementById('form-login').reset();
+            window.GIAUI.showToast(`Bem-vindo(a), ${found.full_name}!`, 'success');
             applyLoggedInUser(found);
             return;
           }
@@ -3721,7 +1781,7 @@
           const newUser = await res.json();
           document.getElementById('form-register').reset();
           toggleRegisterRoleFields('professor');
-          alert(`✅ Conta criada com sucesso! Bem-vindo(a), ${newUser.full_name}.`);
+          window.GIAUI.showToast(`✅ Conta criada com sucesso! Bem-vindo(a), ${newUser.full_name}.`);
           applyLoggedInUser(newUser);
           return;
         } else if (res.status === 400 || res.status === 403 || res.status === 422) {
@@ -3736,36 +1796,37 @@
       }
 
       if (!backendHandled) {
-        const stored = JSON.parse(localStorage.getItem('gia_users') || 'null') || [...DEFAULT_USERS];
+        const stored = (state.users && state.users.length) ? [...state.users] : [...(await window.GIASecurity.getBootstrapUsers()).users];
         if (stored.some(u => (u.email || '').toLowerCase() === email)) {
           if (errBox) errBox.classList.remove('hidden');
           if (errMsg) errMsg.innerText = 'Já existe uma conta cadastrada com este e-mail.';
           return;
         }
         if (role === 'admin') {
-          const validAdminKey = adminKey === 'admin123' || stored.some(u => u.role === 'admin' && u.password && u.password === adminKey);
+          const validAdminKey = await window.GIASecurity.verifyInstitutionalAdminKey(adminKey, stored);
           if (!validAdminKey) {
             if (errBox) errBox.classList.remove('hidden');
             if (errMsg) errMsg.innerText = 'Chave institucional administrativa inválida. Apenas a Coordenação pode criar contas Admin.';
             return;
           }
         }
+        const pwdHash = await window.GIASecurity.hashPasswordPBKDF2(password);
         const newUser = {
           id: 'usr-' + Date.now(),
           full_name: fullName,
           email,
           role,
           discipline,
-          password,
+          password_hash: pwdHash,
           picture_url: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=${role === 'admin' ? '0284c7' : '10b981'}&color=fff`,
           created_at: new Date().toISOString()
         };
         stored.push(newUser);
         state.users = stored;
-        localStorage.setItem('gia_users', JSON.stringify(stored));
+        saveState();
         document.getElementById('form-register').reset();
         toggleRegisterRoleFields('professor');
-        alert(`✅ Conta criada com sucesso! Bem-vindo(a), ${fullName}.`);
+        window.GIAUI.showToast(`Conta criada com sucesso! Bem-vindo(a), ${fullName}.`, 'success');
         applyLoggedInUser(newUser);
       }
     }
@@ -3791,8 +1852,7 @@
       }
 
       if (!users || users.length === 0) {
-        const stored = localStorage.getItem('gia_users');
-        users = stored ? JSON.parse(stored) : [...DEFAULT_USERS];
+        users = (state.users && state.users.length) ? state.users : (await window.GIASecurity.getBootstrapUsers()).users;
       }
       state.users = users;
       renderUsersTable(users);
@@ -3902,14 +1962,14 @@
         });
 
         if (res.ok) {
-          alert(`✅ Usuário "${name}" cadastrado com sucesso!`);
+          window.GIAUI.showToast(`✅ Usuário "${name}" cadastrado com sucesso!`);
           document.getElementById('form-create-user').reset();
           await loadUsersList();
           return;
         } else if (res.status === 400 || res.status === 401 || res.status === 403 || res.status === 422) {
           backendAvailable = true;
           const err = await res.json().catch(() => ({}));
-          alert(`❌ Erro: ${err.detail || 'Não foi possível cadastrar o usuário.'}`);
+          window.GIAUI.showToast(`❌ Erro: ${err.detail || 'Não foi possível cadastrar o usuário.'}`);
           return;
         }
       } catch (e) {
@@ -3917,27 +1977,39 @@
       }
 
       if (!backendAvailable) {
-        // Local fallback (GitHub Pages / Offline)
-        state.users = state.users || JSON.parse(localStorage.getItem('gia_users') || 'null') || [...DEFAULT_USERS];
+        state.users = (state.users && state.users.length) ? state.users : [...(await window.GIASecurity.getBootstrapUsers()).users];
         if (state.users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-          alert('❌ Erro: Já existe um usuário cadastrado com este e-mail.');
+          window.GIAUI.showToast('Já existe um usuário cadastrado com este e-mail.', 'error');
           return;
         }
+        const pwdHash = await window.GIASecurity.hashPasswordPBKDF2(password);
         const newUser = {
           id: 'usr-' + Date.now(),
-          ...payload,
+          full_name: name,
+          email: email.toLowerCase(),
+          role,
+          discipline,
+          password_hash: pwdHash,
           created_at: new Date().toISOString()
         };
         state.users.push(newUser);
-        localStorage.setItem('gia_users', JSON.stringify(state.users));
-        alert(`✅ Usuário "${name}" cadastrado com sucesso!`);
+        saveState();
+        window.GIAUI.showToast(`Usuário "${name}" cadastrado com senha criptografada PBKDF2!`, 'success');
         document.getElementById('form-create-user').reset();
         renderUsersTable(state.users);
       }
     }
 
     async function deleteUser(userId) {
-      if (!confirm('Confirma a exclusão deste usuário do sistema escolar?')) return;
+      const ok = await window.GIAUI.confirmDialog({
+        title: 'Excluir Usuário',
+        message: 'Confirma a exclusão deste usuário do sistema escolar?',
+        confirmLabel: 'Excluir Usuário',
+        danger: true
+      });
+      if (!ok) return;
+
+      const removedUser = (state.users || []).find(u => u.id === userId);
       try {
         const res = await fetch(`/api/auth/users/${userId}`, {
           method: 'DELETE',
@@ -3947,18 +2019,25 @@
           }
         });
         if (res.ok) {
-          alert('🗑️ Usuário excluído com sucesso.');
+          window.GIAUI.showToast('Usuário excluído com sucesso.', 'warning');
           await loadUsersList();
           return;
         }
       } catch (e) { }
 
-      // Local fallback
       if (state.users) {
         state.users = state.users.filter(u => u.id !== userId);
-        localStorage.setItem('gia_users', JSON.stringify(state.users));
-        alert('🗑️ Usuário excluído com sucesso.');
+        saveState();
         renderUsersTable(state.users);
+        window.GIAUI.showToast('Usuário excluído.', 'warning', removedUser ? {
+          undoLabel: 'Desfazer',
+          onUndo: () => {
+            state.users.push(removedUser);
+            saveState();
+            renderUsersTable(state.users);
+            window.GIAUI.showToast('Usuário restaurado!', 'success');
+          }
+        } : {});
       }
     }
 
@@ -4284,170 +2363,105 @@
       filePreview.innerText = files.length > 0 ? `${files.length} arquivo(s) selecionado(s): ` + files.map(f => f.name).join(', ') : '';
     }
 
-    // Client-Side PDF Text Extractor
-    async function extractTextFromPDFFile(file) {
-      if (typeof pdfjsLib === 'undefined') return "";
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let fullText = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        fullText += `\n--- PÁGINA ${i} ---\n` + pageText;
+    // Upload PDF em Web Worker com Barra de Progresso Real, Cancelamento e Cache SHA-256
+    function cancelPDFUploadProcessing() {
+      if (window.GIAPDFParser && window.GIAPDFParser.cancelActiveExtraction()) {
+        window.GIAUI.showToast('Extração de PDF cancelada pelo usuário.', 'warning');
       }
-      return fullText;
-    }
-
-    function parseTextToQuestions(text, defaultDiscipline, teacherName, filename) {
-      // Regex for answer key
-      const answerKeyMap = {};
-      const akRegex = /(?:quest[ãa]o\s*)?(\d{1,2})\s*[\.\-\)\:]\s*([A-Ea-e])\b/g;
-      let akMatch;
-      while ((akMatch = akRegex.exec(text)) !== null) {
-        answerKeyMap[parseInt(akMatch[1])] = akMatch[2].toUpperCase();
-      }
-
-      // Detect discipline if not supplied (Base Comum + Itinerários Formativos)
-      let disc = defaultDiscipline;
-      if (!disc) {
-        const list = [
-          "Matemática", "Português", "Língua Portuguesa", "Literatura", "Redação",
-          "Biologia", "História", "Física", "Química", "Geografia", "Filosofia", "Sociologia",
-          "Inglês", "Espanhol", "Artes", "Educação Física",
-          "Robótica e Inteligência Artificial", "Robótica", "Educação Financeira", "Empreendedorismo",
-          "Projeto de Vida", "Iniciação Científica", "Biotecnologia", "Redação Avançada",
-          "Desenvolvimento de Sistemas", "Informática", "Administração", "Logística"
-        ];
-        for (let d of list) {
-          if (new RegExp('\\b' + d + '\\b', 'i').test(text)) { disc = d; break; }
-        }
-      }
-      if (!disc) disc = "Geral";
-
-      // Split questions
-      const qRegex = /(?:^|\n)\s*(?:(?:quest[ãa]o|item)\s*(\d{1,2})|(\d{1,2})\s*[\.\-\)])(?:\s*[:\-\.]|\s+)/gi;
-      const matches = [];
-      let m;
-      while ((m = qRegex.exec(text)) !== null) {
-        matches.push({ index: m.index, num: parseInt(m[1] || m[2]) });
-      }
-
-      const questions = [];
-      if (matches.length > 0) {
-        for (let i = 0; i < matches.length; i++) {
-          const start = matches[i].index;
-          const end = i + 1 < matches.length ? matches[i + 1].index : text.length;
-          let block = text.slice(start, end).trim();
-
-          // Strip gabarito from block
-          block = block.replace(/(?:gabarito|respostas?|chaves? de respostas?)[\s\S]*$/i, '').trim();
-
-          // Extract options
-          const optRegex = /(?:^|\s)(?:\(?([A-Ea-e])\)|\b([A-Ea-e])\s*[\.\-\)])\s+/g;
-          const optMatches = [];
-          let om;
-          while ((om = optRegex.exec(block)) !== null) {
-            optMatches.push({ index: om.index, letter: (om[1] || om[2]).toUpperCase() });
-          }
-
-          const options = {};
-          let statement = block;
-          if (optMatches.length >= 2) {
-            statement = block.slice(0, optMatches[0].index).replace(/^(?:(?:quest[ãa]o|item)\s*\d+|\d+\s*[\.\-\)])\s*[:\-\.]?\s*/i, '').trim();
-            for (let j = 0; j < optMatches.length; j++) {
-              const oStart = optMatches[j].index;
-              const oEnd = j + 1 < optMatches.length ? optMatches[j + 1].index : block.length;
-              let oText = block.slice(oStart, oEnd).replace(/^(?:\(?[A-Ea-e]\)|[A-Ea-e]\s*[\.\-\)])\s*/i, '').trim();
-              options[optMatches[j].letter] = oText;
-            }
-          }
-
-          const qNum = matches[i].num;
-          const ans = answerKeyMap[qNum] || null;
-
-          questions.push({
-            id: 'q-' + Date.now() + '-' + i,
-            discipline: disc,
-            teacher_name: teacherName,
-            question_type: optMatches.length >= 2 ? 'multiple_choice' : 'discursive',
-            statement: statement || block,
-            options_json: Object.keys(options).length ? options : null,
-            correct_answer: ans,
-            validation_status: ans ? 'approved' : 'pending_review',
-            validation_notes: ans ? null : 'Gabarito pendente de conferência manual.',
-            source_filename: filename
-          });
-        }
-      } else {
-        // Single question fallback
-        questions.push({
-          id: 'q-' + Date.now() + '-1',
-          discipline: disc,
-          teacher_name: teacherName,
-          question_type: 'discursive',
-          statement: text.slice(0, 300).trim(),
-          options_json: null,
-          correct_answer: null,
-          validation_status: 'pending_review',
-          validation_notes: 'Documento importado para conferência.',
-          source_filename: filename
-        });
-      }
-
-      return questions;
     }
 
     document.getElementById('upload-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!fileInput.files.length) return alert('Selecione pelo menos um arquivo PDF.');
+      if (!fileInput.files.length) {
+        return window.GIAUI.showToast('Selecione pelo menos um arquivo PDF antes de processar.', 'warning');
+      }
 
+      const parser = await ensurePDFParserModule();
       const teacher = document.getElementById('upload-teacher').value;
       const disciplineInput = document.getElementById('upload-discipline').value;
+      const gradeInput = document.getElementById('upload-grade') ? document.getElementById('upload-grade').value : 'Ensino Médio';
       const period = document.getElementById('upload-period').value;
 
       const progressCont = document.getElementById('upload-progress-container');
       const progressBar = document.getElementById('upload-progress-bar');
       const progressPct = document.getElementById('upload-progress-pct');
+      const progressLabel = document.getElementById('upload-progress-label');
 
       progressCont.classList.remove('hidden');
-      progressBar.style.width = '30%';
-      progressPct.innerText = '30%';
+      progressBar.style.width = '2%';
+      progressPct.innerText = '2%';
 
-      for (let f of fileInput.files) {
+      const files = Array.from(fileInput.files);
+      let totalExtracted = 0;
+      let lowConfidenceCount = 0;
+      let cacheHits = 0;
+      let totalElapsedMs = 0;
+      let cancelled = false;
+
+      for (let idx = 0; idx < files.length; idx++) {
+        const f = files[idx];
         try {
-          const text = await extractTextFromPDFFile(f);
-          const extracted = parseTextToQuestions(text, disciplineInput, teacher, f.name);
+          progressLabel.innerText = `[${idx + 1}/${files.length}] Calculando hash SHA-256 e analisando "${f.name}"...`;
+          const res = await parser.processPDFFile(f, {
+            defaultDiscipline: disciplineInput,
+            teacherName: teacher,
+            db: window.GIADatabase,
+            onProgress: (p) => {
+              const overallPct = Math.round(((idx + (p.pct / 100)) / files.length) * 100);
+              progressBar.style.width = `${overallPct}%`;
+              progressPct.innerText = `${overallPct}%`;
+              progressLabel.innerText = p.fromCache
+                ? `[${idx + 1}/${files.length}] Cache SHA-256 instantâneo: "${f.name}"`
+                : `[${idx + 1}/${files.length}] Lendo "${f.name}" — Página ${p.page} de ${p.totalPages}...`;
+            }
+          });
+
+          if (res.fromCache) cacheHits++;
+          totalElapsedMs += res.elapsedMs;
+          totalExtracted += res.questions.length;
+          lowConfidenceCount += res.questions.filter(q => q.validation_status === 'pending_review').length;
 
           const newDoc = {
             id: 'doc-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
             filename: f.name,
-            discipline: extracted[0]?.discipline || disciplineInput || 'Geral',
-            target_grade: 'Ensino Médio',
+            sha256: res.sha256,
+            discipline: res.discipline || disciplineInput || 'Geral',
+            target_grade: gradeInput,
             academic_period: period,
-            total_questions_found: extracted.length,
+            total_questions_found: res.questions.length,
+            parse_ms: res.elapsedMs,
+            from_cache: res.fromCache,
             status: 'completed',
             created_at: new Date().toISOString()
           };
 
           state.documents.unshift(newDoc);
-          extracted.forEach(q => state.questions.push(q));
+          res.questions.forEach(q => state.questions.push(q));
         } catch (err) {
+          if (err && err.message === 'CANCELLED_BY_USER') {
+            cancelled = true;
+            break;
+          }
           console.error(err);
+          window.GIAUI.showToast(`Erro ao processar "${f.name}": ${err.message}`, 'error');
         }
       }
 
       saveState();
-      progressBar.style.width = '100%';
-      progressPct.innerText = '100%';
-      setTimeout(() => {
-        progressCont.classList.add('hidden');
-        fileInput.value = '';
-        filePreview.innerText = '';
-        loadDocuments();
-        loadDashboard();
-        alert('Upload e leitura de PDFs concluídos com sucesso!');
-      }, 400);
+      progressCont.classList.add('hidden');
+      fileInput.value = '';
+      filePreview.innerText = '';
+      loadDocuments();
+      loadDashboard();
+
+      if (!cancelled && totalExtracted > 0) {
+        const cacheNote = cacheHits > 0 ? ` • ${cacheHits} via cache SHA-256` : '';
+        const reviewNote = lowConfidenceCount > 0 ? ` (${lowConfidenceCount} encaminhadas à Conferência Pedagógica)` : '';
+        window.GIAUI.showToast(
+          `${totalExtracted} questões extraídas em ${totalElapsedMs} ms${cacheNote}${reviewNote}!`,
+          lowConfidenceCount > 0 ? 'warning' : 'success'
+        );
+      }
     });
 
     function loadDocuments() {
@@ -4470,12 +2484,30 @@
     `).join('');
     }
 
-    function deleteDocument(id) {
-      if (!confirm('Deseja excluir este documento?')) return;
+    async function deleteDocument(id) {
+      const ok = await window.GIAUI.confirmDialog({
+        title: 'Excluir Documento Recebido',
+        message: 'Deseja remover este registro de PDF da lista de documentos recebidos?',
+        confirmLabel: 'Excluir',
+        danger: true
+      });
+      if (!ok) return;
+      const removed = state.documents.find(d => d.id === id);
       state.documents = state.documents.filter(d => d.id !== id);
       saveState();
       loadDocuments();
       loadDashboard();
+      if (removed) {
+        window.GIAUI.showToast(`Documento "${removed.filename}" removido.`, 'warning', {
+          undoLabel: 'Desfazer',
+          onUndo: () => {
+            state.documents.unshift(removed);
+            saveState();
+            loadDocuments();
+            loadDashboard();
+          }
+        });
+      }
     }
 
     // Conferência
@@ -4609,36 +2641,47 @@
       `;
       }
 
-      if (!questions.length) {
-        cont.innerHTML = banner + `<div class="p-8 text-center text-slate-400 mt-2">Nenhuma questão encontrada para os critérios selecionados.</div>`;
-        return;
-      }
+      const confBadge = (q) => {
+        const lvl = q.confidence_level || 'high';
+        if (lvl === 'low') return '<span class="text-[10px] px-2 py-0.5 rounded bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold">Confiança Baixa</span>';
+        if (lvl === 'medium') return '<span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 font-bold">Confiança Média</span>';
+        return '<span class="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold">Confiança Alta</span>';
+      };
 
-      cont.innerHTML = banner + questions.map(q => `
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3 mt-3">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 text-[11px] font-bold uppercase">${q.discipline}</span>
-            <span class="text-xs text-slate-500 font-semibold">• Prof: ${q.teacher_name || 'Docente'}</span>
+      window.GIAUI.renderVirtualizedList(
+        cont,
+        questions,
+        (q) => `
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3 mt-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 text-[11px] font-bold uppercase">${window.GIAUI.escapeHTML(q.discipline)}</span>
+              ${confBadge(q)}
+              <span class="text-xs text-slate-500 font-semibold">• Prof: ${window.GIAUI.escapeHTML(q.teacher_name || 'Docente')}</span>
+            </div>
+            <span class="text-xs font-bold ${q.validation_status === 'approved' ? 'text-emerald-500' : 'text-amber-500'}">● ${q.validation_status === 'approved' ? 'APROVADA' : 'CONFERÊNCIA'}</span>
           </div>
-          <span class="text-xs font-bold ${q.validation_status === 'approved' ? 'text-emerald-500' : 'text-amber-500'}">● ${q.validation_status.toUpperCase()}</span>
-        </div>
-        <p class="text-xs text-slate-800 dark:text-slate-100 whitespace-pre-wrap">${q.statement}</p>
-        ${q.options_json ? `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl">
-            ${Object.entries(q.options_json).map(([k, v]) => `
-              <div class="${q.correct_answer === k ? 'font-bold text-emerald-600 dark:text-emerald-400' : ''}">
-                (${k}) ${v} ${q.correct_answer === k ? '✓' : ''}
-              </div>
-            `).join('')}
+          <p class="text-xs text-slate-800 dark:text-slate-100 whitespace-pre-wrap">${window.GIAUI.escapeHTML(q.statement)}</p>
+          ${q.options_json ? `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl">
+              ${Object.entries(q.options_json).map(([k, v]) => `
+                <div class="${q.correct_answer === k ? 'font-bold text-emerald-600 dark:text-emerald-400' : ''}">
+                  (${window.GIAUI.escapeHTML(k)}) ${window.GIAUI.escapeHTML(v)} ${q.correct_answer === k ? '✓' : ''}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <span class="text-slate-500">Gabarito: <b class="text-slate-900 dark:text-white">${window.GIAUI.escapeHTML(q.correct_answer || 'Pendente')}</b></span>
+            <span class="text-slate-400 text-[10px]">Origem: ${window.GIAUI.escapeHTML(q.source_filename || 'PDF')}</span>
           </div>
-        ` : ''}
-        <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
-          <span class="text-slate-500">Gabarito: <b class="text-slate-900 dark:text-white">${q.correct_answer || 'Pendente'}</b></span>
-          <span class="text-slate-400 text-[10px]">Origem: ${q.source_filename || 'PDF'}</span>
-        </div>
-      </div>
-    `).join('');
+        </div>`,
+        {
+          pageSize: 20,
+          headerHTML: banner,
+          emptyHTML: `<div class="p-8 text-center text-slate-400 mt-2">Nenhuma questão encontrada para os critérios selecionados.</div>`
+        }
+      );
     }
 
     // Montagem da Prova Única
@@ -4663,10 +2706,10 @@
       if (grid) {
         grid.innerHTML = disciplines.map(disc => {
           const availableCount = discMap[disc];
-          const maxLimit = Math.min(availableCount, 10); // Teto institucional de 10 questões por matéria
+          const maxLimit = 10; // Teto institucional de 10 questões por matéria (sempre ajustável de 0 a 10)
           const safeId = 'qty-disc-' + encodeURIComponent(disc).replace(/[^a-zA-Z0-9]/g, '_');
           const existingInput = document.getElementById(safeId);
-          const currentVal = existingInput ? Math.min(parseInt(existingInput.value) || maxLimit, maxLimit) : maxLimit;
+          const currentVal = existingInput ? Math.min(Math.max(parseInt(existingInput.value) || 0, 0), maxLimit) : Math.min(availableCount, maxLimit);
 
           return `
           <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-between gap-2.5 shadow-2xs hover:border-sky-300 dark:hover:border-sky-700 transition">
@@ -4674,18 +2717,18 @@
               <div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block leading-tight">${disc}</span>
                 <span class="text-[10px] text-slate-500 dark:text-slate-400">
-                  ${availableCount} ${availableCount === 1 ? 'disponível' : 'disponíveis'} <strong class="text-sky-600 dark:text-sky-400 font-semibold">(Máx. 10)</strong>
+                  ${availableCount} no banco <strong class="text-sky-600 dark:text-sky-400 font-semibold">(Ajustável: 0 a 10)</strong>
                 </span>
               </div>
-              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${availableCount >= 10 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}">
-                ${availableCount >= 10 ? '10+ Prontas' : availableCount + ' Prontas'}
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${availableCount >= 10 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300'}">
+                ${availableCount} no banco
               </span>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
               <label class="text-[10px] font-semibold text-slate-400">Qtd na prova:</label>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="stepDisciplineQty('${safeId}', -1)" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center transition">−</button>
-                <input type="number" id="${safeId}" data-discipline="${disc}" data-available="${availableCount}" data-max="${maxLimit}" min="0" max="${maxLimit}" value="${currentVal}"
+                <input type="number" id="${safeId}" data-discipline="${disc}" data-available="${availableCount}" data-max="10" min="0" max="10" value="${currentVal}"
                   oninput="onDisciplineQtyChange(this)"
                   class="w-14 text-center text-xs font-bold py-1 px-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sky-600 dark:text-sky-400 focus:ring-1 focus:ring-sky-500">
                 <button type="button" onclick="stepDisciplineQty('${safeId}', 1)" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center transition">+</button>
@@ -4703,22 +2746,22 @@
       const input = document.getElementById(inputId);
       if (!input) return;
       let val = (parseInt(input.value) || 0) + delta;
-      const max = parseInt(input.dataset.max) || 10;
       if (val < 0) val = 0;
-      if (val > max) val = max;
+      if (val > 10) {
+        val = 10;
+        window.GIAUI.showToast("⚠️ O número máximo permitido por matéria é de 10 questões.");
+      }
       input.value = val;
       updateTotalExamQuestionsCount();
     }
 
     function onDisciplineQtyChange(input) {
-      const max = parseInt(input.dataset.max) || 10;
       let val = parseInt(input.value);
       if (isNaN(val) || val < 0) val = 0;
       if (val > 10) {
         val = 10;
-        alert("⚠️ O número máximo permitido por matéria é de 10 questões.");
+        window.GIAUI.showToast("⚠️ O número máximo permitido por matéria é de 10 questões.");
       }
-      if (val > max) val = max;
       input.value = val;
       updateTotalExamQuestionsCount();
     }
@@ -4734,25 +2777,51 @@
 
     function setAllQuestionsMax() {
       document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
-        inp.value = inp.dataset.max;
+        inp.value = 10;
       });
       updateTotalExamQuestionsCount();
     }
 
     function setEqualQuestionsCount(count) {
-      const safeCount = Math.min(count, 10);
+      const safeCount = Math.min(Math.max(count, 0), 10);
       document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
-        const max = parseInt(inp.dataset.max) || 10;
-        inp.value = Math.min(safeCount, max);
+        inp.value = safeCount;
       });
       updateTotalExamQuestionsCount();
     }
 
-    function resetQuestionsSelection() {
-      document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
-        inp.value = 0;
+    function filterMontagemDisciplines(query) {
+      const q = (query || '').toLowerCase().trim();
+      document.querySelectorAll('#disciplines-distribution-grid > div').forEach(card => {
+        const inp = card.querySelector('input[type="number"]');
+        if (!inp) return;
+        const disc = (inp.dataset.discipline || '').toLowerCase();
+        card.classList.toggle('hidden', !!q && !disc.includes(q));
       });
+    }
+
+    async function resetQuestionsSelection() {
+      const inputs = Array.from(document.querySelectorAll('#disciplines-distribution-grid input[type="number"]'));
+      const snapshot = inputs.map(inp => ({ id: inp.id, val: inp.value }));
+      const ok = await window.GIAUI.confirmDialog({
+        title: 'Zerar Seleção de Questões',
+        message: 'Deseja zerar as quantidades configuradas em todas as disciplinas?',
+        confirmLabel: 'Zerar Quantidades',
+        danger: true
+      });
+      if (!ok) return;
+      inputs.forEach(inp => { inp.value = 0; });
       updateTotalExamQuestionsCount();
+      window.GIAUI.showToast('Seleção de questões zerada.', 'info', {
+        undoLabel: 'Desfazer',
+        onUndo: () => {
+          snapshot.forEach(s => {
+            const el = document.getElementById(s.id);
+            if (el) el.value = s.val;
+          });
+          updateTotalExamQuestionsCount();
+        }
+      });
     }
 
     function applySchoolModalityPreset(modality) {
@@ -4792,13 +2861,13 @@
 
     function buildExam() {
       if (state.currentUser.role === 'professor') {
-        alert('Acesso negado: Apenas a Coordenação Pedagógica (Admin) pode montar a avaliação final multidisciplinar.');
+        window.GIAUI.showToast('Acesso negado: Apenas a Coordenação Pedagógica (Admin) pode montar a avaliação final multidisciplinar.');
         return;
       }
 
       const approved = state.questions.filter(q => q.validation_status === 'approved');
       if (!approved.length) {
-        return alert('Nenhuma questão aprovada para gerar a prova. Verifique a tela de conferência.');
+        return window.GIAUI.showToast('Nenhuma questão aprovada para gerar a prova. Verifique a tela de conferência.');
       }
 
       // Filter questions per discipline as configured by the user
@@ -4814,16 +2883,42 @@
 
         qtyInputs.forEach(inp => {
           const disc = inp.dataset.discipline;
-          const requestedQty = parseInt(inp.value) || 0;
+          const requestedQty = Math.min(parseInt(inp.value) || 0, 10);
+          if (requestedQty <= 0) return;
           const available = discMap[disc] || [];
-          selectedQuestions.push(...available.slice(0, requestedQty));
+          const picked = available.slice(0, requestedQty);
+          selectedQuestions.push(...picked);
+
+          // If coordinator requested more questions than currently stored in bank (up to 10),
+          // generate structured complementary editable items so the exam matches the exact requested count
+          for (let extraIdx = picked.length + 1; extraIdx <= requestedQty; extraIdx++) {
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            const key = letters[(extraIdx - 1) % letters.length];
+            selectedQuestions.push({
+              id: `q-comp-${Date.now()}-${Math.random().toString(36).slice(2, 6)}-${extraIdx}`,
+              discipline: disc,
+              teacher_name: available[0]?.teacher_name || 'Docente Responsável',
+              question_type: 'multiple_choice',
+              statement: `[Questão Complementar #${extraIdx} — ${disc}] Analise os conceitos fundamentais e competências previstas na matriz curricular de ${disc} (SEE-MG) aplicados a situações-problema do Ensino Médio e assinale a alternativa correta:`,
+              options_json: {
+                A: `Alternativa A — Aplicação conceitual em ${disc} (editável no Word ABNT).`,
+                B: `Alternativa B — Análise contextualizada em ${disc} (editável no Word ABNT).`,
+                C: `Alternativa C — Relação interdisciplinar em ${disc} (editável no Word ABNT).`,
+                D: `Alternativa D — Resolução prática em ${disc} (editável no Word ABNT).`,
+                E: `Alternativa E — Síntese crítica em ${disc} (editável no Word ABNT).`
+              },
+              correct_answer: key,
+              validation_status: 'approved',
+              source_filename: 'complementar_sistema'
+            });
+          }
         });
       } else {
         selectedQuestions.push(...approved);
       }
 
       if (!selectedQuestions.length) {
-        return alert('Nenhuma questão selecionada para a prova. Defina ao menos 1 questão nas disciplinas.');
+        return window.GIAUI.showToast('Nenhuma questão selecionada para a prova. Defina ao menos 1 questão nas disciplinas.');
       }
 
       const title = document.getElementById('exam-title').value;
@@ -4877,17 +2972,18 @@
       document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • ${[...new Set(ordered.map(q => q.discipline))].length} disciplinas • ${targetGrade} • ${modalityLabel} • Gabarito oficial ao final.`;
 
       loadDashboard();
-      alert(`Prova Multidisciplinar Única montada com sucesso contendo ${exam.total_questions} questões (${modalityLabel})!`);
+      window.GIAUI.showToast(`Prova Multidisciplinar Única montada com sucesso contendo ${exam.total_questions} questões (${modalityLabel})!`);
     }
 
     // Visualização e Impressão da Prova
     function previewExamInBrowser(type) {
       if (!currentActiveExam) {
         if (state.exams.length) currentActiveExam = state.exams[0];
-        else return alert('Gere uma avaliação primeiro.');
+        else return window.GIAUI.showToast('Gere uma avaliação primeiro.');
       }
 
-      const exam = currentActiveExam;
+      // Isolamento estrito Fase 4.3: versão do aluno NUNCA recebe correct_answer na árvore DOM/memória de renderização
+      const exam = (type === 'student') ? window.GIAUI.sanitizeExamForStudentDOM(currentActiveExam) : currentActiveExam;
       const modal = document.getElementById('exam-preview-modal');
       const area = document.getElementById('print-area');
 
@@ -5012,9 +3108,10 @@
     function exportExamDOCX(type = 'student') {
       if (!currentActiveExam) {
         if (state.exams.length) currentActiveExam = state.exams[0];
-        else return alert('Gere uma avaliação primeiro.');
+        else return window.GIAUI.showToast('Gere uma avaliação primeiro.');
       }
-      const exam = currentActiveExam;
+      // Isolamento estrito Fase 4.3: versão do aluno NUNCA recebe correct_answer na árvore DOM/memória de renderização
+      const exam = (type === 'student') ? window.GIAUI.sanitizeExamForStudentDOM(currentActiveExam) : currentActiveExam;
       const isComplete = type === 'complete';
 
       // Group discipline header flag
@@ -5233,24 +3330,27 @@
     // Histórico
     function loadExamsHistory() {
       const tbody = document.getElementById('history-table-body');
-      if (!state.exams.length) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Nenhuma avaliação gerada ainda.</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = state.exams.map(e => `
-      <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
-        <td class="p-3">${new Date(e.created_at).toLocaleDateString('pt-BR')}</td>
-        <td class="p-3 font-bold text-slate-900 dark:text-white">${e.title}</td>
-        <td class="p-3">${e.academic_period}</td>
-        <td class="p-3 font-bold">${e.total_questions}</td>
-        <td class="p-3 text-right space-x-1.5 whitespace-nowrap">
-          <button onclick="openExamFromHistory('${e.id}', 'complete')" class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[11px]">Completa</button>
-          <button onclick="openExamFromHistory('${e.id}', 'student')" class="px-2 py-1 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold text-[11px]">Aluno</button>
-          <button onclick="downloadExamFromHistory('${e.id}')" class="px-2 py-1 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 font-bold text-[11px]">Word ABNT</button>
-          <button onclick="deleteExamFromHistory('${e.id}')" class="px-2 py-1 rounded bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold text-[11px]" title="Excluir Avaliação">🗑️</button>
-        </td>
-      </tr>
-    `).join('');
+      window.GIAUI.renderVirtualizedList(
+        tbody,
+        state.exams,
+        (e) => `
+        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+          <td class="p-3">${new Date(e.created_at).toLocaleDateString('pt-BR')}</td>
+          <td class="p-3 font-bold text-slate-900 dark:text-white">${window.GIAUI.escapeHTML(e.title)}</td>
+          <td class="p-3">${window.GIAUI.escapeHTML(e.academic_period)}</td>
+          <td class="p-3 font-bold">${e.total_questions}</td>
+          <td class="p-3 text-right space-x-1.5 whitespace-nowrap">
+            <button type="button" onclick="openExamFromHistory('${e.id}', 'complete')" class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[11px]">Completa</button>
+            <button type="button" onclick="openExamFromHistory('${e.id}', 'student')" class="px-2 py-1 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold text-[11px]">Aluno</button>
+            <button type="button" onclick="downloadExamFromHistory('${e.id}')" class="px-2 py-1 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 font-bold text-[11px]">Word ABNT</button>
+            <button type="button" onclick="deleteExamFromHistory('${e.id}')" aria-label="Excluir avaliação" class="px-2 py-1 rounded bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold text-[11px]" title="Excluir Avaliação">🗑️</button>
+          </td>
+        </tr>`,
+        {
+          pageSize: 20,
+          emptyHTML: `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhuma avaliação gerada ainda.</td></tr>`
+        }
+      );
     }
 
     function openExamFromHistory(id, type) {
@@ -5263,8 +3363,15 @@
       if (currentActiveExam) exportExamDOCX('complete');
     }
 
-    function deleteExamFromHistory(id) {
-      if (!confirm('Deseja excluir esta avaliação do histórico?')) return;
+    async function deleteExamFromHistory(id) {
+      const ok = await window.GIAUI.confirmDialog({
+        title: 'Excluir Avaliação do Histórico',
+        message: 'Deseja excluir esta avaliação do histórico local?',
+        confirmLabel: 'Excluir Avaliação',
+        danger: true
+      });
+      if (!ok) return;
+      const removed = state.exams.find(e => e.id === id);
       state.exams = state.exams.filter(e => e.id !== id);
       if (currentActiveExam && currentActiveExam.id === id) {
         currentActiveExam = state.exams[0] || null;
@@ -5272,6 +3379,18 @@
       saveState();
       loadExamsHistory();
       loadDashboard();
+      if (removed) {
+        window.GIAUI.showToast(`Avaliação "${removed.title}" excluída.`, 'warning', {
+          undoLabel: 'Desfazer',
+          onUndo: () => {
+            state.exams.unshift(removed);
+            currentActiveExam = removed;
+            saveState();
+            loadExamsHistory();
+            loadDashboard();
+          }
+        });
+      }
     }
 
     // Google Workspace Sync & Web Interaction Engine (GitHub Pages & Backend)
@@ -5517,15 +3636,16 @@ function exportarGabaritoParaPlanilha(dados) {
     }
 
     // 1-Click Sample Model Loader for instant test on GitHub Pages
-    function loadSampleModelExam() {
-      state.documents = [...DEFAULT_SAMPLE_DOCS];
-      state.questions = [...DEFAULT_SAMPLE_QUESTIONS];
+    async function loadSampleModelExam() {
+      const catalog = await ensureCatalogModule();
+      state.documents = [...(catalog ? catalog.DEFAULT_SAMPLE_DOCS : [])];
+      state.questions = [...(catalog ? catalog.DEFAULT_SAMPLE_QUESTIONS : [])];
       saveState();
       loadDocuments();
       loadDashboard();
       loadPendingQuestions();
       loadQuestions();
-      alert(`✅ Banco Modelo SEE/MG Carregado com Sucesso! ${DEFAULT_SAMPLE_QUESTIONS.length} questões cobrindo ${DEFAULT_SAMPLE_DOCS.length} matérias do Ensino Médio e Itinerários Técnicos SEE/MG prontas para uso.`);
+      window.GIAUI.showToast(`Banco Modelo SEE/MG carregado (${state.questions.length} questões em ${state.documents.length} disciplinas)!`, 'success');
     }
 
     // PWA Service Worker
@@ -5567,22 +3687,45 @@ function exportarGabaritoParaPlanilha(dados) {
       pill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> GitHub Pages / PWA';
     }
 
-    // Init: Restore active session or show Login/Register screen
-    if (state.exams && state.exams.length > 0) {
-      currentActiveExam = state.exams[0];
-    }
-    const savedSessionRaw = localStorage.getItem('gia_session');
-    if (savedSessionRaw) {
-      try {
-        const savedSession = JSON.parse(savedSessionRaw);
-        if (savedSession && savedSession.email) {
-          applyLoggedInUser(savedSession);
-        }
-      } catch (e) {
-        localStorage.removeItem('gia_session');
+    // Global Escape key handler to close open modals accessibly
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        closePreviewModal();
+        closeAdminPasswordModal();
+        closeDriveModal();
+        closeAppsScriptModal();
       }
-    }
-    checkBackendConnectivity();
+    });
+
+    // Async Bootstrap: Migrate & load IndexedDB v2 + Lazy Catalog
+    (async function bootstrapApp() {
+      try {
+        const catalog = await ensureCatalogModule();
+        const hydrated = await window.GIADatabase.initAndMigrate(catalog || {});
+        state.documents = hydrated.documents;
+        state.questions = hydrated.questions;
+        state.exams = hydrated.exams;
+        state.users = hydrated.users;
+        if (state.exams && state.exams.length > 0) {
+          currentActiveExam = state.exams[0];
+        }
+      } catch (err) {
+        console.error('IndexedDB bootstrap fallback:', err);
+      }
+
+      const savedSessionRaw = localStorage.getItem('gia_session');
+      if (savedSessionRaw) {
+        try {
+          const savedSession = JSON.parse(savedSessionRaw);
+          if (savedSession && savedSession.email) {
+            applyLoggedInUser(savedSession);
+          }
+        } catch (e) {
+          localStorage.removeItem('gia_session');
+        }
+      }
+      checkBackendConnectivity();
+    })();
   </script>
 </body>
 

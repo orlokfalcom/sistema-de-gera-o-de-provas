@@ -176,17 +176,32 @@ def run_system_audit():
     assert p_root.read_text(encoding="utf-8") == p_docs.read_text(encoding="utf-8"), "Mismatch between index.html and docs/index.html"
 
     root_html = p_root.read_text(encoding="utf-8")
+    catalog_js_path = ROOT_DIR / "assets" / "js" / "catalog-data.js"
+    combined_frontend = root_html + (catalog_js_path.read_text(encoding="utf-8") if catalog_js_path.exists() else "")
+
     assert "modal-admin-password" in root_html
     assert "view-usuarios" in root_html
     assert "exam-school-modality" in root_html
     assert "knowledge-areas-bars" in root_html
-    assert "Robótica e Inteligência Artificial" in root_html
-    assert "Biotecnologia e Genética Aplicada" in root_html
-    assert "Técnico em Desenvolvimento de Sistemas (SEE/MG)" in root_html
-    assert "Projetos Integradores e de Corresponsabilidade Social (PICS)" in root_html
-    assert "Cultura Digital e Fundamentos de IA" in root_html
-    assert "Ferramentas para o Mundo do Trabalho" in root_html
-    print(" ✓ [OK] Todos os 3 arquivos HTML estão perfeitamente sincronizados e contêm todos os componentes solicitados.\n")
+    assert "Técnico em Robótica e Automação (SEE/MG)" in combined_frontend
+    assert "Natureza — Biotecnologia e Genética Aplicada" in combined_frontend
+    assert "Técnico em Desenvolvimento de Sistemas (SEE/MG)" in combined_frontend
+    assert "Projetos Integradores e de Corresponsabilidade Social (PICS)" in combined_frontend
+    assert "Cultura Digital e Fundamentos de IA" in combined_frontend
+    assert "Ferramentas para o Mundo do Trabalho" in combined_frontend
+
+    # Security assertion: zero plaintext passwords in client HTML
+    assert "'admin123'" not in root_html and '"admin123"' not in root_html, "Plaintext admin password leaked in index.html!"
+    assert "'prof123'" not in root_html and '"prof123"' not in root_html, "Plaintext teacher password leaked in index.html!"
+
+    # Verify external modular JS bundles are synced across root, docs/, and backend/static/
+    for mod_name in ["security-db.js", "ui-ux.js", "catalog-data.js", "pdf-parser.js", "pdf-worker.js"]:
+        m_root = (ROOT_DIR / "assets" / "js" / mod_name).read_text(encoding="utf-8")
+        m_docs = (ROOT_DIR / "docs" / "assets" / "js" / mod_name).read_text(encoding="utf-8")
+        m_stat = (ROOT_DIR / "backend" / "static" / "assets" / "js" / mod_name).read_text(encoding="utf-8")
+        assert m_root == m_docs == m_stat, f"Module {mod_name} out of sync!"
+
+    print(" ✓ [OK] Todos os 3 arquivos HTML e os 5 módulos JS estão sincronizados, sem senhas em texto plano e com cobertura SEE/MG completa.\n")
 
     print("=================================================================")
     print("TODOS OS 6 TESTES DA AUDITORIA FORAM APROVADOS COM 100% DE SUCESSO!")

@@ -10,18 +10,20 @@ from backend.app.models import Document, Question
 
 
 def load_seemg_seed_data():
-    """Loads the canonical SEE/MG question bank from index.html so frontend and backend stay 100% aligned."""
-    root_index = Path(__file__).resolve().parents[2] / "index.html"
-    if not root_index.exists():
-        root_index = Path(__file__).resolve().parents[1] / "static" / "index.html"
-    if not root_index.exists():
-        return []
-
-    html = root_index.read_text(encoding="utf-8")
-    m = re.search(r"const DEFAULT_SAMPLE_QUESTIONS = (\[[\s\S]*?\]);", html)
-    if not m:
-        return []
-    return json.loads(m.group(1))
+    """Loads the canonical SEE/MG question bank from assets/js/catalog-data.js (or legacy index.html)."""
+    repo_root = Path(__file__).resolve().parents[2]
+    candidates = [
+        repo_root / "assets" / "js" / "catalog-data.js",
+        repo_root / "backend" / "static" / "assets" / "js" / "catalog-data.js",
+        repo_root / "index.html",
+    ]
+    for path in candidates:
+        if path.exists():
+            content = path.read_text(encoding="utf-8")
+            m = re.search(r"const DEFAULT_SAMPLE_QUESTIONS = (\[[\s\S]*?\]);", content)
+            if m:
+                return json.loads(m.group(1))
+    return []
 
 
 def seed_seemg_questions(db: Session) -> dict:

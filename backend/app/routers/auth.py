@@ -1,3 +1,6 @@
+import hashlib
+import hmac
+import secrets
 from fastapi import APIRouter, Depends, HTTPException, Header, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -9,6 +12,30 @@ from backend.app.schemas import UserResponse, UserCreate, UserUpdate
 from backend.app.services.google_service import GoogleWorkspaceService
 
 router = APIRouter(prefix="/api/auth", tags=["Autenticação & Usuários"])
+
+PBKDF2_ITERATIONS = 100_000
+
+
+def hash_password_pbkdf2(password: str, salt_hex: Optional[str] = None) -> str:
+    salt = bytes.fromhex(salt_hex) if salt_hex else secrets.token_bytes(16)
+    dk = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, PBKDF2_ITERATIONS)
+    return f"pbkdf2${PBKDF2_ITERATIONS}${salt.hex()}${dk.hex()}"
+
+
+def verify_password_record(candidate: str, stored_value: Optional[str]) -> bool:
+    if not stored_value:
+        return False
+    if stored_value.startswith("pbkdf2$"):
+        parts = stored_value.split("$")
+        if len(parts) != 4:
+            return False
+        iters = int(parts[1])
+        salt = bytes.fromhex(parts[2])
+        expected_hex = parts[3]
+        dk = hashlib.pbkdf2_hmac("sha256", candidate.encode("utf-8"), salt, iters)
+        return hmac.compare_digest(dk.hex(), expected_hex)
+    # Legacy fallback before automatic upgrade on login
+    return hmac.compare_digest(candidate, stored_value)
 
 def get_current_user_from_headers(
     x_user_role: Optional[str] = Header(None, alias="X-User-Role"),
@@ -70,7 +97,7 @@ class RegisterRequest(BaseModel):
 
 @router.post("/login", response_model=UserResponse)
 def login_with_credentials(req: LoginRequest, db: Session = Depends(get_db)):
-    """Authenticates a user by email and password."""
+    """Authenticates a user by email and PBKDF2-SHA256 password hash (auto-upgrading legacy records)."""
     email_clean = req.email.strip().lower()
     user = db.query(User).filter(User.email == email_clean).first()
     if not user:
@@ -79,13 +106,16 @@ def login_with_credentials(req: LoginRequest, db: Session = Depends(get_db)):
             detail="E-mail ou senha incorretos. Verifique suas credenciais."
         )
 
-    default_fallback = "admin123" if user.role == "admin" else "prof123"
-    stored_pwd = user.password_hash or default_fallback
-    if req.password != stored_pwd and not (user.role == "admin" and req.password == "admin123") and not (user.role == "professor" and stored_pwd == "admin123" and req.password == "prof123"):
+    if not verify_password_record(req.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="E-mail ou senha incorretos. Verifique suas credenciais."
         )
+
+    # Auto-upgrade legacy non-PBKDF2 hash on successful login
+    if user.password_hash and not user.password_hash.startswith("pbkdf2$"):
+        user.password_hash = hash_password_pbkdf2(req.password)
+        db.commit()
     return user
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -102,8 +132,11 @@ def register_account(req: RegisterRequest, db: Session = Depends(get_db)):
     role = req.role if req.role in ["admin", "professor"] else "professor"
     if role == "admin":
         admin_user = db.query(User).filter(User.role == "admin").first()
-        expected_key = (admin_user.password_hash if admin_user and admin_user.password_hash else "admin123")
-        if not req.admin_key or (req.admin_key != expected_key and req.admin_key != "admin123"):
+        valid_key = bool(req.admin_key) and (
+            (admin_user and verify_password_record(req.admin_key, admin_user.password_hash))
+            or verify_password_record(req.admin_key, hash_password_pbkdf2("admin123", "a1f09c4e7b2841d39e5c6082b47d1a9f"))
+        )
+        if not valid_key:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Chave institucional administrativa inválida. Apenas a Coordenação pode criar contas Admin."
@@ -116,7 +149,7 @@ def register_account(req: RegisterRequest, db: Session = Depends(get_db)):
         full_name=req.full_name.strip(),
         role=role,
         discipline="Todas" if role == "admin" else (req.discipline or "Geral"),
-        password_hash=req.password,
+        password_hash=hash_password_pbkdf2(req.password),
         picture_url=f"https://ui-avatars.com/api/?name={avatar_name}&background={bg_color}&color=fff"
     )
     db.add(new_user)
@@ -126,18 +159,25 @@ def register_account(req: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/verify-admin")
 def verify_admin_password(req: AdminPasswordRequest, db: Session = Depends(get_db)):
-    """Validates administrative password for granting full access."""
-    admin_user = db.query(User).filter(User.role == "admin").first()
-    expected_password = (admin_user.password_hash if admin_user and admin_user.password_hash else "admin123")
+    """Validates administrative password via PBKDF2-SHA256."""
+    admins = db.query(User).filter(User.role == "admin").all()
+    bootstrap_admin_hash = hash_password_pbkdf2("admin123", "a1f09c4e7b2841d39e5c6082b47d1a9f")
 
-    if req.password == expected_password or req.password == "admin123":
+    matched_admin = None
+    for adm in admins:
+        if verify_password_record(req.password, adm.password_hash):
+            matched_admin = adm
+            break
+
+    if matched_admin or verify_password_record(req.password, bootstrap_admin_hash):
+        primary = matched_admin or (admins[0] if admins else None)
         return {
             "valid": True,
             "role": "admin",
             "message": "Acesso administrativo concedido com sucesso.",
             "user": {
-                "name": admin_user.full_name if admin_user else "Coordenador Pedagógico",
-                "email": admin_user.email if admin_user else "admin@escola.gov.br",
+                "name": primary.full_name if primary else "Coordenador Pedagógico",
+                "email": primary.email if primary else "admin@escola.gov.br",
                 "role": "admin"
             }
         }
@@ -206,12 +246,15 @@ def create_user(
         encoded_name = payload.full_name.replace(" ", "+")
         avatar_url = f"https://ui-avatars.com/api/?name={encoded_name}&background={bg_color}&color=fff"
 
+    raw_pwd = payload.password or ("admin123" if payload.role == "admin" else "prof123")
+    hashed_pwd = raw_pwd if raw_pwd.startswith("pbkdf2$") else hash_password_pbkdf2(raw_pwd)
+
     new_user = User(
         email=payload.email,
         full_name=payload.full_name,
         role=payload.role if payload.role in ["admin", "professor"] else "professor",
         discipline=payload.discipline or "Geral",
-        password_hash=payload.password or "admin123",
+        password_hash=hashed_pwd,
         picture_url=avatar_url
     )
     db.add(new_user)
@@ -245,7 +288,7 @@ def update_user(
     if payload.picture_url is not None:
         target.picture_url = payload.picture_url
     if payload.password is not None:
-        target.password_hash = payload.password
+        target.password_hash = payload.password if payload.password.startswith("pbkdf2$") else hash_password_pbkdf2(payload.password)
 
     db.commit()
     db.refresh(target)
