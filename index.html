@@ -2773,10 +2773,10 @@
       if (grid) {
         grid.innerHTML = disciplines.map(disc => {
           const availableCount = discMap[disc];
-          const maxLimit = Math.min(availableCount, 10); // Teto institucional de 10 questões por matéria
+          const maxLimit = 10; // Teto institucional de 10 questões por matéria (sempre ajustável de 0 a 10)
           const safeId = 'qty-disc-' + encodeURIComponent(disc).replace(/[^a-zA-Z0-9]/g, '_');
           const existingInput = document.getElementById(safeId);
-          const currentVal = existingInput ? Math.min(parseInt(existingInput.value) || maxLimit, maxLimit) : maxLimit;
+          const currentVal = existingInput ? Math.min(Math.max(parseInt(existingInput.value) || 0, 0), maxLimit) : Math.min(availableCount, maxLimit);
 
           return `
           <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-between gap-2.5 shadow-2xs hover:border-sky-300 dark:hover:border-sky-700 transition">
@@ -2784,18 +2784,18 @@
               <div>
                 <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block leading-tight">${disc}</span>
                 <span class="text-[10px] text-slate-500 dark:text-slate-400">
-                  ${availableCount} ${availableCount === 1 ? 'disponível' : 'disponíveis'} <strong class="text-sky-600 dark:text-sky-400 font-semibold">(Máx. 10)</strong>
+                  ${availableCount} no banco <strong class="text-sky-600 dark:text-sky-400 font-semibold">(Ajustável: 0 a 10)</strong>
                 </span>
               </div>
-              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${availableCount >= 10 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}">
-                ${availableCount >= 10 ? '10+ Prontas' : availableCount + ' Prontas'}
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${availableCount >= 10 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300'}">
+                ${availableCount} no banco
               </span>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
               <label class="text-[10px] font-semibold text-slate-400">Qtd na prova:</label>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="stepDisciplineQty('${safeId}', -1)" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center transition">−</button>
-                <input type="number" id="${safeId}" data-discipline="${disc}" data-available="${availableCount}" data-max="${maxLimit}" min="0" max="${maxLimit}" value="${currentVal}"
+                <input type="number" id="${safeId}" data-discipline="${disc}" data-available="${availableCount}" data-max="10" min="0" max="10" value="${currentVal}"
                   oninput="onDisciplineQtyChange(this)"
                   class="w-14 text-center text-xs font-bold py-1 px-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sky-600 dark:text-sky-400 focus:ring-1 focus:ring-sky-500">
                 <button type="button" onclick="stepDisciplineQty('${safeId}', 1)" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center transition">+</button>
@@ -2813,22 +2813,22 @@
       const input = document.getElementById(inputId);
       if (!input) return;
       let val = (parseInt(input.value) || 0) + delta;
-      const max = parseInt(input.dataset.max) || 10;
       if (val < 0) val = 0;
-      if (val > max) val = max;
+      if (val > 10) {
+        val = 10;
+        alert("⚠️ O número máximo permitido por matéria é de 10 questões.");
+      }
       input.value = val;
       updateTotalExamQuestionsCount();
     }
 
     function onDisciplineQtyChange(input) {
-      const max = parseInt(input.dataset.max) || 10;
       let val = parseInt(input.value);
       if (isNaN(val) || val < 0) val = 0;
       if (val > 10) {
         val = 10;
         alert("⚠️ O número máximo permitido por matéria é de 10 questões.");
       }
-      if (val > max) val = max;
       input.value = val;
       updateTotalExamQuestionsCount();
     }
@@ -2844,16 +2844,15 @@
 
     function setAllQuestionsMax() {
       document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
-        inp.value = inp.dataset.max;
+        inp.value = 10;
       });
       updateTotalExamQuestionsCount();
     }
 
     function setEqualQuestionsCount(count) {
-      const safeCount = Math.min(count, 10);
+      const safeCount = Math.min(Math.max(count, 0), 10);
       document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
-        const max = parseInt(inp.dataset.max) || 10;
-        inp.value = Math.min(safeCount, max);
+        inp.value = safeCount;
       });
       updateTotalExamQuestionsCount();
     }
@@ -2924,9 +2923,35 @@
 
         qtyInputs.forEach(inp => {
           const disc = inp.dataset.discipline;
-          const requestedQty = parseInt(inp.value) || 0;
+          const requestedQty = Math.min(parseInt(inp.value) || 0, 10);
+          if (requestedQty <= 0) return;
           const available = discMap[disc] || [];
-          selectedQuestions.push(...available.slice(0, requestedQty));
+          const picked = available.slice(0, requestedQty);
+          selectedQuestions.push(...picked);
+
+          // If coordinator requested more questions than currently stored in bank (up to 10),
+          // generate structured complementary editable items so the exam matches the exact requested count
+          for (let extraIdx = picked.length + 1; extraIdx <= requestedQty; extraIdx++) {
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            const key = letters[(extraIdx - 1) % letters.length];
+            selectedQuestions.push({
+              id: `q-comp-${Date.now()}-${Math.random().toString(36).slice(2, 6)}-${extraIdx}`,
+              discipline: disc,
+              teacher_name: available[0]?.teacher_name || 'Docente Responsável',
+              question_type: 'multiple_choice',
+              statement: `[Questão Complementar #${extraIdx} — ${disc}] Analise os conceitos fundamentais e competências previstas na matriz curricular de ${disc} (SEE-MG) aplicados a situações-problema do Ensino Médio e assinale a alternativa correta:`,
+              options_json: {
+                A: `Alternativa A — Aplicação conceitual em ${disc} (editável no Word ABNT).`,
+                B: `Alternativa B — Análise contextualizada em ${disc} (editável no Word ABNT).`,
+                C: `Alternativa C — Relação interdisciplinar em ${disc} (editável no Word ABNT).`,
+                D: `Alternativa D — Resolução prática em ${disc} (editável no Word ABNT).`,
+                E: `Alternativa E — Síntese crítica em ${disc} (editável no Word ABNT).`
+              },
+              correct_answer: key,
+              validation_status: 'approved',
+              source_filename: 'complementar_sistema'
+            });
+          }
         });
       } else {
         selectedQuestions.push(...approved);
