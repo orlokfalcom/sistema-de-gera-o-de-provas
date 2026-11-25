@@ -298,53 +298,102 @@
           </div>
         </header>
 
-        <!-- VIEW: DASHBOARD -->
+        <!-- VIEW: DASHBOARD GERAL AVANÇADO -->
         <section id="view-dashboard" class="space-y-6">
           <div id="dashboard-role-banner"></div>
-          <h3 class="text-lg font-bold">Painel de Indicadores Gerais</h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard-metrics-grid">
-            <!-- Metric Cards -->
+
+          <!-- Quick Action Launchpad -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button onclick="navigate('upload')" class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-sky-400 hover:shadow-md transition text-left group">
+              <div class="w-8 h-8 rounded-xl bg-sky-100 dark:bg-sky-950/80 text-sky-600 dark:text-sky-400 flex items-center justify-center text-sm font-bold mb-2 group-hover:scale-110 transition">
+                📥
+              </div>
+              <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Enviar Questões</h5>
+              <p class="text-[10px] text-slate-400 mt-0.5">PDFs por matéria e ano</p>
+            </button>
+
+            <button onclick="navigate('conferencia')" class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-amber-400 hover:shadow-md transition text-left group">
+              <div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm font-bold mb-2 group-hover:scale-110 transition">
+                🔍
+              </div>
+              <div class="flex items-center justify-between">
+                <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Conferência</h5>
+                <span id="quick-badge-pending" class="px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 text-[10px] font-bold">0</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">Gabaritos e validação</p>
+            </button>
+
+            <button onclick="navigate('montagem')" class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-emerald-400 hover:shadow-md transition text-left group">
+              <div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm font-bold mb-2 group-hover:scale-110 transition">
+                ⚡
+              </div>
+              <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Montar Prova Única</h5>
+              <p class="text-[10px] text-slate-400 mt-0.5">Máx. 10 por matéria</p>
+            </button>
+
+            <button onclick="navigate('historico')" class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-purple-400 hover:shadow-md transition text-left group">
+              <div class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 flex items-center justify-center text-sm font-bold mb-2 group-hover:scale-110 transition">
+                📄
+              </div>
+              <h5 class="text-xs font-bold text-slate-800 dark:text-slate-100">Cadernos Oficiais</h5>
+              <p class="text-[10px] text-slate-400 mt-0.5">Word ABNT & PDFs</p>
+            </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div
-              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-              <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                </svg>
-                Distribuição por Disciplina
-              </h4>
-              <div id="discipline-breakdown-list" class="space-y-2.5 text-xs">
-                <!-- Dynamically populated -->
+          <!-- KPI Metrics Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard-metrics-grid">
+            <!-- Renderizado dinamicamente com gradientes e indicadores -->
+          </div>
+
+          <!-- Áreas do Conhecimento & Matriz de Prontidão Curricular -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Áreas do Conhecimento (5 colunas) -->
+            <div class="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+                  Cobertura por Área do Conhecimento
+                </h4>
+                <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold uppercase">BNCC + Itinerários</span>
+              </div>
+              <div id="knowledge-areas-bars" class="space-y-3.5 text-xs">
+                <!-- Renderizado dinamicamente -->
               </div>
             </div>
 
-            <div
-              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-              <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Regras Pedagógicas Inegociáveis
-              </h4>
-              <ul class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
-                <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> <b>Todas as
-                    Matérias do Ensino Médio:</b> Inclui Formação Geral Básica (BNCC) e Itinerários Formativos / Cursos
-                  Técnicos.</li>
-                <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Prova 100%
-                  Multidisciplinar: Todas as disciplinas num único caderno integrado.</li>
-                <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Preservação da
-                  autoria: Questões e respostas originais dos professores.</li>
-                <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> IA não inventa
-                  questões nem respostas: Gabaritos ausentes ficam marcados como PENDENTES.</li>
-                <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Numeração contínua
-                  (01 a N) com Gabarito Oficial ao final.</li>
-              </ul>
+            <!-- Matriz de Prontidão Curricular por Disciplina (7 colunas) -->
+            <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    Matriz de Prontidão Curricular
+                  </h4>
+                  <p class="text-[11px] text-slate-400">Status de questões prontas (teto de 10 por matéria)</p>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="filterDashboardDisciplineList('all')" id="dash-filter-all" class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300">Todas</button>
+                  <button type="button" onclick="filterDashboardDisciplineList('bncc')" id="dash-filter-bncc" class="px-2 py-0.5 text-[10px] font-bold rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">BNCC</button>
+                  <button type="button" onclick="filterDashboardDisciplineList('itinerario')" id="dash-filter-itinerario" class="px-2 py-0.5 text-[10px] font-bold rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Itinerários</button>
+                </div>
+              </div>
+              <div id="discipline-breakdown-list" class="space-y-2 max-h-72 overflow-y-auto pr-1">
+                <!-- Renderizado dinamicamente com barras e badges -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Banner Informativo Institucional -->
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-100 via-sky-50/50 to-indigo-50/50 dark:from-slate-900 dark:via-sky-950/20 dark:to-indigo-950/20 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">🎓</span>
+              <div>
+                <p class="font-bold text-slate-800 dark:text-slate-100">Avaliações Integradas do Ensino Médio • Padrão ABNT NBR 14724</p>
+                <p class="text-slate-500 dark:text-slate-400">Totalmente aderente a Escolas Integrais e Não Integrais (Regulares) • Sigilo absoluto de gabarito • Numeração contínua (01 a N).</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[10px]">Documentos Editáveis .DOCX & PDFs Oficiais</span>
             </div>
           </div>
         </section>
@@ -1489,12 +1538,29 @@
       document.documentElement.classList.add('dark');
     }
 
-    // Dashboard Loader
+    let currentDashboardDisciplineFilter = 'all';
+
+    function filterDashboardDisciplineList(type) {
+      currentDashboardDisciplineFilter = type;
+      ['all', 'bncc', 'itinerario'].forEach(id => {
+        const btn = document.getElementById('dash-filter-' + id);
+        if (btn) {
+          if (id === type) {
+            btn.className = 'px-2.5 py-1 text-[10px] font-bold rounded-md bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 shadow-2xs';
+          } else {
+            btn.className = 'px-2.5 py-1 text-[10px] font-bold rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800';
+          }
+        }
+      });
+      renderDashboardDisciplineList();
+    }
+
+    // Dashboard Loader Avançado
     function loadDashboard() {
       const isProf = state.currentUser.role === 'professor';
       const profDisc = state.currentUser.discipline || 'Matemática';
 
-      // Role Banner
+      // 1. Role Banner
       const roleBanner = document.getElementById('dashboard-role-banner');
       if (roleBanner) {
         if (isProf) {
@@ -1503,13 +1569,13 @@
             <div class="flex items-start gap-3">
               <span class="text-xl">👤</span>
               <div>
-                <p class="font-bold text-emerald-900 dark:text-emerald-100 text-sm">Perfil Ativo: Professor — Acesso Limitado Pedagógico</p>
-                <p class="text-emerald-700 dark:text-emerald-300 mt-0.5">Seu perfil permite envio de PDFs e validação de questões exclusivamente da sua disciplina (<b>${profDisc}</b>). A montagem da prova única e configurações de nuvem são restritas à Coordenação.</p>
+                <p class="font-bold text-emerald-900 dark:text-emerald-100 text-sm">Perfil Ativo: Professor — Acesso Restrito Pedagógico</p>
+                <p class="text-emerald-700 dark:text-emerald-300 mt-0.5">Acesso focado no envio de PDFs e validação das questões da sua disciplina (<b>${profDisc}</b>). A montagem da prova única e os relatórios gerais são restritos à Coordenação.</p>
               </div>
             </div>
             <div class="flex items-center gap-2 self-end md:self-auto">
-              <span class="text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">Minha Matéria:</span>
-              <select onchange="changeTeacherDiscipline(this.value)" class="text-xs font-bold py-1 px-2.5 rounded-lg border border-emerald-300 dark:border-emerald-700 bg-white dark:bg-slate-800 text-emerald-900 dark:text-emerald-200">
+              <span class="text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">Disciplina Ativa:</span>
+              <select onchange="changeTeacherDiscipline(this.value)" class="text-xs font-bold py-1.5 px-3 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-white dark:bg-slate-800 text-emerald-900 dark:text-emerald-200 shadow-2xs">
                 ${[...new Set(state.questions.map(q => q.discipline))].map(d => `<option value="${d}" ${d === profDisc ? 'selected' : ''}>${d}</option>`).join('')}
               </select>
             </div>
@@ -1517,25 +1583,37 @@
         `;
         } else {
           roleBanner.innerHTML = `
-          <div class="p-4 rounded-2xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-sky-500/10 border border-sky-300 dark:border-sky-800 text-sky-950 dark:text-sky-200 text-xs flex items-center justify-between shadow-xs">
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-sky-500/10 border border-sky-300 dark:border-sky-800 text-sky-950 dark:text-sky-200 text-xs flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
             <div class="flex items-start gap-3">
               <span class="text-xl">🛡️</span>
               <div>
-                <p class="font-bold text-sky-900 dark:text-sky-100 text-sm">Perfil Ativo: Administrador / Coordenação Pedagógica (Acesso Total)</p>
-                <p class="text-sky-700 dark:text-sky-300 mt-0.5">Acesso total a todas as disciplinas, recebimento amplo, conferência global, definição de questões por matéria na prova única e integração com Google Drive/Sheets.</p>
+                <p class="font-bold text-sky-900 dark:text-sky-100 text-sm">Coordenação Pedagógica / Gestão Escolar (Acesso Total)</p>
+                <p class="text-sky-700 dark:text-sky-300 mt-0.5">Visão panorâmica de todas as disciplinas da BNCC e Itinerários Formativos para Escolas Integrais e Não Integrais.</p>
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-lg bg-sky-600 text-white font-extrabold text-[10px] tracking-wider uppercase">Controle Total</span>
+            <div class="flex items-center gap-2 self-end md:self-auto">
+              <span class="px-3 py-1 rounded-xl bg-sky-600 text-white font-extrabold text-[10px] tracking-wider uppercase shadow-xs">Acesso Global</span>
+            </div>
           </div>
         `;
         }
       }
 
+      // Calculations
       const totalDocs = state.documents.length;
       const totalQuestions = state.questions.length;
+      const approvedQuestions = state.questions.filter(q => q.validation_status === 'approved').length;
+      const allPending = state.questions.filter(q => q.validation_status === 'pending_review').length;
+      const totalExams = state.exams.length;
+
       const myQuestions = state.questions.filter(q => q.discipline === profDisc);
       const myPending = myQuestions.filter(q => q.validation_status === 'pending_review').length;
-      const allPending = state.questions.filter(q => q.validation_status === 'pending_review').length;
+
+      // Update pending badges
+      const badgeNav = document.getElementById('badge-pending');
+      if (badgeNav) badgeNav.innerText = isProf ? myPending : allPending;
+      const quickBadge = document.getElementById('quick-badge-pending');
+      if (quickBadge) quickBadge.innerText = isProf ? myPending : allPending;
 
       // Unique disciplines
       const discMap = {};
@@ -1544,60 +1622,205 @@
       });
       const uniqueDiscCount = Object.keys(discMap).length;
 
+      // Readiness calculation (ideal: each active subject has at least 5 approved questions, max 10)
+      const readinessScore = uniqueDiscCount > 0
+        ? Math.min(100, Math.round((approvedQuestions / (uniqueDiscCount * 5)) * 100))
+        : 0;
+
+      // 2. Metrics KPI Cards
       const grid = document.getElementById('dashboard-metrics-grid');
-      if (isProf) {
-        grid.innerHTML = `
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Minha Disciplina</p>
-          <p class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">${profDisc}</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Questões da Minha Matéria</p>
-          <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">${myQuestions.length}</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Pendências da Minha Matéria</p>
-          <p class="text-2xl font-extrabold ${myPending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-1">${myPending}</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Total Geral da Escola</p>
-          <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${totalQuestions}</p>
-        </div>
-      `;
-        document.getElementById('badge-pending').innerText = myPending;
-      } else {
-        grid.innerHTML = `
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Arquivos Enviados</p>
-          <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${totalDocs}</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Disciplinas Identificadas</p>
-          <p class="text-2xl font-extrabold text-sky-600 dark:text-sky-400 mt-1">${uniqueDiscCount}</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Questões Extraídas</p>
-          <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">${totalQuestions}</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <p class="text-xs text-slate-500 font-semibold">Pendentes de Conferência</p>
-          <p class="text-2xl font-extrabold ${allPending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-1">${allPending}</p>
-        </div>
-      `;
-        document.getElementById('badge-pending').innerText = allPending;
+      if (grid) {
+        if (isProf) {
+          grid.innerHTML = `
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Minha Matéria</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm">📘</span>
+              </div>
+              <p class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2 truncate">${profDisc}</p>
+              <p class="text-[10px] text-slate-400 mt-1 font-medium">Docente responsável ativo</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Questões Enviadas</span>
+                <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm">📝</span>
+              </div>
+              <p class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-2">${myQuestions.length}</p>
+              <p class="text-[10px] text-slate-400 mt-1 font-medium">${myQuestions.length - myPending} aprovadas • Teto: 10</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Minhas Pendências</span>
+                <span class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm">⚠️</span>
+              </div>
+              <p class="text-3xl font-extrabold ${myPending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-2">${myPending}</p>
+              <p class="text-[10px] text-slate-400 mt-1 font-medium">${myPending === 0 ? 'Tudo conferido!' : 'Necessita validar gabarito'}</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Acervo Geral</span>
+                <span class="w-8 h-8 rounded-xl bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-sm">🏫</span>
+              </div>
+              <p class="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">${totalQuestions}</p>
+              <p class="text-[10px] text-slate-400 mt-1 font-medium">${uniqueDiscCount} disciplinas ativas</p>
+            </div>
+          `;
+        } else {
+          grid.innerHTML = `
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Prontidão da Prova</span>
+                <span class="w-8 h-8 rounded-xl bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-sm">🎯</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-3xl font-extrabold text-sky-600 dark:text-sky-400">${readinessScore}%</span>
+                <span class="text-[10px] text-slate-400">meta curricular</span>
+              </div>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mt-2.5 overflow-hidden">
+                <div class="bg-gradient-to-r from-sky-500 to-indigo-600 h-2 rounded-full transition-all duration-500" style="width: ${readinessScore}%"></div>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Acervo Extraído</span>
+                <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm">📚</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-3xl font-extrabold text-slate-900 dark:text-white">${totalQuestions}</span>
+                <span class="text-[10px] text-slate-400">questões</span>
+              </div>
+              <p class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-2 font-semibold flex items-center gap-1">
+                <span>✓</span> ${approvedQuestions} validadas (${allPending} pendentes)
+              </p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cobertura Curricular</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm">🌐</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">${uniqueDiscCount}</span>
+                <span class="text-[10px] text-slate-400">disciplinas</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-2 font-medium">BNCC e Itinerários Formativos</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-md transition">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cadernos Oficiais</span>
+                <span class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-sm">📜</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-3xl font-extrabold text-purple-600 dark:text-purple-400">${totalExams}</span>
+                <span class="text-[10px] text-slate-400">provas montadas</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-2 font-medium">Exportáveis em Word ABNT e PDF</p>
+            </div>
+          `;
+        }
       }
 
+      // 3. Knowledge Areas Breakdown
+      renderKnowledgeAreasBars();
+
+      // 4. Disciplines Matrix
+      renderDashboardDisciplineList();
+    }
+
+    function renderKnowledgeAreasBars() {
+      const container = document.getElementById('knowledge-areas-bars');
+      if (!container) return;
+
+      const areas = [
+        { name: 'Linguagens e suas Tecnologias', keywords: ['português', 'língua portuguesa', 'literatura', 'redação', 'inglês', 'espanhol', 'arte', 'educação física'], color: 'bg-sky-500' },
+        { name: 'Matemática e suas Tecnologias', keywords: ['matemática', 'financeira', 'estatística'], color: 'bg-emerald-500' },
+        { name: 'Ciências da Natureza', keywords: ['física', 'química', 'biologia', 'biotecnologia', 'astronomia'], color: 'bg-amber-500' },
+        { name: 'Ciências Humanas e Sociais', keywords: ['história', 'geografia', 'filosofia', 'sociologia', 'geopolítica'], color: 'bg-purple-500' },
+        { name: 'Itinerários Formativos & EPT', keywords: ['robótica', 'educação financeira', 'empreendedorismo', 'projeto de vida', 'sistemas', 'programação', 'administração', 'logística', 'inteligência'], color: 'bg-indigo-500' }
+      ];
+
+      const areaCounts = areas.map(a => {
+        const count = state.questions.filter(q => {
+          const d = (q.discipline || '').toLowerCase();
+          return a.keywords.some(k => d.includes(k));
+        }).length;
+        return { ...a, count };
+      });
+
+      const maxCount = Math.max(...areaCounts.map(a => a.count), 1);
+
+      container.innerHTML = areaCounts.map(a => {
+        const pct = Math.round((a.count / maxCount) * 100);
+        return `
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-slate-700 dark:text-slate-300">${a.name}</span>
+              <span class="font-mono text-slate-500 dark:text-slate-400">${a.count} questões</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+              <div class="${a.color} h-2 rounded-full transition-all duration-500" style="width: ${Math.max(pct, 6)}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDashboardDisciplineList() {
       const list = document.getElementById('discipline-breakdown-list');
-      if (uniqueDiscCount > 0) {
-        list.innerHTML = Object.entries(discMap).map(([disc, count]) => `
-        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 ${isProf && disc === profDisc ? 'bg-emerald-50/60 dark:bg-emerald-950/30 px-2 rounded-lg font-bold text-emerald-900 dark:text-emerald-200' : ''}">
-          <span class="font-medium">${disc} ${isProf && disc === profDisc ? '(Minha Disciplina)' : ''}</span>
-          <span class="px-2 py-0.5 rounded-full ${isProf && disc === profDisc ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200' : 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300'} font-bold">${count} questões</span>
-        </div>
-      `).join('');
-      } else {
-        list.innerHTML = `<p class="text-slate-400">Nenhum documento processado ainda. Envie os primeiros PDFs!</p>`;
+      if (!list) return;
+
+      const bnccKeywords = ['português', 'matemática', 'física', 'química', 'biologia', 'história', 'geografia', 'filosofia', 'sociologia', 'inglês', 'espanhol', 'arte', 'educação física', 'literatura', 'redação'];
+
+      const discMap = {};
+      state.questions.forEach(q => {
+        discMap[q.discipline] = discMap[q.discipline] || { total: 0, approved: 0 };
+        discMap[q.discipline].total += 1;
+        if (q.validation_status === 'approved') discMap[q.discipline].approved += 1;
+      });
+
+      let entries = Object.entries(discMap);
+
+      if (currentDashboardDisciplineFilter === 'bncc') {
+        entries = entries.filter(([d]) => bnccKeywords.some(k => d.toLowerCase().includes(k)));
+      } else if (currentDashboardDisciplineFilter === 'itinerario') {
+        entries = entries.filter(([d]) => !bnccKeywords.some(k => d.toLowerCase().includes(k)));
       }
+
+      if (entries.length === 0) {
+        list.innerHTML = `<p class="p-4 text-center text-xs text-slate-400">Nenhuma disciplina cadastrada neste filtro.</p>`;
+        return;
+      }
+
+      list.innerHTML = entries.map(([disc, stats]) => {
+        const isBncc = bnccKeywords.some(k => disc.toLowerCase().includes(k));
+        const badgeTag = isBncc
+          ? `<span class="text-[9px] px-1.5 py-0.2 rounded font-bold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300">BNCC</span>`
+          : `<span class="text-[9px] px-1.5 py-0.2 rounded font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">Itinerário</span>`;
+        
+        const isReady = stats.approved >= 10;
+        const statusLabel = isReady
+          ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center gap-1"><span>✓</span> Teto Máx (10/10)</span>`
+          : `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">${stats.approved}/10 prontas</span>`;
+
+        return `
+          <div class="p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40 flex items-center justify-between gap-3 text-xs transition">
+            <div class="flex items-center gap-2 overflow-hidden">
+              <span class="font-bold text-slate-800 dark:text-slate-200 truncate">${disc}</span>
+              ${badgeTag}
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              ${statusLabel}
+              <button onclick="navigate('conferencia')" class="text-[11px] text-sky-600 hover:text-sky-800 dark:text-sky-400 font-bold hover:underline" title="Conferir questões desta matéria">Revisar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
     }
 
     function changeTeacherDiscipline(disc) {
