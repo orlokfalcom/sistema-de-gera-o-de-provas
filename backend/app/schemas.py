@@ -78,6 +78,7 @@ class ExamBuildRequest(BaseModel):
     title: str = "Avaliação Geral Multidisciplinar do Ensino Médio"
     academic_period: str = "2026 - Ensino Médio"
     institution_name: str = "Colégio Integrado de Ensino Médio"
+    school_modality: Optional[str] = "integral" # 'integral', 'regular', 'noturno'
     organization_mode: str = "by_discipline" # by_discipline, interleaved, random
     show_discipline_header: bool = True
     question_ids: Optional[List[str]] = None # If None, uses all approved questions
@@ -88,6 +89,7 @@ class ExamResponse(BaseModel):
     title: str
     academic_period: str
     institution_name: str
+    school_modality: Optional[str] = "integral"
     organization_mode: str
     show_discipline_header: bool
     total_questions: int

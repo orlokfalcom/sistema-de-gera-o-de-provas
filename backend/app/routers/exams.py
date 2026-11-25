@@ -54,6 +54,7 @@ def build_multidisciplinary_exam(
         title=req.title,
         academic_period=req.academic_period,
         institution_name=req.institution_name,
+        school_modality=req.school_modality or "integral",
         organization_mode=req.organization_mode,
         show_discipline_header=req.show_discipline_header,
         total_questions=len(ordered_questions),

@@ -115,16 +115,35 @@ class PDFExtractionService:
 
     def _detect_discipline(self, text: str) -> str:
         disciplines = [
-            # Formação Geral Básica (BNCC)
-            "Matemática", "Português", "Língua Portuguesa", "Literatura", "Redação",
+            # Formação Geral Básica (BNCC) - Todos os anos (1º, 2º e 3º EM)
+            "Matemática", "Português", "Língua Portuguesa", "Literatura", "Literatura Brasileira", "Redação",
             "Física", "Química", "Biologia", "História", "Geografia",
-            "Filosofia", "Sociologia", "Inglês", "Língua Inglesa", "Espanhol", "Artes", "Arte", "Educação Física",
-            # Itinerários Formativos & Cursos Integrados (Novo Ensino Médio)
-            "Robótica", "Educação Financeira", "Empreendedorismo", "Projeto de Vida",
-            "Iniciação Científica", "Biotecnologia", "Redação Avançada", "Geopolítica",
-            "Astronomia", "Desenvolvimento de Sistemas", "Informática", "Administração",
-            "Logística", "Marketing Digital", "Meio Ambiente", "Inteligência Artificial",
-            "Comunicação e Mídias", "Cultura Digital"
+            "Filosofia", "Sociologia", "Inglês", "Língua Inglesa", "Espanhol", "Língua Espanhola",
+            "Arte", "Artes", "Artes Visuais", "Música", "Teatro", "Dança", "Educação Física",
+
+            # Itinerário 1: Linguagens e suas Tecnologias
+            "Produção Textual", "Escrita Criativa", "Linguagens Digitais", "Comunicação e Oratória",
+            "Literatura Comparada", "Artes Cênicas",
+
+            # Itinerário 2: Matemática e suas Tecnologias
+            "Educação Financeira", "Matemática Financeira", "Estatística Aplicada", "Modelagem Matemática",
+            "Desenho Técnico", "Geometria Espacial", "Lógica Matemática",
+
+            # Itinerário 3: Ciências da Natureza e suas Tecnologias
+            "Biotecnologia", "Genética", "Sustentabilidade", "Gestão Ambiental", "Práticas Experimentais",
+            "Laboratório", "Astronomia", "Astrofísica", "Química Tecnológica", "Farmacologia", "Saúde Pública", "Bioética",
+
+            # Itinerário 4: Ciências Humanas e Sociais Aplicadas
+            "Geopolítica", "Direitos Humanos", "Cidadania", "Empreendedorismo", "Empreendedorismo Social",
+            "História Regional", "Patrimônio Cultural", "Ética e Política", "Antropologia",
+
+            # Itinerário 5: Educação Profissional e Técnica (Cursos Técnicos Integrados)
+            "Desenvolvimento de Sistemas", "Programação", "Robótica", "Inteligência Artificial",
+            "Ciência de Dados", "Banco de Dados", "Administração", "Logística", "Marketing Digital",
+            "Recursos Humanos", "Contabilidade", "Segurança do Trabalho", "Agropecuária", "Enfermagem",
+
+            # Componentes Integradores / Eletivas
+            "Projeto de Vida", "Estudo Orientado", "Iniciação Científica", "Cultura Digital", "Liderança"
         ]
         text_lower = text.lower()
         for disc in disciplines:

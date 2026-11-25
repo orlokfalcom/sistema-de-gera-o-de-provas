@@ -72,10 +72,29 @@
           </div>
         </div>
       </div>
-      <!-- Quick Role Toggle Button -->
-      <div class="mt-3 flex gap-2">
-        <button id="role-admin-btn" onclick="switchRole('admin')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 bg-sky-600 text-white hover:bg-sky-700 transition">Admin (Total)</button>
-        <button id="role-prof-btn" onclick="switchRole('professor')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition">Professor</button>
+      <!-- User Role Status & Authentication Box -->
+      <div class="mt-3">
+        <!-- Professor View Controls (Admin button is HIDDEN!) -->
+        <div id="prof-controls-box" class="space-y-1.5 hidden">
+          <div class="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 px-2 py-1 rounded-lg">
+            <span>Matéria: <strong id="prof-sidebar-disc" class="text-emerald-600 dark:text-emerald-400">Matemática</strong></span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold uppercase">Professor</span>
+          </div>
+          <button id="btn-request-admin-access" onclick="openAdminPasswordModal()" class="w-full py-1.5 px-2 text-[10px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-sky-50 dark:hover:bg-sky-950/40 hover:border-sky-300 text-slate-600 dark:text-slate-300 hover:text-sky-600 transition flex items-center justify-center gap-1.5 shadow-2xs">
+            <span>🔑 Acesso Coordenação (Exige Senha)</span>
+          </button>
+        </div>
+
+        <!-- Admin View Controls (Visible ONLY when authenticated as Admin) -->
+        <div id="admin-controls-box" class="space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/50 px-2 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+            <span class="font-bold flex items-center gap-1"><span>🛡️</span> Acesso Total</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-200 dark:bg-sky-800 text-sky-800 dark:text-sky-200 font-bold uppercase">ADMIN</span>
+          </div>
+          <button id="btn-exit-admin" onclick="switchRole('professor')" class="w-full py-1.5 px-2 text-[10px] font-bold rounded-lg border border-rose-300 dark:border-rose-900 bg-rose-50/80 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100 transition flex items-center justify-center gap-1.5">
+            <span>🚪 Sair do Modo Admin</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -126,6 +145,14 @@
           Google Workspace
         </div>
         <span id="lock-google" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold flex items-center gap-1">🔒 Admin</span>
+      </a>
+
+      <a href="#usuarios" onclick="navigate('usuarios')" id="nav-usuarios" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          Cadastro de Usuários
+        </div>
+        <span id="lock-usuarios" class="hidden text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold flex items-center gap-1">🔒 Admin</span>
       </a>
     </nav>
 
@@ -206,20 +233,46 @@
         </div>
 
         <form id="upload-form" class="space-y-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label class="block text-xs font-semibold mb-1">Professor Responsável</label>
               <input type="text" id="upload-teacher" value="Prof. Carlos Silva" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1">Disciplina / Componente Curricular</label>
+              <label class="block text-xs font-semibold mb-1">Ano / Série Escolar</label>
+              <input type="text" id="upload-grade" list="grades-suggestions" value="3º Ano do Ensino Médio" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <datalist id="grades-suggestions">
+                <!-- Ensino Médio Regular / Não Integral (Todos os Anos) -->
+                <option value="1º Ano do Ensino Médio (Regular)">
+                <option value="2º Ano do Ensino Médio (Regular)">
+                <option value="3º Ano do Ensino Médio (Regular)">
+                <!-- Ensino Médio de Tempo Integral (Todos os Anos) -->
+                <option value="1º Ano do Ensino Médio (Tempo Integral)">
+                <option value="2º Ano do Ensino Médio (Tempo Integral)">
+                <option value="3º Ano do Ensino Médio (Tempo Integral)">
+                <!-- Cursos Técnicos Integrados (Todos os Anos) -->
+                <option value="1º Ano - Curso Técnico Integrado">
+                <option value="2º Ano - Curso Técnico Integrado">
+                <option value="3º Ano - Curso Técnico Integrado">
+                <!-- Educação de Jovens e Adultos (EJA) -->
+                <option value="1º Módulo - EJA Ensino Médio">
+                <option value="2º Módulo - EJA Ensino Médio">
+                <option value="3º Módulo - EJA Ensino Médio">
+              </datalist>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Disciplina / Componente</label>
               <input type="text" id="upload-discipline" list="disciplines-suggestions" placeholder="Ex: Matemática, Robótica, Educação Financeira..." class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
               <datalist id="disciplines-suggestions">
-                <!-- Base Nacional Comum Curricular (FGB) -->
-                <option value="Matemática">
+                <!-- FORMAÇÃO GERAL BÁSICA (BNCC) - 1º, 2º e 3º ANOS -->
                 <option value="Língua Portuguesa">
-                <option value="Literatura">
-                <option value="Redação">
+                <option value="Literatura Brasileira">
+                <option value="Redação e Produção Textual">
+                <option value="Língua Inglesa">
+                <option value="Língua Espanhola">
+                <option value="Arte (Artes Visuais, Música, Teatro, Dança)">
+                <option value="Educação Física">
+                <option value="Matemática">
                 <option value="Física">
                 <option value="Química">
                 <option value="Biologia">
@@ -227,41 +280,85 @@
                 <option value="Geografia">
                 <option value="Filosofia">
                 <option value="Sociologia">
-                <option value="Inglês">
-                <option value="Espanhol">
-                <option value="Artes">
-                <option value="Educação Física">
-                <!-- Itinerários Formativos & Cursos Técnicos (Novo EM) -->
-                <option value="Robótica e Inteligência Artificial">
+
+                <!-- ITINERÁRIO FORMATIVO 1: LINGUAGENS E SUAS TECNOLOGIAS -->
+                <option value="Produção Textual Avançada e Escrita Criativa">
+                <option value="Práticas de Linguagens Digitais e Redes">
+                <option value="Comunicação, Mídias e Oratória">
+                <option value="Literatura Comparada e Contemporânea">
+                <option value="Teatro, Expressão Corporal e Artes Cênicas">
+
+                <!-- ITINERÁRIO FORMATIVO 2: MATEMÁTICA E SUAS TECNOLOGIAS -->
                 <option value="Educação Financeira">
-                <option value="Empreendedorismo">
+                <option value="Matemática Financeira e Estatística Aplicada">
+                <option value="Resolução de Problemas Complexos e Modelagem Matemática">
+                <option value="Geometria Espacial e Desenho Técnico">
+                <option value="Lógica Matemática e Algoritmos">
+
+                <!-- ITINERÁRIO FORMATIVO 3: CIÊNCIAS DA NATUREZA E SUAS TECNOLOGIAS -->
+                <option value="Biotecnologia e Genética Aplicada">
+                <option value="Sustentabilidade e Gestão Ambiental">
+                <option value="Práticas Experimentais e Laboratório">
+                <option value="Astronomia e Astrofísica">
+                <option value="Química Tecnológica e Farmacologia">
+                <option value="Saúde Pública e Bioética">
+
+                <!-- ITINERÁRIO FORMATIVO 4: CIÊNCIAS HUMANAS E SOCIAIS APLICADAS -->
+                <option value="Geopolítica Contemporânea e Relações Internacionais">
+                <option value="Direitos Humanos, Cidadania e Movimentos Sociais">
+                <option value="Empreendedorismo Social">
+                <option value="História Regional, Patrimônio e Memória">
+                <option value="Ética, Política e Sociedade Contemporânea">
+                <option value="Antropologia e Estudos Culturais">
+
+                <!-- ITINERÁRIO FORMATIVO 5: EDUCAÇÃO PROFISSIONAL E TÉCNICA (EPT) -->
+                <option value="Desenvolvimento de Sistemas e Programação Web">
+                <option value="Robótica e Inteligência Artificial">
+                <option value="Ciência de Dados e Banco de Dados">
+                <option value="Administração e Gestão Empreendedora">
+                <option value="Logística e Cadeia de Suprimentos">
+                <option value="Marketing Digital e E-commerce">
+                <option value="Recursos Humanos e Relações Trabalhistas">
+                <option value="Contabilidade Básica e Finanças Corporativas">
+                <option value="Segurança do Trabalho">
+                <option value="Agropecuária e Gestão do Agronegócio">
+                <option value="Enfermagem e Primeiros Socorros">
+
+                <!-- COMPONENTES INTEGRADORES E ELETIVAS ESCOLARES -->
                 <option value="Projeto de Vida">
-                <option value="Biotecnologia e Meio Ambiente">
-                <option value="Iniciação Científica">
-                <option value="Redação Avançada e Mídias">
-                <option value="Geopolítica Contemporânea">
-                <option value="Desenvolvimento de Sistemas / TI">
-                <option value="Administração">
-                <option value="Logística">
+                <option value="Estudo Orientado e Métodos de Aprendizagem">
+                <option value="Iniciação Científica e Metodologia de Pesquisa">
+                <option value="Cultura Digital e Cidadania na Rede">
+                <option value="Liderança e Inteligência Emocional">
               </datalist>
             </div>
             <div>
               <label class="block text-xs font-semibold mb-1">Período Letivo / Trimestre</label>
-              <input type="text" id="upload-period" list="periods-suggestions" value="2026 - 1º Trimestre Integrado" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <input type="text" id="upload-period" list="periods-suggestions" value="2026 - 1º Trimestre (Tempo Integral)" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
               <datalist id="periods-suggestions">
-                <!-- Regime Trimestral (Padrão 1º, 2º e 3º Trimestres) -->
-                <option value="2026 - 1º Trimestre Integrado">
-                <option value="2026 - 2º Trimestre Integrado">
-                <option value="2026 - 3º Trimestre Integrado">
-                <!-- Regime Bimestral -->
-                <option value="2026 - 1º Bimestre Integrado">
-                <option value="2026 - 2º Bimestre Integrado">
-                <option value="2026 - 3º Bimestre Integrado">
-                <option value="2026 - 4º Bimestre Integrado">
+                <!-- Escolas de Tempo Integral (EMTI / PEI) -->
+                <option value="2026 - 1º Trimestre (Tempo Integral)">
+                <option value="2026 - 2º Trimestre (Tempo Integral)">
+                <option value="2026 - 3º Trimestre (Tempo Integral)">
+                <option value="2026 - 1º Bimestre (Tempo Integral)">
+                <option value="2026 - 2º Bimestre (Tempo Integral)">
+                <option value="2026 - 3º Bimestre (Tempo Integral)">
+                <option value="2026 - 4º Bimestre (Tempo Integral)">
+                <!-- Escolas Não Integrais (Ensino Médio Regular / Parcial / Turno Único) -->
+                <option value="2026 - 1º Trimestre (Ensino Regular)">
+                <option value="2026 - 2º Trimestre (Ensino Regular)">
+                <option value="2026 - 3º Trimestre (Ensino Regular)">
+                <option value="2026 - 1º Bimestre (Ensino Regular)">
+                <option value="2026 - 2º Bimestre (Ensino Regular)">
+                <option value="2026 - 3º Bimestre (Ensino Regular)">
+                <option value="2026 - 4º Bimestre (Ensino Regular)">
+                <!-- Ensino Noturno e EJA -->
+                <option value="2026 - 1º Semestre (Ensino Noturno / EJA)">
+                <option value="2026 - 2º Semestre (Ensino Noturno / EJA)">
                 <!-- Exames Especiais -->
-                <option value="2026 - Simulado Geral ENEM">
-                <option value="2026 - Avaliação de Recuperação Trimestral">
-                <option value="2026 - Exame Final">
+                <option value="2026 - Simulado Geral ENEM / Vestibulares">
+                <option value="2026 - Avaliação de Recuperação">
+                <option value="2026 - Exame Final Oficial">
               </datalist>
             </div>
           </div>
@@ -370,23 +467,40 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
             <div>
-              <label class="block text-xs font-semibold mb-1">Etapa / Trimestre Letivo</label>
-              <input type="text" id="exam-period" list="periods-suggestions" value="2026 - 1º Trimestre Integrado" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <label class="block text-xs font-semibold mb-1">Modalidade Escolar</label>
+              <select id="exam-school-modality" onchange="applySchoolModalityPreset(this.value)" class="w-full text-xs px-2.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold text-sky-700 dark:text-sky-300">
+                <option value="integral" selected>Tempo Integral (Integral)</option>
+                <option value="regular">Ensino Regular (Não Integral)</option>
+                <option value="noturno">Ensino Noturno / EJA</option>
+              </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1">Modo de Organização das Questões</label>
-              <select id="exam-order-mode" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
-                <option value="by_discipline" selected>Agrupada por Disciplina (Padrão Oficial)</option>
-                <option value="interleaved">Intercalada entre Disciplinas (ENEM/Vestibular)</option>
+              <label class="block text-xs font-semibold mb-1">Ano / Série Alvo</label>
+              <select id="exam-target-grade" class="w-full text-xs px-2.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                <option value="Todos os Anos (Integrada)">Todos os Anos (Geral Integrada)</option>
+                <option value="1º Ano do Ensino Médio">1º Ano do Ensino Médio</option>
+                <option value="2º Ano do Ensino Médio">2º Ano do Ensino Médio</option>
+                <option value="3º Ano do Ensino Médio" selected>3º Ano do Ensino Médio</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Período / Trimestre</label>
+              <input type="text" id="exam-period" list="periods-suggestions" value="2026 - 1º Trimestre (Tempo Integral)" class="w-full text-xs px-2.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Modo de Organização</label>
+              <select id="exam-order-mode" class="w-full text-xs px-2.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                <option value="by_discipline" selected>Por Disciplina (Oficial)</option>
+                <option value="interleaved">Intercalada (ENEM)</option>
                 <option value="random">Aleatória</option>
               </select>
             </div>
             <div class="flex items-center pt-5">
-              <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold">
+              <label class="flex items-center gap-1.5 cursor-pointer text-xs font-semibold">
                 <input type="checkbox" id="exam-show-disc-header" checked class="w-4 h-4 rounded text-sky-600">
-                Exibir cabeçalho da disciplina antes das questões
+                Cabeçalho de disciplina
               </label>
             </div>
           </div>
@@ -397,14 +511,16 @@
               <div>
                 <h4 class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                   <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                  Definição do Número de Questões por Matéria
+                  Definição de Questões por Matéria (Máx. 10 por disciplina)
                 </h4>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400">Configure exatamente quantas questões de cada disciplina entrarão na avaliação única.</p>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400">Suporte integral a escolas de tempo integral e não integrais (quantidades heterogêneas permitidas).</p>
               </div>
               <div class="flex items-center gap-1.5 flex-wrap">
-                <button type="button" onclick="setAllQuestionsMax()" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">Todas Disponíveis</button>
-                <button type="button" onclick="setEqualQuestionsCount(1)" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">1 por Matéria</button>
-                <button type="button" onclick="setEqualQuestionsCount(2)" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">2 por Matéria</button>
+                <button type="button" onclick="setAllQuestionsMax()" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-sky-300 dark:border-sky-800 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 text-sky-700 dark:text-sky-300 transition" title="Preenche até 10 por disciplina">Máx. (Até 10)</button>
+                <button type="button" onclick="applyCurricularPreset('regular')" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 transition" title="Preset para Ensino Médio Regular / Parcial">Não Integral (Regular)</button>
+                <button type="button" onclick="applyCurricularPreset('integral')" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-indigo-300 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 transition" title="Preset para Ensino Médio de Tempo Integral">Tempo Integral</button>
+                <button type="button" onclick="setEqualQuestionsCount(5)" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 text-slate-700 dark:text-slate-200 transition">5 / Matéria</button>
+                <button type="button" onclick="resetQuestionsSelection()" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-rose-50 hover:text-rose-600 text-slate-500 transition">Zerar</button>
               </div>
             </div>
 
@@ -534,6 +650,106 @@
         </div>
       </section>
 
+      <!-- VIEW: CADASTRO DE USUÁRIOS (PROFESSORES & COORDENAÇÃO) -->
+      <section id="view-usuarios" class="hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Gerenciamento e Cadastro de Usuários</h3>
+            <p class="text-xs text-slate-500">Controle de acesso docente por disciplina, Itinerários Formativos e privilégios da Coordenação Pedagógica.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1.5 rounded-xl bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 text-xs font-bold flex items-center gap-1.5 border border-sky-200 dark:border-sky-800">
+              <span>👥</span> <span id="users-total-count">0</span> Usuários Cadastrados
+            </span>
+          </div>
+        </div>
+
+        <!-- FORMULÁRIO DE NOVO USUÁRIO -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xs">➕</span>
+              Cadastrar Novo Professor ou Administrador
+            </h4>
+            <span class="text-[10px] text-slate-400">Preencha os dados institucionais e defina o perfil</span>
+          </div>
+
+          <form id="form-create-user" onsubmit="handleCreateUser(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Nome Completo:</label>
+              <input type="text" id="new-user-name" required placeholder="Ex: Profª. Carla Souza"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">E-mail Institucional:</label>
+              <input type="email" id="new-user-email" required placeholder="Ex: carla.souza@escola.gov.br"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Perfil de Acesso:</label>
+              <select id="new-user-role" onchange="toggleDisciplineField(this.value)"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+                <option value="professor">Professor (Acesso Restrito à Matéria)</option>
+                <option value="admin">Administrador (Coordenação / Acesso Total)</option>
+              </select>
+            </div>
+
+            <div id="new-user-discipline-wrapper">
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Disciplina / Componente:</label>
+              <input type="text" id="new-user-discipline" list="disciplines-suggestions" placeholder="Selecione ou digite a matéria (BNCC ou Itinerário)..."
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-2">
+              <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Senha de Acesso:</label>
+              <input type="password" id="new-user-password" required placeholder="Senha de login (padrão: prof123 ou admin123)"
+                class="w-full text-xs py-2 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+            </div>
+
+            <div class="md:col-span-2 lg:col-span-2 flex items-end">
+              <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition shadow-sm flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                Cadastrar Usuário
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TABELA DE USUÁRIOS CADASTRADOS -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">Quadro de Professores e Administradores</h4>
+              <p class="text-[11px] text-slate-500">Visualização de todos os usuários com acesso à plataforma escolar.</p>
+            </div>
+            <div class="relative w-full sm:w-64">
+              <input type="text" id="search-users-input" oninput="filterUsersList(this.value)" placeholder="Filtrar por nome ou disciplina..."
+                class="w-full text-xs py-1.5 pl-8 pr-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-sky-500 outline-hidden">
+              <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-[11px] font-bold text-slate-500 uppercase">
+                  <th class="p-3.5">Usuário</th>
+                  <th class="p-3.5">E-mail</th>
+                  <th class="p-3.5">Disciplina / Componente</th>
+                  <th class="p-3.5">Perfil</th>
+                  <th class="p-3.5 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                <!-- Injetado dinamicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </div>
   </main>
 </div>
@@ -552,6 +768,47 @@
     </div>
     <div class="flex-1 overflow-y-auto p-8 font-sans bg-white text-slate-900" id="print-area">
       <!-- Exam Layout Injected Dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ACESSO ADMINISTRATIVO (AUTENTICAÇÃO POR SENHA) -->
+<div id="modal-admin-password" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xl shadow-xs">
+        🛡️
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white">Acesso Restrito — Coordenação</h3>
+        <p class="text-[11px] text-slate-500">Autenticação institucional com senha para acesso total</p>
+      </div>
+    </div>
+
+    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+      Acesso irrestrito à montagem de provas com até 10 questões por matéria, cadastro de docentes, histórico e integrações Google. Digite a senha administrativa para prosseguir:
+    </p>
+
+    <div class="space-y-2">
+      <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300">Senha Administrativa:</label>
+      <div class="relative">
+        <input type="password" id="input-admin-password" placeholder="Digite a senha administrativa..."
+          onkeydown="if(event.key==='Enter') submitAdminPassword()"
+          class="w-full text-xs py-2.5 px-3 pr-10 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-sky-500 outline-hidden">
+        <button type="button" onclick="togglePasswordVisibility('input-admin-password')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs">👁️</button>
+      </div>
+      <div id="admin-password-error" class="hidden text-[11px] text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1.5 pt-1">
+        <span>⚠️</span> <span id="admin-password-error-msg">Senha incorreta. Acesso negado.</span>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+      <button onclick="closeAdminPasswordModal()" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition">
+        Cancelar
+      </button>
+      <button onclick="submitAdminPassword()" class="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+        <span>Liberar Acesso Total</span> 🔑
+      </button>
     </div>
   </div>
 </div>
@@ -615,7 +872,7 @@
   }
 
   // Navigation & Access Control
-  const ADMIN_ONLY_VIEWS = ['montagem', 'historico', 'google'];
+  const ADMIN_ONLY_VIEWS = ['montagem', 'historico', 'google', 'usuarios'];
 
   function navigate(viewId) {
     if (state.currentUser.role === 'professor' && ADMIN_ONLY_VIEWS.includes(viewId)) {
@@ -639,20 +896,87 @@
     if (viewId === 'questoes') loadQuestions();
     if (viewId === 'montagem') loadExamSetup();
     if (viewId === 'historico') loadExamsHistory();
+    if (viewId === 'usuarios') loadUsersList();
   }
 
   function showRestrictedAccessModal(viewId) {
     const viewNames = {
       'montagem': 'Montagem da Prova Única Integrada',
       'historico': 'Histórico e Cadernos Oficiais com Gabarito',
-      'google': 'Integração Institucional Google Workspace'
+      'google': 'Integração Institucional Google Workspace',
+      'usuarios': 'Gerenciamento e Cadastro de Usuários'
     };
     const title = viewNames[viewId] || 'Área Restrita';
-    alert(`🔒 ACESSO RESTRITO À COORDENAÇÃO PEDAGÓGICA (ADMIN)\n\nA tela "${title}" possui acesso restrito para resguardar o sigilo escolar e a integridade da avaliação integrada antes de sua aplicação.\n\nComo Professor, você possui acesso ao Recebimento de PDFs e à Conferência/Validação das questões da sua matéria (${state.currentUser.discipline || 'sua disciplina'}).`);
+    if (confirm(`🔒 ACESSO RESTRITO À COORDENAÇÃO PEDAGÓGICA (ADMIN)\n\nA tela "${title}" possui acesso restrito para resguardar o sigilo escolar e a gestão da avaliação integrada.\n\nComo Professor, você possui acesso ao Recebimento de PDFs e à Conferência/Validação das questões da sua matéria (${state.currentUser.discipline || 'sua disciplina'}).\n\nDeseja inserir a senha administrativa para liberar o acesso total?`)) {
+      openAdminPasswordModal();
+    }
+  }
+
+  function openAdminPasswordModal() {
+    const modal = document.getElementById('modal-admin-password');
+    const input = document.getElementById('input-admin-password');
+    const err = document.getElementById('admin-password-error');
+    if (err) err.classList.add('hidden');
+    if (input) input.value = '';
+    if (modal) modal.classList.remove('hidden');
+    setTimeout(() => { if (input) input.focus(); }, 100);
+  }
+
+  function closeAdminPasswordModal() {
+    const modal = document.getElementById('modal-admin-password');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  async function submitAdminPassword() {
+    const input = document.getElementById('input-admin-password');
+    const err = document.getElementById('admin-password-error');
+    const errMsg = document.getElementById('admin-password-error-msg');
+    const pwd = input ? input.value : '';
+
+    if (!pwd) {
+      if (err) err.classList.remove('hidden');
+      if (errMsg) errMsg.innerText = 'Por favor, digite a senha administrativa.';
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/verify-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+
+      if (response.ok) {
+        closeAdminPasswordModal();
+        switchRole('admin');
+        alert('🔓 Acesso total de Administrador / Coordenação liberado com sucesso!');
+        return;
+      }
+    } catch (e) {
+      // Offline fallback
+      if (pwd === 'admin123') {
+        closeAdminPasswordModal();
+        switchRole('admin');
+        alert('🔓 Acesso total de Administrador / Coordenação liberado com sucesso!');
+        return;
+      }
+    }
+
+    if (err) err.classList.remove('hidden');
+    if (errMsg) errMsg.innerText = 'Senha administrativa incorreta. O acesso de coordenação é restrito.';
+  }
+
+  function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.type = input.type === 'password' ? 'text' : 'password';
   }
 
   function switchRole(role) {
     state.currentUser.role = role;
+    const profBox = document.getElementById('prof-controls-box');
+    const adminBox = document.getElementById('admin-controls-box');
+
     if (role === 'admin') {
       state.currentUser.email = 'admin@escola.gov.br';
       state.currentUser.name = 'Coordenador Pedagógico';
@@ -662,12 +986,10 @@
       document.getElementById('user-role-badge').innerText = 'ADMIN (ACESSO TOTAL)';
       document.getElementById('user-role-badge').className = 'px-1.5 py-0.5 text-[9px] font-bold rounded bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 uppercase';
       
-      const btnAdmin = document.getElementById('role-admin-btn');
-      const btnProf = document.getElementById('role-prof-btn');
-      if (btnAdmin) btnAdmin.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-sky-600 bg-sky-600 text-white transition shadow-xs';
-      if (btnProf) btnProf.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300';
+      if (profBox) profBox.classList.add('hidden');
+      if (adminBox) adminBox.classList.remove('hidden');
 
-      ['montagem', 'historico', 'google'].forEach(id => {
+      ['montagem', 'historico', 'google', 'usuarios'].forEach(id => {
         const lock = document.getElementById('lock-' + id);
         if (lock) lock.classList.add('hidden');
         const nav = document.getElementById('nav-' + id);
@@ -682,12 +1004,13 @@
       document.getElementById('user-role-badge').innerText = 'PROFESSOR (ACESSO LIMITADO)';
       document.getElementById('user-role-badge').className = 'px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 uppercase';
       
-      const btnAdmin = document.getElementById('role-admin-btn');
-      const btnProf = document.getElementById('role-prof-btn');
-      if (btnProf) btnProf.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-emerald-600 bg-emerald-600 text-white transition shadow-xs';
-      if (btnAdmin) btnAdmin.className = 'flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300';
+      const discEl = document.getElementById('prof-sidebar-disc');
+      if (discEl) discEl.innerText = state.currentUser.discipline;
 
-      ['montagem', 'historico', 'google'].forEach(id => {
+      if (adminBox) adminBox.classList.add('hidden'); // O botão de admin NÃO APARECE PARA PROFESSOR!
+      if (profBox) profBox.classList.remove('hidden');
+
+      ['montagem', 'historico', 'google', 'usuarios'].forEach(id => {
         const lock = document.getElementById('lock-' + id);
         if (lock) lock.classList.remove('hidden');
         const nav = document.getElementById('nav-' + id);
@@ -717,7 +1040,192 @@
       if (vId === 'questoes') loadQuestions();
       if (vId === 'montagem') loadExamSetup();
       if (vId === 'historico') loadExamsHistory();
+      if (vId === 'usuarios') loadUsersList();
     }
+  }
+
+  // User Management Engine
+  const DEFAULT_USERS = [
+    { id: 'usr-admin-1', full_name: 'Coordenador Pedagógico', email: 'admin@escola.gov.br', role: 'admin', discipline: 'Todas', picture_url: 'https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff', created_at: new Date().toISOString() },
+    { id: 'usr-prof-1', full_name: 'Prof. Carlos Silva', email: 'professor@escola.gov.br', role: 'professor', discipline: 'Matemática', picture_url: 'https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff', created_at: new Date().toISOString() },
+    { id: 'usr-prof-2', full_name: 'Profª. Mariana Santos', email: 'mariana@escola.gov.br', role: 'professor', discipline: 'Português', picture_url: 'https://ui-avatars.com/api/?name=Mariana+Santos&background=6366f1&color=fff', created_at: new Date().toISOString() },
+    { id: 'usr-prof-3', full_name: 'Profª. Carla Souza', email: 'carla@escola.gov.br', role: 'professor', discipline: 'Biologia', picture_url: 'https://ui-avatars.com/api/?name=Carla+Souza&background=14b8a6&color=fff', created_at: new Date().toISOString() },
+    { id: 'usr-prof-4', full_name: 'Prof. André Martins', email: 'andre@escola.gov.br', role: 'professor', discipline: 'História', picture_url: 'https://ui-avatars.com/api/?name=Andre+Martins&background=f59e0b&color=fff', created_at: new Date().toISOString() },
+    { id: 'usr-prof-5', full_name: 'Prof. Marcos Dias', email: 'marcos@escola.gov.br', role: 'professor', discipline: 'Física', picture_url: 'https://ui-avatars.com/api/?name=Marcos+Dias&background=ec4899&color=fff', created_at: new Date().toISOString() },
+    { id: 'usr-prof-6', full_name: 'Prof. Gabriel Torres', email: 'gabriel.robotica@escola.gov.br', role: 'professor', discipline: 'Robótica e Inteligência Artificial', picture_url: 'https://ui-avatars.com/api/?name=Gabriel+Torres&background=06b6d4&color=fff', created_at: new Date().toISOString() }
+  ];
+
+  async function loadUsersList() {
+    let users = [];
+    try {
+      const res = await fetch('/api/auth/users');
+      if (res.ok) {
+        users = await res.json();
+      }
+    } catch (e) {
+      // offline fallback
+    }
+
+    if (!users || users.length === 0) {
+      const stored = localStorage.getItem('gia_users');
+      users = stored ? JSON.parse(stored) : [...DEFAULT_USERS];
+    }
+    state.users = users;
+    renderUsersTable(users);
+  }
+
+  function renderUsersTable(users) {
+    const tbody = document.getElementById('users-table-body');
+    const countEl = document.getElementById('users-total-count');
+    if (countEl) countEl.innerText = users.length;
+    if (!tbody) return;
+
+    if (users.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-xs text-slate-400">Nenhum usuário cadastrado.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = users.map(u => {
+      const isAdmin = u.role === 'admin';
+      const badgeRole = isAdmin
+        ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 uppercase">Coordenação / Admin</span>'
+        : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 uppercase">Professor</span>';
+      
+      const avatar = u.picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.full_name)}&background=${isAdmin ? '0284c7' : '10b981'}&color=fff`;
+
+      return `
+        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+          <td class="p-3.5 flex items-center gap-3">
+            <img src="${avatar}" class="w-8 h-8 rounded-full ring-1 ring-slate-300 dark:ring-slate-700">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white block">${u.full_name}</span>
+              <span class="text-[10px] text-slate-400">${isAdmin ? 'Acesso Global' : 'Acesso Disciplinar'}</span>
+            </div>
+          </td>
+          <td class="p-3.5 font-mono text-[11px] text-slate-600 dark:text-slate-400">${u.email}</td>
+          <td class="p-3.5">
+            <span class="inline-block px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-[11px]">
+              ${u.discipline || 'Geral'}
+            </span>
+          </td>
+          <td class="p-3.5">${badgeRole}</td>
+          <td class="p-3.5 text-right">
+            ${u.email === 'admin@escola.gov.br' ? '<span class="text-[10px] text-slate-400 font-semibold italic">Principal</span>' : `
+              <button onclick="deleteUser('${u.id}')" class="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition" title="Excluir Usuário">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            `}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterUsersList(query) {
+    if (!state.users) return;
+    const q = query.toLowerCase().trim();
+    if (!q) {
+      renderUsersTable(state.users);
+      return;
+    }
+    const filtered = state.users.filter(u =>
+      (u.full_name && u.full_name.toLowerCase().includes(q)) ||
+      (u.email && u.email.toLowerCase().includes(q)) ||
+      (u.discipline && u.discipline.toLowerCase().includes(q))
+    );
+    renderUsersTable(filtered);
+  }
+
+  function toggleDisciplineField(role) {
+    const wrapper = document.getElementById('new-user-discipline-wrapper');
+    const input = document.getElementById('new-user-discipline');
+    if (!wrapper || !input) return;
+    if (role === 'admin') {
+      input.value = 'Todas';
+      wrapper.classList.add('opacity-50');
+    } else {
+      input.value = '';
+      wrapper.classList.remove('opacity-50');
+    }
+  }
+
+  async function handleCreateUser(e) {
+    e.preventDefault();
+    const name = document.getElementById('new-user-name').value.trim();
+    const email = document.getElementById('new-user-email').value.trim();
+    const role = document.getElementById('new-user-role').value;
+    const discipline = document.getElementById('new-user-discipline').value.trim() || (role === 'admin' ? 'Todas' : 'Geral');
+    const password = document.getElementById('new-user-password').value;
+
+    const payload = {
+      full_name: name,
+      email: email,
+      role: role,
+      discipline: discipline,
+      password: password
+    };
+
+    try {
+      const res = await fetch('/api/auth/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Role': state.currentUser.role,
+          'X-User-Email': state.currentUser.email
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert(`✅ Usuário "${name}" cadastrado com sucesso!`);
+        document.getElementById('form-create-user').reset();
+        await loadUsersList();
+        return;
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(`❌ Erro: ${err.detail || 'Não foi possível cadastrar o usuário.'}`);
+      }
+    } catch (e) {
+      // Local fallback
+      const newUser = {
+        id: 'usr-' + Date.now(),
+        ...payload,
+        created_at: new Date().toISOString()
+      };
+      state.users = state.users || [...DEFAULT_USERS];
+      state.users.push(newUser);
+      localStorage.setItem('gia_users', JSON.stringify(state.users));
+      alert(`✅ Usuário "${name}" cadastrado com sucesso!`);
+      document.getElementById('form-create-user').reset();
+      renderUsersTable(state.users);
+    }
+  }
+
+  async function deleteUser(userId) {
+    if (!confirm('Confirma a exclusão deste usuário do sistema escolar?')) return;
+    try {
+      const res = await fetch(`/api/auth/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-User-Role': state.currentUser.role,
+          'X-User-Email': state.currentUser.email
+        }
+      });
+      if (res.ok) {
+        alert('🗑️ Usuário excluído com sucesso.');
+        await loadUsersList();
+        return;
+      }
+    } catch (e) {}
+
+    // Local fallback
+    if (state.users) {
+      state.users = state.users.filter(u => u.id !== userId);
+      localStorage.setItem('gia_users', JSON.stringify(state.users));
+      alert('🗑️ Usuário excluído com sucesso.');
+      renderUsersTable(state.users);
+    }
+  }
   }
 
   function toggleDarkMode() {
@@ -1247,22 +1755,34 @@
 
     if (grid) {
       grid.innerHTML = disciplines.map(disc => {
-        const maxCount = discMap[disc];
+        const availableCount = discMap[disc];
+        const maxLimit = Math.min(availableCount, 10); // Teto institucional de 10 questões por matéria
         const safeId = 'qty-disc-' + encodeURIComponent(disc).replace(/[^a-zA-Z0-9]/g, '_');
         const existingInput = document.getElementById(safeId);
-        const currentVal = existingInput ? Math.min(parseInt(existingInput.value) || maxCount, maxCount) : maxCount;
+        const currentVal = existingInput ? Math.min(parseInt(existingInput.value) || maxLimit, maxLimit) : maxLimit;
 
         return `
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center justify-between shadow-xs">
-            <div>
-              <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">${disc}</span>
-              <span class="text-[10px] text-slate-500">${maxCount} ${maxCount === 1 ? 'questão disponível' : 'questões disponíveis'}</span>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-between gap-2.5 shadow-2xs hover:border-sky-300 dark:hover:border-sky-700 transition">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block leading-tight">${disc}</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">
+                  ${availableCount} ${availableCount === 1 ? 'disponível' : 'disponíveis'} <strong class="text-sky-600 dark:text-sky-400 font-semibold">(Máx. 10)</strong>
+                </span>
+              </div>
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${availableCount >= 10 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}">
+                ${availableCount >= 10 ? '10+ Prontas' : availableCount + ' Prontas'}
+              </span>
             </div>
-            <div class="flex items-center gap-2">
-              <label class="text-[10px] font-semibold text-slate-400">Qtd:</label>
-              <input type="number" id="${safeId}" data-discipline="${disc}" data-max="${maxCount}" min="0" max="${maxCount}" value="${currentVal}"
-                oninput="onDisciplineQtyChange(this)"
-                class="w-16 text-center text-xs font-bold py-1 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sky-600 dark:text-sky-400 focus:ring-1 focus:ring-sky-500">
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+              <label class="text-[10px] font-semibold text-slate-400">Qtd na prova:</label>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="stepDisciplineQty('${safeId}', -1)" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center transition">−</button>
+                <input type="number" id="${safeId}" data-discipline="${disc}" data-available="${availableCount}" data-max="${maxLimit}" min="0" max="${maxLimit}" value="${currentVal}"
+                  oninput="onDisciplineQtyChange(this)"
+                  class="w-14 text-center text-xs font-bold py-1 px-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sky-600 dark:text-sky-400 focus:ring-1 focus:ring-sky-500">
+                <button type="button" onclick="stepDisciplineQty('${safeId}', 1)" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center justify-center transition">+</button>
+              </div>
             </div>
           </div>
         `;
@@ -1272,10 +1792,25 @@
     updateTotalExamQuestionsCount();
   }
 
+  function stepDisciplineQty(inputId, delta) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    let val = (parseInt(input.value) || 0) + delta;
+    const max = parseInt(input.dataset.max) || 10;
+    if (val < 0) val = 0;
+    if (val > max) val = max;
+    input.value = val;
+    updateTotalExamQuestionsCount();
+  }
+
   function onDisciplineQtyChange(input) {
-    const max = parseInt(input.dataset.max) || 0;
+    const max = parseInt(input.dataset.max) || 10;
     let val = parseInt(input.value);
     if (isNaN(val) || val < 0) val = 0;
+    if (val > 10) {
+      val = 10;
+      alert("⚠️ O número máximo permitido por matéria é de 10 questões.");
+    }
     if (val > max) val = max;
     input.value = val;
     updateTotalExamQuestionsCount();
@@ -1298,10 +1833,51 @@
   }
 
   function setEqualQuestionsCount(count) {
+    const safeCount = Math.min(count, 10);
     document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
-      const max = parseInt(inp.dataset.max) || 0;
-      inp.value = Math.min(count, max);
+      const max = parseInt(inp.dataset.max) || 10;
+      inp.value = Math.min(safeCount, max);
     });
+    updateTotalExamQuestionsCount();
+  }
+
+  function resetQuestionsSelection() {
+    document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
+      inp.value = 0;
+    });
+    updateTotalExamQuestionsCount();
+  }
+
+  function applySchoolModalityPreset(modality) {
+    const periodInput = document.getElementById('exam-period');
+    if (!periodInput) return;
+    if (modality === 'integral') {
+      periodInput.value = '2026 - 1º Trimestre (Tempo Integral)';
+    } else if (modality === 'regular') {
+      periodInput.value = '2026 - 1º Trimestre (Ensino Regular)';
+    } else if (modality === 'noturno') {
+      periodInput.value = '2026 - 1º Semestre (Ensino Noturno / EJA)';
+    }
+  }
+
+  function applyCurricularPreset(type) {
+    const bnccSubjects = [
+      'Língua Portuguesa', 'Português', 'Matemática', 'Biologia', 'Física', 'Química',
+      'História', 'Geografia', 'Filosofia', 'Sociologia', 'Inglês', 'Língua Inglesa', 'Arte', 'Educação Física'
+    ];
+
+    document.querySelectorAll('#disciplines-distribution-grid input[type="number"]').forEach(inp => {
+      const disc = inp.dataset.discipline;
+      const max = parseInt(inp.dataset.max) || 10;
+      const isBncc = bnccSubjects.some(b => disc.toLowerCase().includes(b.toLowerCase()));
+
+      if (type === 'regular') {
+        inp.value = isBncc ? Math.min(max, 5) : 0;
+      } else {
+        inp.value = max;
+      }
+    });
+
     updateTotalExamQuestionsCount();
   }
 
@@ -1346,6 +1922,8 @@
     const title = document.getElementById('exam-title').value;
     const institution = document.getElementById('exam-institution').value;
     const period = document.getElementById('exam-period').value;
+    const schoolModality = (document.getElementById('exam-school-modality') ? document.getElementById('exam-school-modality').value : 'integral');
+    const targetGrade = (document.getElementById('exam-target-grade') ? document.getElementById('exam-target-grade').value : '3º Ano do Ensino Médio');
     const mode = document.getElementById('exam-order-mode').value;
     const showHeader = document.getElementById('exam-show-disc-header').checked;
 
@@ -1372,6 +1950,8 @@
       title: title,
       institution_name: institution,
       academic_period: period,
+      school_modality: schoolModality,
+      target_grade: targetGrade,
       organization_mode: mode,
       show_discipline_header: showHeader,
       total_questions: ordered.length,
@@ -1386,10 +1966,11 @@
     const resArea = document.getElementById('exam-generated-result');
     resArea.classList.remove('hidden');
     document.getElementById('result-exam-title').innerText = `${exam.title} — ${exam.total_questions} Questões`;
-    document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • ${[...new Set(ordered.map(q => q.discipline))].length} disciplinas incluídas • Gabarito oficial ao final.`;
+    const modalityLabel = schoolModality === 'regular' ? 'Ensino Regular (Não Integral)' : 'Tempo Integral';
+    document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • ${[...new Set(ordered.map(q => q.discipline))].length} disciplinas • ${targetGrade} • ${modalityLabel} • Gabarito oficial ao final.`;
 
     loadDashboard();
-    alert(`Prova Multidisciplinar Única montada com sucesso contendo ${exam.total_questions} questões!`);
+    alert(`Prova Multidisciplinar Única montada com sucesso contendo ${exam.total_questions} questões (${modalityLabel})!`);
   }
 
   // Visualização e Impressão da Prova

@@ -12,6 +12,12 @@ def run_migrations():
                 conn.execute(text("ALTER TABLE users ADD COLUMN discipline VARCHAR(100) DEFAULT 'Geral'"))
             if "password_hash" not in cols:
                 conn.execute(text("ALTER TABLE users ADD COLUMN password_hash VARCHAR(255) DEFAULT 'admin123'"))
+
+            # Check exams columns
+            res_exams = conn.execute(text("PRAGMA table_info(exams)"))
+            exam_cols = [row[1] for row in res_exams.fetchall()]
+            if "school_modality" not in exam_cols:
+                conn.execute(text("ALTER TABLE exams ADD COLUMN school_modality VARCHAR(50) DEFAULT 'integral'"))
             conn.commit()
         except Exception:
             pass

@@ -77,6 +77,7 @@ class Exam(Base):
     academic_period = Column(String(100), default="Ensino Médio")
     institution_name = Column(String(255), default="Colégio Integrado de Ensino Médio")
     organization_mode = Column(String(50), default="by_discipline")  # 'by_discipline', 'interleaved', 'random'
+    school_modality = Column(String(50), default="integral")  # 'integral', 'regular', 'noturno'
     show_discipline_header = Column(Boolean, default=True)
     total_questions = Column(Integer, default=0)
     pdf_path = Column(Text, nullable=True)

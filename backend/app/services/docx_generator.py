@@ -73,17 +73,23 @@ class DocxGeneratorService:
         r_title.font.color.rgb = RGBColor(30, 41, 59)
 
         # Student Identification Table (ABNT / Sobriedade Institucional)
-        table = doc.add_table(rows=3, cols=2)
+        is_regular = getattr(exam, "school_modality", "integral") in ["regular", "parcial"]
+        modality_text = "Ensino Médio Regular (Não Integral)" if is_regular else "Ensino Médio de Tempo Integral (EMTI / PEI)"
+        shift_text = "TURNO: ( ) Mat. ( ) Vesp. ( ) Not." if is_regular else "REGIME: Tempo Integral"
+
+        table = doc.add_table(rows=4, cols=2)
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         table.autofit = False
 
         rows = table.rows
         rows[0].cells[0].text = "ESTUDANTE: ____________________________________________"
-        rows[0].cells[1].text = "TURMA: ____________"
-        rows[1].cells[0].text = "PROFESSORES: Componentes Curriculares Integrados do Ensino Médio"
+        rows[0].cells[1].text = f"TURMA: ____________  |  {shift_text}"
+        rows[1].cells[0].text = f"MODALIDADE: {modality_text}"
         rows[1].cells[1].text = "DATA: ____/____/2026"
-        rows[2].cells[0].text = "ASSINATURA DO ALUNO: __________________________________"
+        rows[2].cells[0].text = "PROFESSORES: Componentes Curriculares do Ensino Médio"
         rows[2].cells[1].text = f"TOTAL DE QUESTÕES: {len(items):02d}"
+        rows[3].cells[0].text = "ASSINATURA DO ALUNO: __________________________________"
+        rows[3].cells[1].text = "NOTA / CONCEITO: ____________"
 
         # Style table cells font (Arial 9.5pt)
         for row in rows:

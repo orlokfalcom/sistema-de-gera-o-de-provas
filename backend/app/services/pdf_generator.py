@@ -125,18 +125,26 @@ class PDFGeneratorService:
         story.append(Spacer(1, 6))
 
         # Student Identification Block
+        is_regular = getattr(exam, "school_modality", "integral") in ["regular", "parcial"]
+        modality_label = "Ensino Médio Regular (Não Integral)" if is_regular else "Ensino Médio de Tempo Integral (EMTI / PEI)"
+        shift_label = "TURNO: ( ) Mat. ( ) Vesp. ( ) Not." if is_regular else "REGIME: Tempo Integral"
+
         ident_data = [
             [
                 Paragraph("<b>ESTUDANTE:</b> ____________________________________________________________________", meta_label),
-                Paragraph("<b>TURMA:</b> ___________", meta_label)
+                Paragraph(f"<b>TURMA:</b> ___________ | {shift_label}", meta_label)
             ],
             [
-                Paragraph("<b>PROFESSOR(ES):</b> Disciplinas Integradas do Ensino Médio", meta_val),
+                Paragraph(f"<b>MODALIDADE:</b> {modality_label}", meta_val),
                 Paragraph("<b>DATA:</b> ____/____/2026", meta_val)
             ],
             [
-                Paragraph("<b>ASSINATURA DO ESTUDANTE:</b> ____________________________________________________", meta_label),
+                Paragraph("<b>PROFESSOR(ES):</b> Componentes Curriculares do Ensino Médio", meta_val),
                 Paragraph(f"<b>TOTAL QUESTÕES:</b> {len(items):02d}", meta_label)
+            ],
+            [
+                Paragraph("<b>ASSINATURA DO ESTUDANTE:</b> ____________________________________________________", meta_label),
+                Paragraph("<b>NOTA / CONCEITO:</b> ____________", meta_label)
             ]
         ]
         t_ident = Table(ident_data, colWidths=[380, 142])
