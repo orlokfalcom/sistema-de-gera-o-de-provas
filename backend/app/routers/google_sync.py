@@ -60,7 +60,11 @@ def export_processing_log_to_sheets(
     )
 
 @router.post("/sheets/export-answer-key/{exam_id}")
-def export_answer_key_to_sheets(exam_id: str, db: Session = Depends(get_db)):
+def export_answer_key_to_sheets(
+    exam_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
     exam = db.query(Exam).filter(Exam.id == exam_id).first()
     if not exam:
         raise HTTPException(status_code=404, detail="Avaliação não encontrada.")

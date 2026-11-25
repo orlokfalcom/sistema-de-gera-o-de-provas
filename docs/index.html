@@ -1245,6 +1245,7 @@
         return;
       }
 
+      let backendHandled = false;
       try {
         const response = await fetch('/api/auth/verify-admin', {
           method: 'POST',
@@ -1257,10 +1258,18 @@
           switchRole('admin');
           alert('🔓 Acesso total de Administrador / Coordenação liberado com sucesso!');
           return;
+        } else if (response.status === 401 || response.status === 403) {
+          backendHandled = true;
         }
       } catch (e) {
-        // Offline fallback
-        if (pwd === 'admin123') {
+        // Offline / static hosting
+      }
+
+      if (!backendHandled) {
+        // Offline / GitHub Pages fallback: accept default 'admin123' or any admin password registered in localStorage
+        const storedUsers = state.users || JSON.parse(localStorage.getItem('gia_users') || '[]');
+        const matchesCustomAdmin = storedUsers.some(u => u.role === 'admin' && u.password && u.password === pwd);
+        if (pwd === 'admin123' || matchesCustomAdmin) {
           closeAdminPasswordModal();
           switchRole('admin');
           alert('🔓 Acesso total de Administrador / Coordenação liberado com sucesso!');
@@ -1471,6 +1480,7 @@
         password: password
       };
 
+      let backendAvailable = false;
       try {
         const res = await fetch('/api/auth/users', {
           method: 'POST',
@@ -1487,18 +1497,28 @@
           document.getElementById('form-create-user').reset();
           await loadUsersList();
           return;
-        } else {
+        } else if (res.status === 400 || res.status === 401 || res.status === 403 || res.status === 422) {
+          backendAvailable = true;
           const err = await res.json().catch(() => ({}));
           alert(`❌ Erro: ${err.detail || 'Não foi possível cadastrar o usuário.'}`);
+          return;
         }
       } catch (e) {
-        // Local fallback
+        // Offline / GitHub Pages
+      }
+
+      if (!backendAvailable) {
+        // Local fallback (GitHub Pages / Offline)
+        state.users = state.users || JSON.parse(localStorage.getItem('gia_users') || 'null') || [...DEFAULT_USERS];
+        if (state.users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+          alert('❌ Erro: Já existe um usuário cadastrado com este e-mail.');
+          return;
+        }
         const newUser = {
           id: 'usr-' + Date.now(),
           ...payload,
           created_at: new Date().toISOString()
         };
-        state.users = state.users || [...DEFAULT_USERS];
         state.users.push(newUser);
         localStorage.setItem('gia_users', JSON.stringify(state.users));
         alert(`✅ Usuário "${name}" cadastrado com sucesso!`);
@@ -2462,27 +2482,35 @@
       const modal = document.getElementById('exam-preview-modal');
       const area = document.getElementById('print-area');
 
+      const isRegular = exam.school_modality === 'regular';
+      const modalitySubtitle = isRegular ? 'Ensino Médio Regular (Não Integral)' : 'Ensino Médio de Tempo Integral (EMTI / PEI)';
+      const regimeCell = isRegular
+        ? '<b>TURNO:</b> ( ) Mat. ( ) Vesp. ( ) Not.'
+        : '<b>REGIME:</b> Tempo Integral';
+      const gradeLabel = exam.target_grade || 'Ensino Médio';
+
       let html = `
       <div style="font-family: Arial, sans-serif; color: #1e293b; max-width: 800px; margin: 0 auto; line-height: 1.4;">
         <!-- Cabeçalho Institucional -->
         <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 12px;">
           <h2 style="margin: 0; font-size: 16px; font-weight: bold; text-transform: uppercase;">${exam.institution_name}</h2>
           <h3 style="margin: 4px 0 0 0; font-size: 13px; color: #475569;">${exam.title} — ${exam.academic_period}</h3>
+          <p style="margin: 2px 0 0 0; font-size: 11px; color: #0369a1; font-weight: bold;">${modalitySubtitle} • ${gradeLabel}</p>
         </div>
 
         <!-- Dados do Aluno -->
         <table style="width: 100%; border: 1px solid #94a3b8; border-collapse: collapse; margin-bottom: 12px; font-size: 11px;">
           <tr>
             <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>ESTUDANTE:</b> ____________________________________________________________________</td>
-            <td style="padding: 6px; border: 1px solid #cbd5e1; width: 140px;"><b>TURMA:</b> ___________</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1; width: 170px;"><b>TURMA:</b> ___________</td>
           </tr>
           <tr>
-            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>PROFESSORES:</b> Disciplinas Integradas do Ensino Médio</td>
-            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>DATA:</b> ____/____/2026</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>SÉRIE / ETAPA:</b> ${gradeLabel}</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;">${regimeCell}</td>
           </tr>
           <tr>
             <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>ASSINATURA:</b> __________________________________________________________________</td>
-            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>TOTAL ITENS:</b> ${exam.total_questions}</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>DATA:</b> ___/___/2026 | <b>ITENS:</b> ${exam.total_questions}</td>
           </tr>
         </table>
 
@@ -2749,21 +2777,21 @@
         <div class="Section1">
           <!-- Cabeçalho Institucional ABNT -->
           <h1 class="inst-header">${exam.institution_name}</h1>
-          <h2 class="exam-title">${exam.title} — ${exam.academic_period}</h2>
+          <h2 class="exam-title">${exam.title} — ${exam.academic_period} (${exam.school_modality === 'regular' ? 'Ensino Médio Regular — Não Integral' : 'Ensino Médio de Tempo Integral — EMTI / PEI'})</h2>
 
           <!-- Quadro de Identificação do Aluno ABNT -->
           <table class="student-table">
             <tr>
-              <td style="width: 70%;"><b>ESTUDANTE:</b> ___________________________________________________________</td>
-              <td style="width: 30%;"><b>TURMA:</b> _____________</td>
+              <td style="width: 65%;"><b>ESTUDANTE:</b> _______________________________________________________</td>
+              <td style="width: 35%;"><b>TURMA:</b> _____________</td>
             </tr>
             <tr>
-              <td><b>PROFESSORES:</b> Componentes Curriculares Integrados do Ensino Médio</td>
-              <td><b>DATA:</b> ____/____/2026</td>
+              <td><b>SÉRIE / ETAPA:</b> ${exam.target_grade || 'Ensino Médio'}</td>
+              <td>${exam.school_modality === 'regular' ? '<b>TURNO:</b> ( ) Mat. ( ) Vesp. ( ) Not.' : '<b>REGIME:</b> Tempo Integral'}</td>
             </tr>
             <tr>
-              <td><b>ASSINATURA DO ESTUDANTE:</b> __________________________________________________</td>
-              <td><b>TOTAL ITENS:</b> ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}</td>
+              <td><b>ASSINATURA DO ESTUDANTE:</b> ______________________________________________</td>
+              <td><b>DATA:</b> ___/___/2026 | <b>ITENS:</b> ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}</td>
             </tr>
           </table>
 
@@ -2806,9 +2834,11 @@
         <td class="p-3 font-bold text-slate-900 dark:text-white">${e.title}</td>
         <td class="p-3">${e.academic_period}</td>
         <td class="p-3 font-bold">${e.total_questions}</td>
-        <td class="p-3 text-right space-x-2">
-          <button onclick="openExamFromHistory('${e.id}', 'complete')" class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold">Ver Prova Completa</button>
-          <button onclick="openExamFromHistory('${e.id}', 'student')" class="px-2.5 py-1 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold">Ver Versão Aluno</button>
+        <td class="p-3 text-right space-x-1.5 whitespace-nowrap">
+          <button onclick="openExamFromHistory('${e.id}', 'complete')" class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-[11px]">Completa</button>
+          <button onclick="openExamFromHistory('${e.id}', 'student')" class="px-2 py-1 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold text-[11px]">Aluno</button>
+          <button onclick="downloadExamFromHistory('${e.id}')" class="px-2 py-1 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 font-bold text-[11px]">Word ABNT</button>
+          <button onclick="deleteExamFromHistory('${e.id}')" class="px-2 py-1 rounded bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold text-[11px]" title="Excluir Avaliação">🗑️</button>
         </td>
       </tr>
     `).join('');
@@ -2819,6 +2849,22 @@
       if (currentActiveExam) previewExamInBrowser(type);
     }
 
+    function downloadExamFromHistory(id) {
+      currentActiveExam = state.exams.find(e => e.id === id);
+      if (currentActiveExam) exportExamDOCX('complete');
+    }
+
+    function deleteExamFromHistory(id) {
+      if (!confirm('Deseja excluir esta avaliação do histórico?')) return;
+      state.exams = state.exams.filter(e => e.id !== id);
+      if (currentActiveExam && currentActiveExam.id === id) {
+        currentActiveExam = state.exams[0] || null;
+      }
+      saveState();
+      loadExamsHistory();
+      loadDashboard();
+    }
+
     // Google Workspace Sync & Web Interaction Engine (GitHub Pages & Backend)
     async function syncDriveLatest() {
       const statusEl = document.getElementById('drive-sync-status');
@@ -2826,20 +2872,17 @@
 
       let syncedBackend = false;
       try {
-        const res = await fetch('/api/cloud/sync-drive', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-User-Role': state.currentUser.role,
-            'X-User-Email': state.currentUser.email
-          },
-          body: JSON.stringify({
-            academic_year: '2026',
-            target_grade: '3º Ano do Ensino Médio',
-            exam_title: currentActiveExam ? currentActiveExam.title : 'Avaliação Geral Multidisciplinar'
-          })
-        });
-        if (res.ok) syncedBackend = true;
+        if (currentActiveExam && currentActiveExam.id && !currentActiveExam.id.startsWith('exam-')) {
+          const res = await fetch(`/api/google/drive/sync-exam/${currentActiveExam.id}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-User-Role': state.currentUser.role,
+              'X-User-Email': state.currentUser.email
+            }
+          });
+          if (res.ok) syncedBackend = true;
+        }
       } catch (e) {
         // GitHub Pages / Offline mode
       }
@@ -2942,16 +2985,13 @@
 
       // 1. Try backend
       try {
-        await fetch('/api/cloud/export-sheets', {
+        await fetch('/api/google/sheets/export-log', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-User-Role': state.currentUser.role,
             'X-User-Email': state.currentUser.email
-          },
-          body: JSON.stringify({
-            academic_period: currentActiveExam ? currentActiveExam.academic_period : '2026 - 1º Trimestre'
-          })
+          }
         });
       } catch (e) { }
 
