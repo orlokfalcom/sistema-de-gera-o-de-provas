@@ -70,7 +70,56 @@ def test_rbac_roles_permissions():
     assert res_sheets_prof.status_code == 403
     print("test_rbac_sheets_professor_forbidden: PASSED")
 
+def test_admin_password_and_user_creation():
+    client = TestClient(app)
+    
+    # 1. Test verify-admin with correct password
+    res_correct = client.post("/api/auth/verify-admin", json={"password": "admin123"})
+    assert res_correct.status_code == 200
+    assert res_correct.json()["valid"] is True
+    assert res_correct.json()["role"] == "admin"
+    print("test_admin_password_correct: PASSED")
+
+    # 2. Test verify-admin with wrong password
+    res_wrong = client.post("/api/auth/verify-admin", json={"password": "wrong-password"})
+    assert res_wrong.status_code == 401
+    print("test_admin_password_wrong_rejected: PASSED")
+
+    # 3. Test user creation with discipline and password (as admin)
+    admin_headers = {"X-User-Role": "admin", "X-User-Email": "admin@escola.gov.br"}
+    user_payload = {
+        "email": f"prof.robotica.{random.randint(1000, 9999)}@escola.gov.br",
+        "full_name": "Prof. Gabriel Robótica",
+        "role": "professor",
+        "discipline": "Robótica Aplicada",
+        "password": "senhaSegura123"
+    }
+    res_create = client.post("/api/auth/users", json=user_payload, headers=admin_headers)
+    assert res_create.status_code == 201
+    created_user = res_create.json()
+    assert created_user["discipline"] == "Robótica Aplicada"
+    assert created_user["role"] == "professor"
+    print("test_user_creation_with_discipline: PASSED")
+
+    # 4. Test max 10 questions per discipline validation
+    exam_payload_over_limit = {
+        "title": "Avaliação Acima do Limite",
+        "academic_period": "2026",
+        "institution_name": "Colégio Teste",
+        "organization_mode": "by_discipline",
+        "show_discipline_header": True,
+        "questions_per_discipline": {
+            "Matemática": 12  # Exceeds max 10!
+        }
+    }
+    res_over = client.post("/api/exams/build", json=exam_payload_over_limit, headers=admin_headers)
+    assert res_over.status_code == 400
+    assert "máximo permitido de questões por matéria é 10" in res_over.json()["detail"]
+    print("test_max_10_questions_per_discipline_enforced: PASSED")
+
 if __name__ == "__main__":
+    import random
     test_questions_per_discipline_selection()
     test_rbac_roles_permissions()
+    test_admin_password_and_user_creation()
     print("\nALL ROLE & QUESTION COUNT TESTS PASSED!")

@@ -30,6 +30,12 @@ def build_multidisciplinary_exam(
 
     # 1.1 Custom questions per discipline count if provided
     if req.questions_per_discipline:
+        for disc, count in req.questions_per_discipline.items():
+            if count > 10:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"O número máximo permitido de questões por matéria é 10. A matéria '{disc}' foi configurada com {count} questões."
+                )
         questions = ExamBuilderService.select_questions_by_discipline_counts(
             questions, req.questions_per_discipline
         )

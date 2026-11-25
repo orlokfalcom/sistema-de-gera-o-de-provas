@@ -10,8 +10,8 @@ class ExamBuilderService:
     ) -> List[Question]:
         """
         Filters questions according to a dict { discipline_name: count }.
-        If a discipline is present in counts_per_discipline, takes at most that many questions.
-        If a discipline is omitted or None, all its questions are preserved.
+        If a discipline is present in counts_per_discipline, takes at most that many questions (capped at 10 max per subject).
+        If a discipline is omitted or None, all its questions are preserved (up to 10 max).
         """
         disc_map: Dict[str, List[Question]] = {}
         for q in questions:
@@ -20,11 +20,14 @@ class ExamBuilderService:
         selected: List[Question] = []
         for disc, q_list in disc_map.items():
             if disc in counts_per_discipline:
-                limit = counts_per_discipline[disc]
+                requested_limit = counts_per_discipline[disc]
+                # Enforce rule: max 10 questions per discipline
+                limit = min(max(requested_limit, 0), 10)
                 if limit > 0:
                     selected.extend(q_list[:limit])
             else:
-                selected.extend(q_list)
+                # Default rule if not specified: cap at 10 questions
+                selected.extend(q_list[:10])
         return selected
 
     @staticmethod

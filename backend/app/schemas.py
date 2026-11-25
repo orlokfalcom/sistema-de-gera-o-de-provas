@@ -7,9 +7,18 @@ class UserBase(BaseModel):
     full_name: str
     picture_url: Optional[str] = None
     role: str = "professor"
+    discipline: Optional[str] = "Geral"
 
 class UserCreate(UserBase):
-    pass
+    password: Optional[str] = "admin123"
+
+class UserUpdate(BaseModel):
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    role: Optional[str] = None
+    discipline: Optional[str] = None
+    picture_url: Optional[str] = None
+    password: Optional[str] = None
 
 class UserResponse(UserBase):
     id: str

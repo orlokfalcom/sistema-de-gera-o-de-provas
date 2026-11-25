@@ -15,6 +15,8 @@ class User(Base):
     full_name = Column(String(255), nullable=False)
     picture_url = Column(Text, nullable=True)
     role = Column(String(50), nullable=False, default="professor")  # 'admin' or 'professor'
+    discipline = Column(String(100), nullable=True, default="Geral")
+    password_hash = Column(String(255), nullable=True, default="admin123")
     google_id = Column(String(255), unique=True, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 

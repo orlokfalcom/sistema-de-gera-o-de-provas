@@ -188,7 +188,8 @@
               Regras Pedagógicas Inegociáveis
             </h4>
             <ul class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
-              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Prova 100% Multidisciplinar: Todas as matérias num único caderno.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> <b>Todas as Matérias do Ensino Médio:</b> Inclui Formação Geral Básica (BNCC) e Itinerários Formativos / Cursos Técnicos.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Prova 100% Multidisciplinar: Todas as disciplinas num único caderno integrado.</li>
               <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Preservação da autoria: Questões e respostas originais dos professores.</li>
               <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> IA não inventa questões nem respostas: Gabaritos ausentes ficam marcados como PENDENTES.</li>
               <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Numeração contínua (01 a N) com Gabarito Oficial ao final.</li>
@@ -201,7 +202,7 @@
       <section id="view-upload" class="hidden space-y-6">
         <div>
           <h3 class="text-lg font-bold">Recebimento de PDFs dos Professores</h3>
-          <p class="text-xs text-slate-500">Envie múltiplos arquivos PDF (digitais ou digitalizados). O motor extrai automaticamente as questões e gabaritos diretamente no navegador ou via backend.</p>
+          <p class="text-xs text-slate-500">Envie múltiplos arquivos PDF de qualquer matéria do Ensino Médio (Base Comum ou Itinerários Formativos). O motor extrai automaticamente questões, alternativas e gabarito.</p>
         </div>
 
         <form id="upload-form" class="space-y-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -211,12 +212,57 @@
               <input type="text" id="upload-teacher" value="Prof. Carlos Silva" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1">Disciplina</label>
-              <input type="text" id="upload-discipline" placeholder="Ex: Química, Geografia (ou auto-detectar)" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <label class="block text-xs font-semibold mb-1">Disciplina / Componente Curricular</label>
+              <input type="text" id="upload-discipline" list="disciplines-suggestions" placeholder="Ex: Matemática, Robótica, Educação Financeira..." class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <datalist id="disciplines-suggestions">
+                <!-- Base Nacional Comum Curricular (FGB) -->
+                <option value="Matemática">
+                <option value="Língua Portuguesa">
+                <option value="Literatura">
+                <option value="Redação">
+                <option value="Física">
+                <option value="Química">
+                <option value="Biologia">
+                <option value="História">
+                <option value="Geografia">
+                <option value="Filosofia">
+                <option value="Sociologia">
+                <option value="Inglês">
+                <option value="Espanhol">
+                <option value="Artes">
+                <option value="Educação Física">
+                <!-- Itinerários Formativos & Cursos Técnicos (Novo EM) -->
+                <option value="Robótica e Inteligência Artificial">
+                <option value="Educação Financeira">
+                <option value="Empreendedorismo">
+                <option value="Projeto de Vida">
+                <option value="Biotecnologia e Meio Ambiente">
+                <option value="Iniciação Científica">
+                <option value="Redação Avançada e Mídias">
+                <option value="Geopolítica Contemporânea">
+                <option value="Desenvolvimento de Sistemas / TI">
+                <option value="Administração">
+                <option value="Logística">
+              </datalist>
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1">Série / Período</label>
-              <input type="text" id="upload-period" value="Ensino Médio - 2026" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <label class="block text-xs font-semibold mb-1">Período Letivo / Trimestre</label>
+              <input type="text" id="upload-period" list="periods-suggestions" value="2026 - 1º Trimestre Integrado" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <datalist id="periods-suggestions">
+                <!-- Regime Trimestral (Padrão 1º, 2º e 3º Trimestres) -->
+                <option value="2026 - 1º Trimestre Integrado">
+                <option value="2026 - 2º Trimestre Integrado">
+                <option value="2026 - 3º Trimestre Integrado">
+                <!-- Regime Bimestral -->
+                <option value="2026 - 1º Bimestre Integrado">
+                <option value="2026 - 2º Bimestre Integrado">
+                <option value="2026 - 3º Bimestre Integrado">
+                <option value="2026 - 4º Bimestre Integrado">
+                <!-- Exames Especiais -->
+                <option value="2026 - Simulado Geral ENEM">
+                <option value="2026 - Avaliação de Recuperação Trimestral">
+                <option value="2026 - Exame Final">
+              </datalist>
             </div>
           </div>
 
@@ -326,8 +372,8 @@
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-semibold mb-1">Etapa / Período Letivo</label>
-              <input type="text" id="exam-period" value="2026 - 1º Bimestre Integrado" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+              <label class="block text-xs font-semibold mb-1">Etapa / Trimestre Letivo</label>
+              <input type="text" id="exam-period" list="periods-suggestions" value="2026 - 1º Trimestre Integrado" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
             </div>
             <div>
               <label class="block text-xs font-semibold mb-1">Modo de Organização das Questões</label>
@@ -402,8 +448,11 @@
             <button onclick="previewExamInBrowser('answer_key')" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 transition flex items-center gap-2">
               🔑 Gabarito Oficial Separado
             </button>
-            <button onclick="exportExamDOCX()" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition flex items-center gap-2">
-              📝 Exportar Prova Formatada (.doc)
+            <button onclick="exportExamDOCX('student')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition flex items-center gap-2" title="Exportar Caderno do Aluno Editável em Padrão ABNT">
+              📝 Prova Editável Aluno ABNT (.doc / Word)
+            </button>
+            <button onclick="exportExamDOCX('complete')" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold hover:bg-slate-900 transition flex items-center gap-2" title="Exportar Prova Completa com Gabarito Oficial ao Final em Padrão ABNT">
+              📋 Prova Completa + Gabarito ABNT (.doc)
             </button>
           </div>
         </div>
@@ -509,13 +558,15 @@
 
 <!-- SCRIPT CORE ENGINE -->
 <script>
-  // Initial 5 Sample Disciplines & Questions
+  // Initial Sample Disciplines & Questions (Formação Geral Básica + Itinerários Formativos)
   const DEFAULT_SAMPLE_DOCS = [
     { id: 'doc-1', filename: '1_matematica.pdf', discipline: 'Matemática', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
     { id: 'doc-2', filename: '2_portugues.pdf', discipline: 'Português', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
     { id: 'doc-3', filename: '3_biologia.pdf', discipline: 'Biologia', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
     { id: 'doc-4', filename: '4_historia.pdf', discipline: 'História', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
-    { id: 'doc-5', filename: '5_fisica.pdf', discipline: 'Física', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() }
+    { id: 'doc-5', filename: '5_fisica.pdf', discipline: 'Física', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
+    { id: 'doc-6', filename: '6_robotica.pdf', discipline: 'Robótica e Inteligência Artificial', target_grade: 'Itinerário Formativo EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
+    { id: 'doc-7', filename: '7_educacao_financeira.pdf', discipline: 'Educação Financeira', target_grade: 'Itinerário Formativo EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() }
   ];
 
   const DEFAULT_SAMPLE_QUESTIONS = [
@@ -528,7 +579,11 @@
     { id: 'q-his-1', discipline: 'História', teacher_name: 'Prof. André', question_type: 'multiple_choice', statement: "O período da história republicana brasileira conhecido como 'República Velha' ou 'República Oligárquica' (1889-1930) caracterizou-se politicamente por:", options_json: { A: 'Hegemonia do poder exercido alternadamente pelas elites de São Paulo e Minas Gerais na política do café com leite.', B: 'Amplo sufrágio universal com voto secreto estendido a analfabetos e mulheres.', C: 'Intervenção estatal contínua no fortalecimento dos direitos trabalhistas urbanos.', D: 'Predomínio absoluto do tenentismo nos primeiros escalões do Ministério da Fazenda.', E: 'Criação da CLT e industrialização de base.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '4_historia.pdf' },
     { id: 'q-his-2', discipline: 'História', teacher_name: 'Prof. André', question_type: 'multiple_choice', statement: 'A Revolução Constitucionalista de 1932 ocorrida no estado de São Paulo tinha como principal reivindicação:', options_json: { A: 'A instauração de uma monarquia parlamentarista.', B: 'A promulgação de uma nova Constituição e o fim do governo provisório de Getúlio Vargas.', C: 'A abolição imediata da escravidão nas fazendas de café.', D: 'A aliança militar com o bloco dos Aliados na Primeira Guerra Mundial.', E: 'O cancelamento da dívida externa com os bancos ingleses.' }, correct_answer: 'B', validation_status: 'approved', source_filename: '4_historia.pdf' },
     { id: 'q-fis-1', discipline: 'Física', teacher_name: 'Prof. Marcos', question_type: 'multiple_choice', statement: 'Um veículo trafega em movimento retilíneo uniforme com velocidade constante de 72 km/h. Qual a distância, em metros, percorrida por esse móvel no intervalo de 10 segundos?', options_json: { A: '100 m', B: '150 m', C: '200 m', D: '720 m', E: '2000 m' }, correct_answer: 'C', validation_status: 'approved', source_filename: '5_fisica.pdf' },
-    { id: 'q-fis-2', discipline: 'Física', teacher_name: 'Prof. Marcos', question_type: 'multiple_choice', statement: 'De acordo com a Primeira Lei de Newton (Princípio da Inércia), um corpo em repouso ou em movimento retilíneo uniforme continuará nesse estado a menos que:', options_json: { A: 'Exista atrito suficiente entre as superfícies de contato.', B: 'Uma força resultante não nula atue sobre ele.', C: 'Sua aceleração seja igual a zero.', D: 'Sua energia cinética permaneça inalterada.', E: 'A gravidade local seja anulada.' }, correct_answer: 'B', validation_status: 'approved', source_filename: '5_fisica.pdf' }
+    { id: 'q-fis-2', discipline: 'Física', teacher_name: 'Prof. Marcos', question_type: 'multiple_choice', statement: 'De acordo com a Primeira Lei de Newton (Princípio da Inércia), um corpo em repouso ou em movimento retilíneo uniforme continuará nesse estado a menos que:', options_json: { A: 'Exista atrito suficiente entre as superfícies de contato.', B: 'Uma força resultante não nula atue sobre ele.', C: 'Sua aceleração seja igual a zero.', D: 'Sua energia cinética permaneça inalterada.', E: 'A gravidade local seja anulada.' }, correct_answer: 'B', validation_status: 'approved', source_filename: '5_fisica.pdf' },
+    { id: 'q-rob-1', discipline: 'Robótica e Inteligência Artificial', teacher_name: 'Prof. Henrique', question_type: 'multiple_choice', statement: 'Em projetos de robótica educacional com microcontroladores (como a plataforma Arduino), qual componente tem como função primordial medir distâncias de obstáculos por meio da emissão e reflexão de ondas ultrassônicas?', options_json: { A: 'Sensor ultrassônico (HC-SR04).', B: 'Servomotor de passo contínuo.', C: 'Potenciômetro linear de precisão.', D: 'Ponte H para inversão de sentido.', E: 'Resistor pull-up de polarização.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '6_robotica.pdf' },
+    { id: 'q-rob-2', discipline: 'Robótica e Inteligência Artificial', teacher_name: 'Prof. Henrique', question_type: 'multiple_choice', statement: 'No contexto de sistemas embarcados e Inteligência Artificial aplicada ao Ensino Médio, o elemento denominado "atuador" tem a função de:', options_json: { A: 'Converter sinais elétricos digitais ou analógicos em ações físicas ou mecânicas no ambiente.', B: 'Realizar exclusivamente a filtragem de ruído térmico em baterias de íon-lítio.', C: 'Armazenar o firmware permanentemente em discos rígidos magnéticos externos.', D: 'Atuar como firewall contra pacotes maliciosos em redes locais sem fio.', E: 'Proteger os circuitos contra inversão de polaridade por meio de fusíveis.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '6_robotica.pdf' },
+    { id: 'q-fin-1', discipline: 'Educação Financeira', teacher_name: 'Profª. Juliana', question_type: 'multiple_choice', statement: 'No planejamento financeiro pessoal, qual é o principal efeito dos juros compostos em investimentos de longo prazo quando comparados ao regime de juros simples?', options_json: { A: 'Crescimento exponencial do capital devido à incidência de juros sobre o montante acumulado periodicamente.', B: 'Garantia legal de imunidade tributária e isenção de taxas de administração.', C: 'Eliminação completa de riscos de mercado e liquidez diária sem volatilidade.', D: 'Redução progressiva da rentabilidade nominal em função do tempo transcorrido.', E: 'Troca automática do indexador de renda fixa por ouro físico custodiado.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '7_educacao_financeira.pdf' },
+    { id: 'q-fin-2', discipline: 'Educação Financeira', teacher_name: 'Profª. Juliana', question_type: 'multiple_choice', statement: 'A estratégia de diversificação de ativos em uma carteira de investimentos tem como objetivo técnico essencial:', options_json: { A: 'Mitigar o risco não sistemático (específico) da carteira mantendo o retorno esperado equilibrado.', B: 'Concentrar o total do patrimônio no ativo de maior volatilidade do mercado de capitais.', C: 'Assegurar retornos fixos positivos diários independentemente de crises globais.', D: 'Substituir a necessidade de manter uma reserva de emergência para imprevistos.', E: 'Evitar o uso de instituições financeiras autorizadas pelo Banco Central.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '7_educacao_financeira.pdf' }
   ];
 
   // Storage In-Browser
@@ -838,10 +893,17 @@
       answerKeyMap[parseInt(akMatch[1])] = akMatch[2].toUpperCase();
     }
 
-    // Detect discipline if not supplied
+    // Detect discipline if not supplied (Base Comum + Itinerários Formativos)
     let disc = defaultDiscipline;
     if (!disc) {
-      const list = ["Matemática", "Português", "Biologia", "História", "Física", "Química", "Geografia", "Filosofia", "Inglês"];
+      const list = [
+        "Matemática", "Português", "Língua Portuguesa", "Literatura", "Redação",
+        "Biologia", "História", "Física", "Química", "Geografia", "Filosofia", "Sociologia",
+        "Inglês", "Espanhol", "Artes", "Educação Física",
+        "Robótica e Inteligência Artificial", "Robótica", "Educação Financeira", "Empreendedorismo",
+        "Projeto de Vida", "Iniciação Científica", "Biotecnologia", "Redação Avançada",
+        "Desenvolvimento de Sistemas", "Informática", "Administração", "Logística"
+      ];
       for (let d of list) {
         if (new RegExp('\\b' + d + '\\b', 'i').test(text)) { disc = d; break; }
       }
@@ -1450,37 +1512,224 @@
     document.getElementById('exam-preview-modal').classList.add('hidden');
   }
 
-  function exportExamDOCX() {
+  // Exportação DOCX / Word Editável em estrita conformidade com as Normas ABNT (NBR 14724)
+  function exportExamDOCX(type = 'student') {
     if (!currentActiveExam) {
       if (state.exams.length) currentActiveExam = state.exams[0];
-      else return alert('Gere uma prova primeiro.');
+      else return alert('Gere uma avaliação primeiro.');
     }
     const exam = currentActiveExam;
-    const content = `
-      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
-      <head><meta charset='utf-8'><title>${exam.title}</title></head>
+    const isComplete = type === 'complete';
+    
+    // Group discipline header flag
+    let currentDisc = null;
+
+    const questionsHTML = exam.items.map(it => {
+      let discHeader = '';
+      if (exam.show_discipline_header && exam.organization_mode === 'by_discipline') {
+        if (it.question.discipline !== currentDisc) {
+          currentDisc = it.question.discipline;
+          discHeader = `<div class="abnt-discipline-header">■ COMPONENTE CURRICULAR: ${currentDisc.toUpperCase()}</div>`;
+        }
+      }
+
+      const tagDisc = (exam.show_discipline_header && exam.organization_mode !== 'by_discipline') ? ` [${it.question.discipline.toUpperCase()}]` : '';
+      const orderStr = it.order_number < 10 ? '0' + it.order_number : it.order_number;
+
+      let optionsHTML = '';
+      if (it.question.question_type === 'multiple_choice' && it.question.options_json) {
+        optionsHTML = Object.entries(it.question.options_json).map(([k, v]) => `
+          <p class="abnt-option"><b>(${k})</b> ${v}</p>
+        `).join('');
+      } else {
+        optionsHTML = `
+          <div style="margin: 8pt 0 12pt 0;">
+            <p style="border-bottom: 1pt dotted #94a3b8; margin: 6pt 0; height: 12pt;"></p>
+            <p style="border-bottom: 1pt dotted #94a3b8; margin: 6pt 0; height: 12pt;"></p>
+            <p style="border-bottom: 1pt dotted #94a3b8; margin: 6pt 0; height: 12pt;"></p>
+            <p style="border-bottom: 1pt dotted #94a3b8; margin: 6pt 0; height: 12pt;"></p>
+          </div>
+        `;
+      }
+
+      return `
+        ${discHeader}
+        <div class="abnt-question-block">
+          <p class="abnt-question-num"><b>QUESTÃO ${orderStr}${tagDisc}</b></p>
+          <p class="abnt-statement">${it.question.statement}</p>
+          ${optionsHTML}
+        </div>
+      `;
+    }).join('');
+
+    let answerKeyHTML = '';
+    if (isComplete) {
+      answerKeyHTML = `
+        <div style="page-break-before: always; margin-top: 24pt;">
+          <h2 style="text-align: center; font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 8pt;">
+            GABARITO OFICIAL — ${exam.title.toUpperCase()} (${exam.academic_period})
+          </h2>
+          <table class="abnt-table" style="width: 100%; border-collapse: collapse; font-size: 9.5pt;">
+            <thead>
+              <tr style="background-color: #0f172a; color: #ffffff;">
+                <th style="border: 1pt solid #000000; padding: 6pt; text-align: center; width: 15%;">QUESTÃO</th>
+                <th style="border: 1pt solid #000000; padding: 6pt; text-align: left; width: 60%;">DISCIPLINA</th>
+                <th style="border: 1pt solid #000000; padding: 6pt; text-align: center; width: 25%;">RESPOSTA OFICIAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${exam.items.map(it => `
+                <tr>
+                  <td style="border: 1pt solid #cbd5e1; padding: 5pt; text-align: center; font-weight: bold;">${it.order_number < 10 ? '0' + it.order_number : it.order_number}</td>
+                  <td style="border: 1pt solid #cbd5e1; padding: 5pt; text-align: left;">${it.question.discipline}</td>
+                  <td style="border: 1pt solid #cbd5e1; padding: 5pt; text-align: center; font-weight: bold;">${it.question.correct_answer || 'PENDENTE'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    const docContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>${exam.title}</title>
+        <!--[if gte mso 9]>
+        <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+          @page Section1 {
+            size: 21.0cm 29.7cm; /* Formato A4 (ABNT NBR 14724) */
+            margin: 3.0cm 2.0cm 2.0cm 3.0cm; /* Margens ABNT: Superior 3cm, Direita 2cm, Inferior 2cm, Esquerda 3cm */
+            mso-header-margin: 1.5cm;
+            mso-footer-margin: 1.5cm;
+            mso-paper-source: 0;
+          }
+          div.Section1 { page: Section1; }
+          body {
+            font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+            font-size: 11pt;
+            line-height: 1.25;
+            color: #000000;
+          }
+          h1.inst-header {
+            font-size: 12pt;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0 0 3pt 0;
+          }
+          h2.exam-title {
+            font-size: 11pt;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0 0 8pt 0;
+            color: #1e293b;
+          }
+          table.student-table {
+            width: 100%;
+            border: 1pt solid #000000;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 10pt;
+          }
+          table.student-table td {
+            border: 1pt solid #64748b;
+            padding: 5pt 7pt;
+          }
+          .instructions-box {
+            border: 1pt solid #cbd5e1;
+            background-color: #f8fafc;
+            padding: 6pt 10pt;
+            font-size: 8.5pt;
+            text-align: justify;
+            margin-bottom: 12pt;
+          }
+          .abnt-discipline-header {
+            font-size: 11pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0284c7;
+            margin-top: 14pt;
+            margin-bottom: 4pt;
+            border-bottom: 1pt solid #cbd5e1;
+            padding-bottom: 2pt;
+          }
+          .abnt-question-block {
+            margin-bottom: 10pt;
+          }
+          .abnt-question-num {
+            font-size: 10.5pt;
+            font-weight: bold;
+            margin: 8pt 0 3pt 0;
+          }
+          .abnt-statement {
+            font-size: 10.5pt;
+            text-align: justify;
+            line-height: 1.25;
+            margin: 0 0 4pt 0;
+          }
+          .abnt-option {
+            font-size: 10pt;
+            margin: 2pt 0 2pt 20pt;
+            text-align: left;
+            line-height: 1.2;
+          }
+        </style>
+      </head>
       <body>
-        <h2 style='text-align:center;'>${exam.institution_name}</h2>
-        <h3 style='text-align:center;'>${exam.title} — ${exam.academic_period}</h3>
-        <p><b>ESTUDANTE:</b> ___________________________ <b>TURMA:</b> ___________ <b>DATA:</b> ____/____/2026</p>
-        <hr/>
-        ${exam.items.map(it => `
-          <p><b>QUESTÃO ${it.order_number < 10 ? '0' + it.order_number : it.order_number} [${it.question.discipline}]</b><br/>${it.question.statement}</p>
-          ${it.question.options_json ? Object.entries(it.question.options_json).map(([k,v]) => `<p>&nbsp;&nbsp;(${k}) ${v}</p>`).join('') : '<p>.......................................................................</p>'}
-        `).join('')}
-        <br/><br/>
-        <h3 style='text-align:center;'>GABARITO OFICIAL</h3>
-        <table border='1' cellspacing='0' cellpadding='4' style='width:100%; border-collapse:collapse;'>
-          <tr><th>QUESTÃO</th><th>DISCIPLINA</th><th>RESPOSTA</th></tr>
-          ${exam.items.map(it => `<tr><td>${it.order_number}</td><td>${it.question.discipline}</td><td><b>${it.question.correct_answer}</b></td></tr>`).join('')}
-        </table>
-      </body></html>
+        <div class="Section1">
+          <!-- Cabeçalho Institucional ABNT -->
+          <h1 class="inst-header">${exam.institution_name}</h1>
+          <h2 class="exam-title">${exam.title} — ${exam.academic_period}</h2>
+
+          <!-- Quadro de Identificação do Aluno ABNT -->
+          <table class="student-table">
+            <tr>
+              <td style="width: 70%;"><b>ESTUDANTE:</b> ___________________________________________________________</td>
+              <td style="width: 30%;"><b>TURMA:</b> _____________</td>
+            </tr>
+            <tr>
+              <td><b>PROFESSORES:</b> Componentes Curriculares Integrados do Ensino Médio</td>
+              <td><b>DATA:</b> ____/____/2026</td>
+            </tr>
+            <tr>
+              <td><b>ASSINATURA DO ESTUDANTE:</b> __________________________________________________</td>
+              <td><b>TOTAL ITENS:</b> ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}</td>
+            </tr>
+          </table>
+
+          <!-- Instruções Oficiais ABNT -->
+          <div class="instructions-box">
+            <b>INSTRUÇÕES GERAIS (PADRÃO ABNT):</b> 1. Este caderno reúne todas as disciplinas anunciadas da Formação Geral Básica e dos Itinerários Formativos do Ensino Médio com numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}). 2. Utilize caneta esferográfica azul ou preta. 3. Em itens de múltipla escolha, marque somente uma alternativa; rasuras anulam a resposta.
+          </div>
+
+          <hr style="border: none; border-top: 1pt solid #cbd5e1; margin-bottom: 12pt;"/>
+
+          <!-- Questões -->
+          ${questionsHTML}
+
+          <!-- Gabarito Oficial ao Final -->
+          ${answerKeyHTML}
+        </div>
+      </body>
+      </html>
     `;
-    const blob = new Blob(['\ufeff' + content], { type: 'application/msword' });
+
+    const blob = new Blob(['\ufeff' + docContent], { type: 'application/msword;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `prova_${exam.id}.doc`;
+    a.download = `prova_${(exam.id || 'ensino_medio').slice(0, 8)}_${isComplete ? 'completa_abnt' : 'aluno_abnt'}.doc`;
     a.click();
     URL.revokeObjectURL(url);
   }
