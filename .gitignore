@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+backend/evaluations.db
+backend/storage/uploads/*.pdf
+backend/storage/extracted_images/*
+!backend/storage/extracted_images/.gitkeep
+backend/storage/generated_exams/*
+!backend/storage/generated_exams/.gitkeep
+.idea/
+.vscode/

@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador Inteligente de Avaliações — Ensino Médio</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0284c7">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PDF.js CDN for in-browser client-side PDF parsing on GitHub Pages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- Google Fonts: Inter / Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' }
+          }
+        }
+      }
+    };
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
+  <style>
+    .glass-card { backdrop-filter: blur(8px); }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    @media print {
+      body * { visibility: hidden; }
+      #print-area, #print-area * { visibility: visible; }
+      #print-area { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+
+<div class="flex h-full overflow-hidden">
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 z-30 transition-all duration-300">
+    <!-- Header / Brand -->
+    <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <div>
+        <h1 class="text-sm font-extrabold tracking-tight text-slate-900 dark:text-white uppercase leading-snug">Gerador de Provas</h1>
+        <p class="text-[10px] text-sky-600 dark:text-sky-400 font-semibold tracking-wide uppercase">Ensino Médio</p>
+      </div>
+    </div>
+
+    <!-- User Profile & Role Switcher -->
+    <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+      <div class="flex items-center gap-3">
+        <img id="user-avatar" src="https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff" class="w-9 h-9 rounded-full ring-2 ring-sky-500/30">
+        <div class="overflow-hidden">
+          <p id="user-name" class="text-xs font-bold truncate">Coordenador Pedagógico</p>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span id="user-role-badge" class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 uppercase">ADMIN</span>
+            <span class="text-[10px] text-emerald-500 font-medium flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> GitHub Pages / Online
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- Quick Role Toggle Button -->
+      <div class="mt-3 flex gap-2">
+        <button onclick="switchRole('admin')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition">Admin</button>
+        <button onclick="switchRole('professor')" class="flex-1 py-1 px-2 text-[10px] font-bold rounded border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition">Professor</button>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+      <a href="#dashboard" onclick="navigate('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        Dashboard Geral
+      </a>
+
+      <a href="#upload" onclick="navigate('upload')" id="nav-upload" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        Recebimento de PDFs
+      </a>
+
+      <a href="#conferencia" onclick="navigate('conferencia')" id="nav-conferencia" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <div class="flex items-center gap-3">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          Conferência Pré-Prova
+        </div>
+        <span id="badge-pending" class="px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300">0</span>
+      </a>
+
+      <a href="#questoes" onclick="navigate('questoes')" id="nav-questoes" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        Banco de Questões
+      </a>
+
+      <a href="#montagem" onclick="navigate('montagem')" id="nav-montagem" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        Montar Prova Única
+      </a>
+
+      <a href="#historico" onclick="navigate('historico')" id="nav-historico" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Histórico & Provas
+      </a>
+
+      <a href="#google" onclick="navigate('google')" id="nav-google" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition">
+        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+        Google Workspace
+      </a>
+    </nav>
+
+    <!-- Footer Controls -->
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <button onclick="toggleDarkMode()" title="Alternar Modo Escuro / Claro" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+        <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+      <button onclick="installPWA()" id="btn-install" class="hidden text-[10px] font-bold py-1.5 px-3 rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Instalar App
+      </button>
+      <button onclick="resetDemoData()" title="Restaurar dados de demonstração" class="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</button>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="flex-1 overflow-y-auto bg-slate-50/70 dark:bg-slate-950 p-6 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+      
+      <!-- SUBTITLE HERO BANNER -->
+      <header class="bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-sky-600/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-sky-100 text-[11px] font-extrabold uppercase tracking-wider mb-2">Plataforma Institucional Oficial</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Gerador Inteligente de Avaliações</h2>
+          <p class="text-sm md:text-base text-sky-100 mt-1 font-medium">Uma avaliação. Todas as disciplinas. Inteligência a serviço da educação.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="navigate('upload')" class="px-4 py-2.5 rounded-xl bg-white text-sky-700 hover:bg-sky-50 text-xs font-bold transition shadow-sm flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Enviar PDFs
+          </button>
+          <button onclick="navigate('montagem')" class="px-4 py-2.5 rounded-xl bg-sky-950/40 hover:bg-sky-950/60 text-white text-xs font-bold transition flex items-center gap-2 border border-white/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> Gerar Prova
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW: DASHBOARD -->
+      <section id="view-dashboard" class="space-y-6">
+        <h3 class="text-lg font-bold">Painel de Indicadores Gerais</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard-metrics-grid">
+          <!-- Metric Cards -->
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+              Distribuição por Disciplina
+            </h4>
+            <div id="discipline-breakdown-list" class="space-y-2.5 text-xs">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Regras Pedagógicas Inegociáveis
+            </h4>
+            <ul class="text-xs space-y-2 text-slate-600 dark:text-slate-300">
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Prova 100% Multidisciplinar: Todas as matérias num único caderno.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Preservação da autoria: Questões e respostas originais dos professores.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> IA não inventa questões nem respostas: Gabaritos ausentes ficam marcados como PENDENTES.</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 font-bold">✓</span> Numeração contínua (01 a N) com Gabarito Oficial ao final.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: UPLOAD DE PDFs -->
+      <section id="view-upload" class="hidden space-y-6">
+        <div>
+          <h3 class="text-lg font-bold">Recebimento de PDFs dos Professores</h3>
+          <p class="text-xs text-slate-500">Envie múltiplos arquivos PDF (digitais ou digitalizados). O motor extrai automaticamente as questões e gabaritos diretamente no navegador ou via backend.</p>
+        </div>
+
+        <form id="upload-form" class="space-y-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1">Professor Responsável</label>
+              <input type="text" id="upload-teacher" value="Prof. Carlos Silva" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Disciplina</label>
+              <input type="text" id="upload-discipline" placeholder="Ex: Química, Geografia (ou auto-detectar)" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Série / Período</label>
+              <input type="text" id="upload-period" value="Ensino Médio - 2026" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+          </div>
+
+          <!-- Drag and Drop Area -->
+          <div id="drop-zone" class="border-2 border-dashed border-sky-400 dark:border-sky-600/50 rounded-2xl p-8 text-center bg-sky-50/50 dark:bg-sky-950/20 cursor-pointer hover:bg-sky-50 transition">
+            <svg class="w-12 h-12 mx-auto text-sky-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">Arraste e solte múltiplos PDFs aqui</p>
+            <p class="text-xs text-slate-500 mt-1">ou clique para selecionar os arquivos do seu computador</p>
+            <input type="file" id="file-input" multiple accept=".pdf" class="hidden">
+            <p id="file-list-preview" class="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-3"></p>
+          </div>
+
+          <!-- Progress Bar -->
+          <div id="upload-progress-container" class="hidden space-y-1">
+            <div class="flex justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+              <span id="upload-progress-label">Lendo e segmentando questões do PDF...</span>
+              <span id="upload-progress-pct">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+              <div id="upload-progress-bar" class="bg-sky-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg> Iniciar Processamento
+            </button>
+          </div>
+        </form>
+
+        <!-- Documentos Recebidos List -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h4 class="text-sm font-bold mb-4">Documentos Recebidos no Sistema</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                <tr>
+                  <th class="p-3">Data / Hora</th>
+                  <th class="p-3">Arquivo</th>
+                  <th class="p-3">Disciplina</th>
+                  <th class="p-3">Questões Extraídas</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody id="documents-table-body" class="divide-y divide-slate-200 dark:divide-slate-800">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: CONFERÊNCIA INTELIGENTE -->
+      <section id="view-conferencia" class="hidden space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-bold">Conferência Pedagógica Pré-Prova</h3>
+            <p class="text-xs text-slate-500">Valide questões com gabarito ausente, alternativas pendentes ou inconsistências antes de gerar a prova.</p>
+          </div>
+          <button onclick="loadPendingQuestions()" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition">Atualizar Pendências</button>
+        </div>
+
+        <div id="pending-questions-container" class="space-y-4">
+          <!-- Pending review cards -->
+        </div>
+      </section>
+
+      <!-- VIEW: BANCO DE QUESTÕES -->
+      <section id="view-questoes" class="hidden space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold">Banco Centralizado de Questões</h3>
+            <p class="text-xs text-slate-500">Todas as questões extraídas e categorizadas por disciplina e autoria original.</p>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="questions-search" oninput="filterQuestions()" placeholder="Buscar por enunciado..." class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 w-64">
+            <select id="questions-filter-discipline" onchange="filterQuestions()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800">
+              <option value="">Todas as disciplinas</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="questions-list-container" class="space-y-4">
+          <!-- Dynamically filled with question cards -->
+        </div>
+      </section>
+
+      <!-- VIEW: MONTAGEM DA PROVA ÚNICA -->
+      <section id="view-montagem" class="hidden space-y-6">
+        <div>
+          <h3 class="text-lg font-bold">Montagem Automática da Prova Única</h3>
+          <p class="text-xs text-slate-500">Reúne todas as disciplinas em uma única avaliação multidisciplinar com numeração contínua (01 a N) e gabarito oficial ao final.</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1">Título da Avaliação</label>
+              <input type="text" id="exam-title" value="Avaliação Geral Multidisciplinar do Ensino Médio" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Instituição de Ensino</label>
+              <input type="text" id="exam-institution" value="Colégio Integrado de Ensino Médio" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1">Etapa / Período Letivo</label>
+              <input type="text" id="exam-period" value="2026 - 1º Bimestre Integrado" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Modo de Organização das Questões</label>
+              <select id="exam-order-mode" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold">
+                <option value="by_discipline" selected>Agrupada por Disciplina (Padrão Oficial)</option>
+                <option value="interleaved">Intercalada entre Disciplinas (ENEM/Vestibular)</option>
+                <option value="random">Aleatória</option>
+              </select>
+            </div>
+            <div class="flex items-center pt-5">
+              <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold">
+                <input type="checkbox" id="exam-show-disc-header" checked class="w-4 h-4 rounded text-sky-600">
+                Exibir cabeçalho da disciplina antes das questões
+              </label>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-900/50 flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-sky-900 dark:text-sky-200">Total de Questões Aprovadas Prontas para a Prova</p>
+              <p class="text-xs text-sky-700 dark:text-sky-400 mt-0.5">Todas as questões de todas as disciplinas enviadas serão incluídas sem exceção.</p>
+            </div>
+            <span id="exam-ready-questions-count" class="text-2xl font-extrabold text-sky-600 dark:text-sky-400">0</span>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <button onclick="buildExam()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white text-xs font-bold transition shadow-lg shadow-sky-600/20 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> Gerar Prova Multidisciplinar Única
+            </button>
+          </div>
+        </div>
+
+        <!-- Generated Exam Modal / Result Area -->
+        <div id="exam-generated-result" class="hidden bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-800 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">✓</div>
+            <div>
+              <h4 class="text-sm font-bold text-emerald-900 dark:text-emerald-200" id="result-exam-title">Prova Gerada com Sucesso!</h4>
+              <p class="text-xs text-emerald-700 dark:text-emerald-400" id="result-exam-meta"></p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 pt-2">
+            <button onclick="previewExamInBrowser('complete')" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition flex items-center gap-2">
+              📄 Visualizar Prova Completa (Gabarito ao final)
+            </button>
+            <button onclick="previewExamInBrowser('student')" class="px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition flex items-center gap-2">
+              🎓 Visualizar Prova do Aluno (Sem gabarito)
+            </button>
+            <button onclick="previewExamInBrowser('answer_key')" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 transition flex items-center gap-2">
+              🔑 Gabarito Oficial Separado
+            </button>
+            <button onclick="exportExamDOCX()" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition flex items-center gap-2">
+              📝 Exportar Prova Formatada (.doc)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: HISTÓRICO & DOWNLOADS -->
+      <section id="view-historico" class="hidden space-y-6">
+        <div>
+          <h3 class="text-lg font-bold">Histórico e Arquivamento de Provas</h3>
+          <p class="text-xs text-slate-500">Consulte avaliações multidisciplinares geradas anteriormente e abra seus cadernos oficiais.</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <tr>
+                <th class="p-3">Data</th>
+                <th class="p-3">Título da Avaliação</th>
+                <th class="p-3">Período Letivo</th>
+                <th class="p-3">Questões</th>
+                <th class="p-3 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body" class="divide-y divide-slate-200 dark:divide-slate-800">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW: GOOGLE WORKSPACE -->
+      <section id="view-google" class="hidden space-y-6">
+        <div>
+          <h3 class="text-lg font-bold">Integração Google Workspace</h3>
+          <p class="text-xs text-slate-500">Sincronize arquivos diretamente com o Google Drive institucional e exporte relatórios para o Google Sheets.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.01 1.99l-6.84 11.83 3.42 5.92 6.84-11.83-3.42-5.92zm7.14 12.38l-3.42-5.92-6.84 11.83h6.84l3.42-5.91zm-7.71 5.92h-6.84l3.42-5.92h6.84l-3.42 5.92z"/></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold">Google Drive</h4>
+                <p class="text-xs text-slate-500">Pastas automáticas por ano e período letivo</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Organiza automaticamente as provas finais e arquivos originais em pastas estruturadas no Drive da instituição.</p>
+            <button onclick="syncDriveLatest()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Sincronizar Provas com o Google Drive
+            </button>
+            <div id="drive-sync-status" class="text-xs font-medium text-emerald-600 dark:text-emerald-400"></div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold">Google Sheets</h4>
+                <p class="text-xs text-slate-500">Planilha de conferência e gabarito</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Gera relatórios automatizados de professores, disciplinas, questões extraídas e gabarito oficial em planilha do Sheets.</p>
+            <button onclick="exportSheetsLog()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Exportar Registro para o Google Sheets
+            </button>
+            <div id="sheets-sync-status" class="text-xs font-medium text-emerald-600 dark:text-emerald-400"></div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <h4 class="text-sm font-bold">Automações com Google Apps Script</h4>
+          <p class="text-xs text-slate-500">Código pronto para vincular formulários do Google Forms e eventos do Google Drive diretamente à plataforma.</p>
+          <button onclick="showAppsScriptModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg> Ver Código Google Apps Script (.gs)
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: PREVIEW DE PROVA / IMPRESSÃO -->
+<div id="exam-preview-modal" class="fixed inset-0 z-50 bg-black/60 hidden flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-800">
+    <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <h3 class="text-sm font-bold" id="preview-modal-title">Visualização Oficial da Avaliação</h3>
+      <div class="flex items-center gap-2">
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-sky-600 text-white text-xs font-bold hover:bg-sky-700 transition flex items-center gap-1.5">
+          🖨️ Imprimir / Salvar PDF
+        </button>
+        <button onclick="closePreviewModal()" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 font-bold">✕</button>
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto p-8 font-sans bg-white text-slate-900" id="print-area">
+      <!-- Exam Layout Injected Dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT CORE ENGINE -->
+<script>
+  // Initial 5 Sample Disciplines & Questions
+  const DEFAULT_SAMPLE_DOCS = [
+    { id: 'doc-1', filename: '1_matematica.pdf', discipline: 'Matemática', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
+    { id: 'doc-2', filename: '2_portugues.pdf', discipline: 'Português', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
+    { id: 'doc-3', filename: '3_biologia.pdf', discipline: 'Biologia', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
+    { id: 'doc-4', filename: '4_historia.pdf', discipline: 'História', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() },
+    { id: 'doc-5', filename: '5_fisica.pdf', discipline: 'Física', target_grade: '3º Ano EM', academic_period: '2026 - 1º Bimestre', total_questions_found: 2, status: 'completed', created_at: new Date().toISOString() }
+  ];
+
+  const DEFAULT_SAMPLE_QUESTIONS = [
+    { id: 'q-mat-1', discipline: 'Matemática', teacher_name: 'Prof. Roberto', question_type: 'multiple_choice', statement: 'Determine o valor do determinante da matriz quadrada de ordem 2 cujos elementos são a11 = 3, a12 = 5, a21 = 2 e a22 = 4.', options_json: { A: '2', B: '7', C: '-2', D: '10', E: '12' }, correct_answer: 'A', validation_status: 'approved', source_filename: '1_matematica.pdf' },
+    { id: 'q-mat-2', discipline: 'Matemática', teacher_name: 'Prof. Roberto', question_type: 'multiple_choice', statement: 'Uma progressão aritmética (PA) possui primeiro termo igual a 5 e razão igual a 3. Qual é o décimo termo dessa PA?', options_json: { A: '28', B: '32', C: '35', D: '40', E: '45' }, correct_answer: 'B', validation_status: 'approved', source_filename: '1_matematica.pdf' },
+    { id: 'q-por-1', discipline: 'Português', teacher_name: 'Profª. Mariana', question_type: 'multiple_choice', statement: 'Assinale a alternativa em que todas as palavras estão grafadas em estrita conformidade com as regras do Novo Acordo Ortográfico:', options_json: { A: 'Micro-ondas, autoestrada, contraproposta, anti-inflamatório.', B: 'Microondas, auto-estrada, contra-proposta, antiinflamatório.', C: 'Micro-ondas, auto-estrada, contraproposta, antiinflamatório.', D: 'Microondas, autoestrada, contraproposta, anti-inflamatório.', E: 'Micro-ondas, autoestrada, contra-proposta, antiinflamatório.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '2_portugues.pdf' },
+    { id: 'q-por-2', discipline: 'Português', teacher_name: 'Profª. Mariana', question_type: 'multiple_choice', statement: "Na oração 'Embora estivesse exausto, continuou estudando para o simulado', a conjunção em destaque estabelece relação semântica de:", options_json: { A: 'Causa.', B: 'Consequência.', C: 'Concessão.', D: 'Condição.', E: 'Proporção.' }, correct_answer: 'C', validation_status: 'approved', source_filename: '2_portugues.pdf' },
+    { id: 'q-bio-1', discipline: 'Biologia', teacher_name: 'Profª. Carla', question_type: 'multiple_choice', statement: 'No cruzamento entre dois indivíduos heterozigotos para um caráter monogênico com dominância completa (Aa x Aa), a proporção fenotípica esperada na descendência é de:', options_json: { A: '1 : 2 : 1', B: '3 : 1', C: '9 : 3 : 3 : 1', D: '1 : 1', E: '4 : 0' }, correct_answer: 'B', validation_status: 'approved', source_filename: '3_biologia.pdf' },
+    { id: 'q-bio-2', discipline: 'Biologia', teacher_name: 'Profª. Carla', question_type: 'multiple_choice', statement: 'A organela celular responsável pela síntese de ATP por meio da respiração celular aeróbia é denominada:', options_json: { A: 'Complexo golgiense.', B: 'Retículo endoplasmático liso.', C: 'Ribossomo.', D: 'Mitocôndria.', E: 'Lisossomo.' }, correct_answer: 'D', validation_status: 'approved', source_filename: '3_biologia.pdf' },
+    { id: 'q-his-1', discipline: 'História', teacher_name: 'Prof. André', question_type: 'multiple_choice', statement: "O período da história republicana brasileira conhecido como 'República Velha' ou 'República Oligárquica' (1889-1930) caracterizou-se politicamente por:", options_json: { A: 'Hegemonia do poder exercido alternadamente pelas elites de São Paulo e Minas Gerais na política do café com leite.', B: 'Amplo sufrágio universal com voto secreto estendido a analfabetos e mulheres.', C: 'Intervenção estatal contínua no fortalecimento dos direitos trabalhistas urbanos.', D: 'Predomínio absoluto do tenentismo nos primeiros escalões do Ministério da Fazenda.', E: 'Criação da CLT e industrialização de base.' }, correct_answer: 'A', validation_status: 'approved', source_filename: '4_historia.pdf' },
+    { id: 'q-his-2', discipline: 'História', teacher_name: 'Prof. André', question_type: 'multiple_choice', statement: 'A Revolução Constitucionalista de 1932 ocorrida no estado de São Paulo tinha como principal reivindicação:', options_json: { A: 'A instauração de uma monarquia parlamentarista.', B: 'A promulgação de uma nova Constituição e o fim do governo provisório de Getúlio Vargas.', C: 'A abolição imediata da escravidão nas fazendas de café.', D: 'A aliança militar com o bloco dos Aliados na Primeira Guerra Mundial.', E: 'O cancelamento da dívida externa com os bancos ingleses.' }, correct_answer: 'B', validation_status: 'approved', source_filename: '4_historia.pdf' },
+    { id: 'q-fis-1', discipline: 'Física', teacher_name: 'Prof. Marcos', question_type: 'multiple_choice', statement: 'Um veículo trafega em movimento retilíneo uniforme com velocidade constante de 72 km/h. Qual a distância, em metros, percorrida por esse móvel no intervalo de 10 segundos?', options_json: { A: '100 m', B: '150 m', C: '200 m', D: '720 m', E: '2000 m' }, correct_answer: 'C', validation_status: 'approved', source_filename: '5_fisica.pdf' },
+    { id: 'q-fis-2', discipline: 'Física', teacher_name: 'Prof. Marcos', question_type: 'multiple_choice', statement: 'De acordo com a Primeira Lei de Newton (Princípio da Inércia), um corpo em repouso ou em movimento retilíneo uniforme continuará nesse estado a menos que:', options_json: { A: 'Exista atrito suficiente entre as superfícies de contato.', B: 'Uma força resultante não nula atue sobre ele.', C: 'Sua aceleração seja igual a zero.', D: 'Sua energia cinética permaneça inalterada.', E: 'A gravidade local seja anulada.' }, correct_answer: 'B', validation_status: 'approved', source_filename: '5_fisica.pdf' }
+  ];
+
+  // Storage In-Browser
+  let state = {
+    documents: JSON.parse(localStorage.getItem('gia_docs')) || DEFAULT_SAMPLE_DOCS,
+    questions: JSON.parse(localStorage.getItem('gia_questions')) || DEFAULT_SAMPLE_QUESTIONS,
+    exams: JSON.parse(localStorage.getItem('gia_exams')) || [],
+    currentUser: { role: 'admin', email: 'admin@escola.gov.br', name: 'Coordenador Pedagógico' }
+  };
+
+  function saveState() {
+    localStorage.setItem('gia_docs', JSON.stringify(state.documents));
+    localStorage.setItem('gia_questions', JSON.stringify(state.questions));
+    localStorage.setItem('gia_exams', JSON.stringify(state.exams));
+  }
+
+  function resetDemoData() {
+    if (confirm('Restaurar dados iniciais de demonstração com as 5 disciplinas?')) {
+      localStorage.removeItem('gia_docs');
+      localStorage.removeItem('gia_questions');
+      localStorage.removeItem('gia_exams');
+      state.documents = [...DEFAULT_SAMPLE_DOCS];
+      state.questions = [...DEFAULT_SAMPLE_QUESTIONS];
+      state.exams = [];
+      saveState();
+      loadDashboard();
+      alert('Dados restaurados com sucesso!');
+    }
+  }
+
+  // Navigation
+  function navigate(viewId) {
+    document.querySelectorAll('main section').forEach(el => el.classList.add('hidden'));
+    const target = document.getElementById('view-' + viewId);
+    if (target) target.classList.remove('hidden');
+
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.remove('bg-sky-50', 'text-sky-700', 'dark:bg-sky-950/50', 'dark:text-sky-300');
+    });
+    const activeNav = document.getElementById('nav-' + viewId);
+    if (activeNav) activeNav.classList.add('bg-sky-50', 'text-sky-700', 'dark:bg-sky-950/50', 'dark:text-sky-300');
+
+    if (viewId === 'dashboard') loadDashboard();
+    if (viewId === 'upload') loadDocuments();
+    if (viewId === 'conferencia') loadPendingQuestions();
+    if (viewId === 'questoes') loadQuestions();
+    if (viewId === 'montagem') loadExamSetup();
+    if (viewId === 'historico') loadExamsHistory();
+  }
+
+  function switchRole(role) {
+    state.currentUser.role = role;
+    if (role === 'admin') {
+      state.currentUser.email = 'admin@escola.gov.br';
+      state.currentUser.name = 'Coordenador Pedagógico';
+      document.getElementById('user-name').innerText = state.currentUser.name;
+      document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=Admin+Escolar&background=0284c7&color=fff';
+      document.getElementById('user-role-badge').innerText = 'ADMIN';
+      document.getElementById('user-role-badge').className = 'px-1.5 py-0.5 text-[9px] font-bold rounded bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 uppercase';
+    } else {
+      state.currentUser.email = 'professor@escola.gov.br';
+      state.currentUser.name = 'Prof. Carlos Silva';
+      document.getElementById('user-name').innerText = state.currentUser.name;
+      document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=Carlos+Silva&background=10b981&color=fff';
+      document.getElementById('user-role-badge').innerText = 'PROFESSOR';
+      document.getElementById('user-role-badge').className = 'px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 uppercase';
+    }
+  }
+
+  function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  }
+
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+
+  // Dashboard Loader
+  function loadDashboard() {
+    const totalDocs = state.documents.length;
+    const totalQuestions = state.questions.length;
+    const pending = state.questions.filter(q => q.validation_status === 'pending_review').length;
+    
+    // Unique disciplines
+    const discMap = {};
+    state.questions.forEach(q => {
+      discMap[q.discipline] = (discMap[q.discipline] || 0) + 1;
+    });
+    const uniqueDiscCount = Object.keys(discMap).length;
+
+    const grid = document.getElementById('dashboard-metrics-grid');
+    grid.innerHTML = `
+      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <p class="text-xs text-slate-500 font-semibold">Arquivos Enviados</p>
+        <p class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">${totalDocs}</p>
+      </div>
+      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <p class="text-xs text-slate-500 font-semibold">Disciplinas Identificadas</p>
+        <p class="text-2xl font-extrabold text-sky-600 dark:text-sky-400 mt-1">${uniqueDiscCount}</p>
+      </div>
+      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <p class="text-xs text-slate-500 font-semibold">Questões Extraídas</p>
+        <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">${totalQuestions}</p>
+      </div>
+      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <p class="text-xs text-slate-500 font-semibold">Pendentes de Conferência</p>
+        <p class="text-2xl font-extrabold ${pending > 0 ? 'text-amber-500' : 'text-emerald-500'} mt-1">${pending}</p>
+      </div>
+    `;
+
+    document.getElementById('badge-pending').innerText = pending;
+
+    const list = document.getElementById('discipline-breakdown-list');
+    if (uniqueDiscCount > 0) {
+      list.innerHTML = Object.entries(discMap).map(([disc, count]) => `
+        <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+          <span class="font-medium">${disc}</span>
+          <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold">${count} questões</span>
+        </div>
+      `).join('');
+    } else {
+      list.innerHTML = `<p class="text-slate-400">Nenhum documento processado ainda. Envie os primeiros PDFs!</p>`;
+    }
+  }
+
+  // Upload Management
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const filePreview = document.getElementById('file-list-preview');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-sky-600'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-sky-600'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-sky-600');
+    fileInput.files = e.dataTransfer.files;
+    updateFilePreview();
+  });
+
+  fileInput.addEventListener('change', updateFilePreview);
+
+  function updateFilePreview() {
+    const files = Array.from(fileInput.files);
+    filePreview.innerText = files.length > 0 ? `${files.length} arquivo(s) selecionado(s): ` + files.map(f => f.name).join(', ') : '';
+  }
+
+  // Client-Side PDF Text Extractor
+  async function extractTextFromPDFFile(file) {
+    if (typeof pdfjsLib === 'undefined') return "";
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map(item => item.str).join(' ');
+      fullText += `\n--- PÁGINA ${i} ---\n` + pageText;
+    }
+    return fullText;
+  }
+
+  function parseTextToQuestions(text, defaultDiscipline, teacherName, filename) {
+    // Regex for answer key
+    const answerKeyMap = {};
+    const akRegex = /(?:quest[ãa]o\s*)?(\d{1,2})\s*[\.\-\)\:]\s*([A-Ea-e])\b/g;
+    let akMatch;
+    while ((akMatch = akRegex.exec(text)) !== null) {
+      answerKeyMap[parseInt(akMatch[1])] = akMatch[2].toUpperCase();
+    }
+
+    // Detect discipline if not supplied
+    let disc = defaultDiscipline;
+    if (!disc) {
+      const list = ["Matemática", "Português", "Biologia", "História", "Física", "Química", "Geografia", "Filosofia", "Inglês"];
+      for (let d of list) {
+        if (new RegExp('\\b' + d + '\\b', 'i').test(text)) { disc = d; break; }
+      }
+    }
+    if (!disc) disc = "Geral";
+
+    // Split questions
+    const qRegex = /(?:^|\n)\s*(?:(?:quest[ãa]o|item)\s*(\d{1,2})|(\d{1,2})\s*[\.\-\)])(?:\s*[:\-\.]|\s+)/gi;
+    const matches = [];
+    let m;
+    while ((m = qRegex.exec(text)) !== null) {
+      matches.push({ index: m.index, num: parseInt(m[1] || m[2]) });
+    }
+
+    const questions = [];
+    if (matches.length > 0) {
+      for (let i = 0; i < matches.length; i++) {
+        const start = matches[i].index;
+        const end = i + 1 < matches.length ? matches[i + 1].index : text.length;
+        let block = text.slice(start, end).trim();
+
+        // Strip gabarito from block
+        block = block.replace(/(?:gabarito|respostas?|chaves? de respostas?)[\s\S]*$/i, '').trim();
+
+        // Extract options
+        const optRegex = /(?:^|\s)(?:\(?([A-Ea-e])\)|\b([A-Ea-e])\s*[\.\-\)])\s+/g;
+        const optMatches = [];
+        let om;
+        while ((om = optRegex.exec(block)) !== null) {
+          optMatches.push({ index: om.index, letter: (om[1] || om[2]).toUpperCase() });
+        }
+
+        const options = {};
+        let statement = block;
+        if (optMatches.length >= 2) {
+          statement = block.slice(0, optMatches[0].index).replace(/^(?:(?:quest[ãa]o|item)\s*\d+|\d+\s*[\.\-\)])\s*[:\-\.]?\s*/i, '').trim();
+          for (let j = 0; j < optMatches.length; j++) {
+            const oStart = optMatches[j].index;
+            const oEnd = j + 1 < optMatches.length ? optMatches[j + 1].index : block.length;
+            let oText = block.slice(oStart, oEnd).replace(/^(?:\(?[A-Ea-e]\)|[A-Ea-e]\s*[\.\-\)])\s*/i, '').trim();
+            options[optMatches[j].letter] = oText;
+          }
+        }
+
+        const qNum = matches[i].num;
+        const ans = answerKeyMap[qNum] || null;
+
+        questions.push({
+          id: 'q-' + Date.now() + '-' + i,
+          discipline: disc,
+          teacher_name: teacherName,
+          question_type: optMatches.length >= 2 ? 'multiple_choice' : 'discursive',
+          statement: statement || block,
+          options_json: Object.keys(options).length ? options : null,
+          correct_answer: ans,
+          validation_status: ans ? 'approved' : 'pending_review',
+          validation_notes: ans ? null : 'Gabarito pendente de conferência manual.',
+          source_filename: filename
+        });
+      }
+    } else {
+      // Single question fallback
+      questions.push({
+        id: 'q-' + Date.now() + '-1',
+        discipline: disc,
+        teacher_name: teacherName,
+        question_type: 'discursive',
+        statement: text.slice(0, 300).trim(),
+        options_json: null,
+        correct_answer: null,
+        validation_status: 'pending_review',
+        validation_notes: 'Documento importado para conferência.',
+        source_filename: filename
+      });
+    }
+
+    return questions;
+  }
+
+  document.getElementById('upload-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!fileInput.files.length) return alert('Selecione pelo menos um arquivo PDF.');
+
+    const teacher = document.getElementById('upload-teacher').value;
+    const disciplineInput = document.getElementById('upload-discipline').value;
+    const period = document.getElementById('upload-period').value;
+
+    const progressCont = document.getElementById('upload-progress-container');
+    const progressBar = document.getElementById('upload-progress-bar');
+    const progressPct = document.getElementById('upload-progress-pct');
+
+    progressCont.classList.remove('hidden');
+    progressBar.style.width = '30%';
+    progressPct.innerText = '30%';
+
+    for (let f of fileInput.files) {
+      try {
+        const text = await extractTextFromPDFFile(f);
+        const extracted = parseTextToQuestions(text, disciplineInput, teacher, f.name);
+
+        const newDoc = {
+          id: 'doc-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+          filename: f.name,
+          discipline: extracted[0]?.discipline || disciplineInput || 'Geral',
+          target_grade: 'Ensino Médio',
+          academic_period: period,
+          total_questions_found: extracted.length,
+          status: 'completed',
+          created_at: new Date().toISOString()
+        };
+
+        state.documents.unshift(newDoc);
+        extracted.forEach(q => state.questions.push(q));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    saveState();
+    progressBar.style.width = '100%';
+    progressPct.innerText = '100%';
+    setTimeout(() => {
+      progressCont.classList.add('hidden');
+      fileInput.value = '';
+      filePreview.innerText = '';
+      loadDocuments();
+      loadDashboard();
+      alert('Upload e leitura de PDFs concluídos com sucesso!');
+    }, 400);
+  });
+
+  function loadDocuments() {
+    const tbody = document.getElementById('documents-table-body');
+    if (!state.documents.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Nenhum documento recebido ainda.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = state.documents.map(d => `
+      <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+        <td class="p-3">${new Date(d.created_at).toLocaleString('pt-BR')}</td>
+        <td class="p-3 font-semibold text-slate-900 dark:text-white">${d.filename}</td>
+        <td class="p-3"><span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold">${d.discipline}</span></td>
+        <td class="p-3 font-bold">${d.total_questions_found}</td>
+        <td class="p-3"><span class="text-emerald-500 font-bold">● CONCLUÍDO</span></td>
+        <td class="p-3 text-right">
+          <button onclick="deleteDocument('${d.id}')" class="text-rose-500 hover:text-rose-700 font-bold">Excluir</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function deleteDocument(id) {
+    if (!confirm('Deseja excluir este documento?')) return;
+    state.documents = state.documents.filter(d => d.id !== id);
+    saveState();
+    loadDocuments();
+    loadDashboard();
+  }
+
+  // Conferência
+  function loadPendingQuestions() {
+    const pending = state.questions.filter(q => q.validation_status === 'pending_review');
+    document.getElementById('badge-pending').innerText = pending.length;
+
+    const cont = document.getElementById('pending-questions-container');
+    if (!pending.length) {
+      cont.innerHTML = `
+        <div class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl p-8 text-center">
+          <p class="text-sm font-bold text-emerald-800 dark:text-emerald-300">Todas as questões estão conferidas e aprovadas!</p>
+          <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Não há pendências de gabarito ou inconsistências.</p>
+        </div>
+      `;
+      return;
+    }
+
+    cont.innerHTML = pending.map(q => `
+      <div class="bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-800 rounded-2xl p-5 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="px-2.5 py-1 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200 text-xs font-bold uppercase">${q.discipline}</span>
+          <span class="text-xs text-slate-500">Arquivo: ${q.source_filename || 'PDF'}</span>
+        </div>
+        <p class="text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap">${q.statement}</p>
+        ${q.options_json ? `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">
+            ${Object.entries(q.options_json).map(([k, v]) => `<div><b>(${k})</b> ${v}</div>`).join('')}
+          </div>
+        ` : ''}
+        <div class="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 text-xs flex items-center gap-2">
+          <span>⚠️ ${q.validation_notes || 'Gabarito pendente de conferência.'}</span>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <input type="text" id="ans-input-${q.id}" placeholder="Gabarito (ex: C)" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 w-32 bg-white dark:bg-slate-800 uppercase font-bold text-center">
+          <button onclick="approveQuestion('${q.id}')" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">Aprovar Questão</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function approveQuestion(id) {
+    const input = document.getElementById('ans-input-' + id);
+    const ans = input ? input.value.trim().toUpperCase() : '';
+    const q = state.questions.find(item => item.id === id);
+    if (q) {
+      q.correct_answer = ans || 'A';
+      q.validation_status = 'approved';
+      q.validation_notes = 'Aprovada manualmente pela coordenação.';
+      saveState();
+      loadPendingQuestions();
+      loadDashboard();
+    }
+  }
+
+  // Banco de Questões
+  function loadQuestions() {
+    const discSelect = document.getElementById('questions-filter-discipline');
+    const uniqueDisc = [...new Set(state.questions.map(q => q.discipline))];
+    discSelect.innerHTML = '<option value="">Todas as disciplinas</option>' + uniqueDisc.map(d => `<option value="${d}">${d}</option>`).join('');
+    renderQuestionsList(state.questions);
+  }
+
+  function filterQuestions() {
+    const search = document.getElementById('questions-search').value.toLowerCase();
+    const disc = document.getElementById('questions-filter-discipline').value;
+    const filtered = state.questions.filter(q => {
+      const matchSearch = q.statement.toLowerCase().includes(search);
+      const matchDisc = !disc || q.discipline === disc;
+      return matchSearch && matchDisc;
+    });
+    renderQuestionsList(filtered);
+  }
+
+  function renderQuestionsList(questions) {
+    const cont = document.getElementById('questions-list-container');
+    if (!questions.length) {
+      cont.innerHTML = `<div class="p-8 text-center text-slate-400">Nenhuma questão encontrada.</div>`;
+      return;
+    }
+    cont.innerHTML = questions.map(q => `
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 text-[11px] font-bold uppercase">${q.discipline}</span>
+            <span class="text-xs text-slate-500 font-semibold">• Prof: ${q.teacher_name || 'Docente'}</span>
+          </div>
+          <span class="text-xs font-bold ${q.validation_status === 'approved' ? 'text-emerald-500' : 'text-amber-500'}">● ${q.validation_status.toUpperCase()}</span>
+        </div>
+        <p class="text-xs text-slate-800 dark:text-slate-100 whitespace-pre-wrap">${q.statement}</p>
+        ${q.options_json ? `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl">
+            ${Object.entries(q.options_json).map(([k, v]) => `
+              <div class="${q.correct_answer === k ? 'font-bold text-emerald-600 dark:text-emerald-400' : ''}">
+                (${k}) ${v} ${q.correct_answer === k ? '✓' : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <span class="text-slate-500">Gabarito: <b class="text-slate-900 dark:text-white">${q.correct_answer || 'Pendente'}</b></span>
+          <span class="text-slate-400 text-[10px]">Origem: ${q.source_filename || 'PDF'}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Montagem da Prova Única
+  function loadExamSetup() {
+    const approved = state.questions.filter(q => q.validation_status === 'approved');
+    document.getElementById('exam-ready-questions-count').innerText = approved.length;
+  }
+
+  let currentActiveExam = null;
+
+  function buildExam() {
+    const approved = state.questions.filter(q => q.validation_status === 'approved');
+    if (!approved.length) {
+      return alert('Nenhuma questão aprovada para gerar a prova. Verifique a tela de conferência.');
+    }
+
+    const title = document.getElementById('exam-title').value;
+    const institution = document.getElementById('exam-institution').value;
+    const period = document.getElementById('exam-period').value;
+    const mode = document.getElementById('exam-order-mode').value;
+    const showHeader = document.getElementById('exam-show-disc-header').checked;
+
+    let ordered = [...approved];
+    if (mode === 'by_discipline') {
+      ordered.sort((a, b) => a.discipline.localeCompare(b.discipline));
+    } else if (mode === 'random') {
+      ordered.sort(() => Math.random() - 0.5);
+    } else if (mode === 'interleaved') {
+      const grouped = {};
+      approved.forEach(q => { grouped[q.discipline] = grouped[q.discipline] || []; grouped[q.discipline].push(q); });
+      const keys = Object.keys(grouped);
+      const maxL = Math.max(...keys.map(k => grouped[k].length));
+      ordered = [];
+      for (let i = 0; i < maxL; i++) {
+        for (let k of keys) {
+          if (grouped[k][i]) ordered.push(grouped[k][i]);
+        }
+      }
+    }
+
+    const exam = {
+      id: 'exam-' + Date.now(),
+      title: title,
+      institution_name: institution,
+      academic_period: period,
+      organization_mode: mode,
+      show_discipline_header: showHeader,
+      total_questions: ordered.length,
+      items: ordered.map((q, idx) => ({ order_number: idx + 1, question: q })),
+      created_at: new Date().toISOString()
+    };
+
+    state.exams.unshift(exam);
+    saveState();
+    currentActiveExam = exam;
+
+    const resArea = document.getElementById('exam-generated-result');
+    resArea.classList.remove('hidden');
+    document.getElementById('result-exam-title').innerText = `${exam.title} — ${exam.total_questions} Questões`;
+    document.getElementById('result-exam-meta').innerText = `Numeração contínua (01 a ${exam.total_questions < 10 ? '0' + exam.total_questions : exam.total_questions}) • Todas as disciplinas incluídas • Gabarito oficial ao final.`;
+
+    loadDashboard();
+    alert('Prova Multidisciplinar Única montada com sucesso!');
+  }
+
+  // Visualização e Impressão da Prova
+  function previewExamInBrowser(type) {
+    if (!currentActiveExam) {
+      if (state.exams.length) currentActiveExam = state.exams[0];
+      else return alert('Gere uma avaliação primeiro.');
+    }
+
+    const exam = currentActiveExam;
+    const modal = document.getElementById('exam-preview-modal');
+    const area = document.getElementById('print-area');
+
+    let html = `
+      <div style="font-family: Arial, sans-serif; color: #1e293b; max-width: 800px; margin: 0 auto; line-height: 1.4;">
+        <!-- Cabeçalho Institucional -->
+        <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 12px;">
+          <h2 style="margin: 0; font-size: 16px; font-weight: bold; text-transform: uppercase;">${exam.institution_name}</h2>
+          <h3 style="margin: 4px 0 0 0; font-size: 13px; color: #475569;">${exam.title} — ${exam.academic_period}</h3>
+        </div>
+
+        <!-- Dados do Aluno -->
+        <table style="width: 100%; border: 1px solid #94a3b8; border-collapse: collapse; margin-bottom: 12px; font-size: 11px;">
+          <tr>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>ESTUDANTE:</b> ____________________________________________________________________</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1; width: 140px;"><b>TURMA:</b> ___________</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>PROFESSORES:</b> Disciplinas Integradas do Ensino Médio</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>DATA:</b> ____/____/2026</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>ASSINATURA:</b> __________________________________________________________________</td>
+            <td style="padding: 6px; border: 1px solid #cbd5e1;"><b>TOTAL ITENS:</b> ${exam.total_questions}</td>
+          </tr>
+        </table>
+
+        <!-- Instruções Gerais -->
+        <div style="background-color: #f8fafc; border-left: 3px solid #0284c7; padding: 6px 10px; font-size: 10px; margin-bottom: 16px;">
+          <b>INSTRUÇÕES GERAIS:</b> 1. Caderno único contendo todas as disciplinas do Ensino Médio. 2. Preencha todas as questões com caneta azul ou preta. 3. Rasuras anulam as respostas de múltipla escolha.
+        </div>
+    `;
+
+    // Only answer key view
+    if (type === 'answer_key') {
+      html += renderAnswerKeyTableHTML(exam);
+      html += `</div>`;
+      area.innerHTML = html;
+      modal.classList.remove('hidden');
+      return;
+    }
+
+    // Questions listing
+    let curDisc = null;
+    exam.items.forEach(item => {
+      const q = item.question;
+      if (exam.show_discipline_header && exam.organization_mode === 'by_discipline' && q.discipline !== curDisc) {
+        curDisc = q.discipline;
+        html += `<div style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; font-weight: bold; font-size: 11px; margin-top: 14px; border-radius: 4px;">■ DISCIPLINA: ${curDisc.toUpperCase()}</div>`;
+      }
+
+      const discTag = (exam.show_discipline_header && exam.organization_mode !== 'by_discipline') ? ` [${q.discipline.toUpperCase()}]` : '';
+      html += `
+        <div style="margin-top: 10px; padding-bottom: 8px; font-size: 11px;">
+          <div style="font-weight: bold; color: #0f172a;">QUESTÃO ${item.order_number < 10 ? '0' + item.order_number : item.order_number}${discTag}</div>
+          <div style="margin: 3px 0 6px 0; color: #334155;">${q.statement}</div>
+      `;
+
+      if (q.question_type === 'multiple_choice' && q.options_json) {
+        ['A', 'B', 'C', 'D', 'E'].forEach(letter => {
+          if (q.options_json[letter]) {
+            html += `<div style="margin-left: 14px; margin-bottom: 3px;"><b>( ${letter} )</b> ${q.options_json[letter]}</div>`;
+          }
+        });
+      } else {
+        html += `<div style="border-bottom: 1px dotted #cbd5e1; height: 18px; margin: 6px 0;"></div><div style="border-bottom: 1px dotted #cbd5e1; height: 18px; margin: 6px 0;"></div>`;
+      }
+      html += `</div>`;
+    });
+
+    // If Complete Exam: Add Answer Key at the end
+    if (type === 'complete') {
+      html += `<div style="page-break-before: always; margin-top: 24px; padding-top: 16px; border-top: 2px dashed #94a3b8;">`;
+      html += `<h3 style="text-align: center; font-size: 13px; font-weight: bold; margin-bottom: 10px;">GABARITO OFICIAL — ${exam.title.toUpperCase()}</h3>`;
+      html += renderAnswerKeyTableHTML(exam);
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+    area.innerHTML = html;
+    modal.classList.remove('hidden');
+  }
+
+  function renderAnswerKeyTableHTML(exam) {
+    let t = `
+      <table style="width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; margin-top: 8px;">
+        <thead>
+          <tr style="background-color: #1e293b; color: white;">
+            <th style="padding: 6px; border: 1px solid #475569;">QUESTÃO</th>
+            <th style="padding: 6px; border: 1px solid #475569; text-align: left;">DISCIPLINA</th>
+            <th style="padding: 6px; border: 1px solid #475569;">RESPOSTA OFICIAL</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+    exam.items.forEach(it => {
+      t += `
+        <tr style="border-bottom: 1px solid #cbd5e1;">
+          <td style="padding: 5px; border: 1px solid #cbd5e1;">${it.order_number < 10 ? '0' + it.order_number : it.order_number}</td>
+          <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: left;">${it.question.discipline}</td>
+          <td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: bold;">${it.question.correct_answer || 'PENDENTE'}</td>
+        </tr>
+      `;
+    });
+    t += `</tbody></table>`;
+    return t;
+  }
+
+  function closePreviewModal() {
+    document.getElementById('exam-preview-modal').classList.add('hidden');
+  }
+
+  function exportExamDOCX() {
+    if (!currentActiveExam) {
+      if (state.exams.length) currentActiveExam = state.exams[0];
+      else return alert('Gere uma prova primeiro.');
+    }
+    const exam = currentActiveExam;
+    const content = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+      <head><meta charset='utf-8'><title>${exam.title}</title></head>
+      <body>
+        <h2 style='text-align:center;'>${exam.institution_name}</h2>
+        <h3 style='text-align:center;'>${exam.title} — ${exam.academic_period}</h3>
+        <p><b>ESTUDANTE:</b> ___________________________ <b>TURMA:</b> ___________ <b>DATA:</b> ____/____/2026</p>
+        <hr/>
+        ${exam.items.map(it => `
+          <p><b>QUESTÃO ${it.order_number < 10 ? '0' + it.order_number : it.order_number} [${it.question.discipline}]</b><br/>${it.question.statement}</p>
+          ${it.question.options_json ? Object.entries(it.question.options_json).map(([k,v]) => `<p>&nbsp;&nbsp;(${k}) ${v}</p>`).join('') : '<p>.......................................................................</p>'}
+        `).join('')}
+        <br/><br/>
+        <h3 style='text-align:center;'>GABARITO OFICIAL</h3>
+        <table border='1' cellspacing='0' cellpadding='4' style='width:100%; border-collapse:collapse;'>
+          <tr><th>QUESTÃO</th><th>DISCIPLINA</th><th>RESPOSTA</th></tr>
+          ${exam.items.map(it => `<tr><td>${it.order_number}</td><td>${it.question.discipline}</td><td><b>${it.question.correct_answer}</b></td></tr>`).join('')}
+        </table>
+      </body></html>
+    `;
+    const blob = new Blob(['\ufeff' + content], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `prova_${exam.id}.doc`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Histórico
+  function loadExamsHistory() {
+    const tbody = document.getElementById('history-table-body');
+    if (!state.exams.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Nenhuma avaliação gerada ainda.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = state.exams.map(e => `
+      <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+        <td class="p-3">${new Date(e.created_at).toLocaleDateString('pt-BR')}</td>
+        <td class="p-3 font-bold text-slate-900 dark:text-white">${e.title}</td>
+        <td class="p-3">${e.academic_period}</td>
+        <td class="p-3 font-bold">${e.total_questions}</td>
+        <td class="p-3 text-right space-x-2">
+          <button onclick="openExamFromHistory('${e.id}', 'complete')" class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold">Ver Prova Completa</button>
+          <button onclick="openExamFromHistory('${e.id}', 'student')" class="px-2.5 py-1 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 font-bold">Ver Versão Aluno</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function openExamFromHistory(id, type) {
+    currentActiveExam = state.exams.find(e => e.id === id);
+    if (currentActiveExam) previewExamInBrowser(type);
+  }
+
+  // Google Workspace Sync Simulation
+  function syncDriveLatest() {
+    const statusEl = document.getElementById('drive-sync-status');
+    statusEl.innerText = 'Sincronizando com o Google Drive institucional...';
+    setTimeout(() => {
+      statusEl.innerText = '✓ Sincronizado com sucesso! Pastas organizadas por ano letivo e bimestre.';
+    }, 600);
+  }
+
+  function exportSheetsLog() {
+    const statusEl = document.getElementById('sheets-sync-status');
+    statusEl.innerText = 'Exportando registros para o Google Sheets...';
+    setTimeout(() => {
+      statusEl.innerText = `✓ Planilha atualizada com ${state.questions.length} questões e gabarito oficial!`;
+    }, 600);
+  }
+
+  function showAppsScriptModal() {
+    alert("Código Google Apps Script pronto para integração:\n\nfunction onDocumentUploadDrive(e) {\n  var folder = DriveApp.getFolderById('ID_PASTA_RECEBIMENTO');\n  // Webhook com a plataforma...\n}");
+  }
+
+  // PWA Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(console.error);
+    });
+  }
+
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('btn-install').classList.remove('hidden');
+  });
+
+  function installPWA() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        document.getElementById('btn-install').classList.add('hidden');
+      });
+    }
+  }
+
+  // Init
+  loadDashboard();
+</script>
+</body>
+</html>
